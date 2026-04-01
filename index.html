@@ -1,75 +1,1303 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Arizona Overdose Dashboard (CDC Embedded)</title>
-<style>
-body { font-family: Arial; background:#0b132b; color:white; margin:0; }
-.container { display:flex; padding:20px; gap:20px; }
-.left, .right { background:#1c2541; padding:20px; border-radius:10px; }
-.left { width:50%; }
-.right { width:50%; }
-.grid { display:grid; grid-template-columns: repeat(3,1fr); gap:10px; }
-.tile { padding:15px; border-radius:8px; text-align:center; cursor:pointer; }
-.low { background:#2ec4b6; }
-.moderate { background:#ff9f1c; }
-.high { background:#e71d36; }
-.metric { margin:10px 0; font-size:18px; }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UACOMP Active Trials Dashboard</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --panel: #ffffff;
+      --text: #15202b;
+      --muted: #617286;
+      --line: #dbe4ee;
+      --accent: #0f62fe;
+      --accent-soft: #edf4ff;
+      --good: #1f8f4e;
+      --good-soft: #eaf8ef;
+      --warn: #a76700;
+      --warn-soft: #fff5e6;
+      --chip: #eff3f8;
+      --shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .wrap {
+      max-width: 1380px;
+      margin: 0 auto;
+      padding: 22px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 30px;
+      line-height: 1.1;
+    }
+
+    .sub {
+      max-width: 1080px;
+      color: var(--muted);
+      line-height: 1.45;
+      margin-bottom: 18px;
+      font-size: 14px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .panel.pad {
+      padding: 18px;
+    }
+
+    .stack > * + * {
+      margin-top: 14px;
+    }
+
+    .section-title {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 7px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+    }
+
+    textarea,
+    input,
+    select {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    textarea {
+      min-height: 128px;
+      resize: vertical;
+      line-height: 1.3;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+      margin-top: 6px;
+    }
+
+    .row2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    button {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: 14px;
+      cursor: pointer;
+      font-weight: 800;
+    }
+
+    button.primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    button:disabled {
+      opacity: 0.7;
+      cursor: wait;
+    }
+
+    .right-stack > * + * {
+      margin-top: 14px;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .metric {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    .metric .k {
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 8px;
+      font-weight: 800;
+    }
+
+    .metric .v {
+      font-size: 30px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 14px;
+    }
+
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+      flex-wrap: wrap;
+    }
+
+    .toolbar .title {
+      font-size: 22px;
+      font-weight: 900;
+      margin-bottom: 4px;
+    }
+
+    .toolbar .mini {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .toolbar .right-note {
+      color: var(--muted);
+      font-size: 12px;
+      text-align: right;
+    }
+
+    .table-wrap {
+      overflow: auto;
+      max-height: 720px;
+      border-radius: 0 0 18px 18px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1060px;
+      font-size: 14px;
+    }
+
+    th,
+    td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+      text-align: left;
+    }
+
+    th {
+      position: sticky;
+      top: 0;
+      background: #fbfcff;
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      z-index: 1;
+    }
+
+    .link {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 800;
+    }
+
+    .chip {
+      display: inline-block;
+      padding: 4px 8px;
+      margin: 2px 4px 2px 0;
+      border-radius: 999px;
+      background: var(--chip);
+      border: 1px solid var(--line);
+      font-size: 12px;
+      color: #334155;
+      white-space: nowrap;
+    }
+
+    .status {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 5px 9px;
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .s-recruiting,
+    .s-enrolling_by_invitation { background: var(--good-soft); color: var(--good); }
+
+    .s-active_not_recruiting,
+    .s-not_yet_recruiting { background: var(--warn-soft); color: var(--warn); }
+
+    .s-unknown { background: #eef2f7; color: #475569; }
+
+    .muted { color: var(--muted); }
+
+    .empty,
+    .loading,
+    .error {
+      padding: 26px 18px;
+      color: var(--muted);
+    }
+
+    .error strong {
+      color: #991b1b;
+    }
+
+    .legend-box {
+      padding: 16px 18px;
+    }
+
+    .legend-title {
+      font-size: 16px;
+      font-weight: 900;
+      margin-bottom: 10px;
+    }
+
+    .mini-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 0;
+    }
+
+    .mini-table th,
+    .mini-table td {
+      font-size: 13px;
+      padding: 10px 10px;
+    }
+
+    .status-bar {
+      height: 10px;
+      background: #edf2f7;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 4px;
+    }
+
+    .status-fill {
+      height: 100%;
+      background: var(--accent);
+      width: 0;
+    }
+
+    .footer-note {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .callout {
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: var(--accent-soft);
+      border: 1px solid #d4e3ff;
+      color: #274c7c;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    @media (max-width: 1180px) {
+      .layout,
+      .split {
+        grid-template-columns: 1fr;
+      }
+
+      .metrics {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 680px) {
+      .metrics {
+        grid-template-columns: 1fr;
+      }
+
+      .row2 {
+        grid-template-columns: 1fr;
+      }
+    }
+  
+/* Tightened layout tuning */
+.dashboard-shell, .app-shell, .main-layout {
+  align-items: start;
+}
+.right-panel, .content-panel, .results-panel {
+  min-width: 0;
+}
+.panel, .card, .metric-card {
+  padding: 12px !important;
+}
+h1 { font-size: 28px !important; line-height: 1.15; margin: 0 0 10px 0; }
+h2 { font-size: 18px !important; line-height: 1.2; margin: 0 0 6px 0; }
+p, label, button, input, select, textarea, th, td, li, span, div {
+  font-size: 14px;
+}
+.stats-grid, .metrics-grid {
+  gap: 12px !important;
+}
+.table-wrap, .table-container, .results-table-wrap {
+  max-height: 360px !important;
+  overflow: auto !important;
+}
+table {
+  width: 100%;
+  table-layout: fixed;
+  font-size: 13px !important;
+}
+th, td {
+  padding: 8px 10px !important;
+  vertical-align: top;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+}
+.bottom-right, .specialty-panel, .summary-panel {
+  max-height: 360px !important;
+  overflow: auto !important;
+}
+
 </style>
+
+<style id="layout-preview-patch">
+/* Preview layout cleanup */
+.right-panel,
+.content-panel,
+.results-panel,
+.dashboard-main,
+.dashboard-content {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 16px !important;
+  min-width: 0 !important;
+}
+
+.specialty-panel,
+.summary-panel,
+.bottom-right {
+  width: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  overflow: visible !important;
+  order: 2 !important;
+}
+
+.table-wrap, .table-container, .results-table-wrap {
+  max-height: 520px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+table {
+  width: 100% !important;
+  table-layout: fixed !important;
+}
+
+th:nth-child(7), td:nth-child(7) {
+  width: 180px !important;
+  max-width: 180px !important;
+}
+
+th:nth-child(8), td:nth-child(8) {
+  width: 170px !important;
+  max-width: 170px !important;
+}
+
+th, td {
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+  vertical-align: top !important;
+}
+
+.specialty-panel table,
+.summary-panel table {
+  table-layout: auto !important;
+}
+
+.specialty-panel th,
+.specialty-panel td,
+.summary-panel th,
+.summary-panel td {
+  writing-mode: horizontal-tb !important;
+  transform: none !important;
+  white-space: normal !important;
+  text-align: left !important;
+}
+
+.specialty-panel .mini-card,
+.summary-panel .mini-card,
+.specialty-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+}
+
+@media (max-width: 1200px) {
+  .specialty-panel .mini-card,
+  .summary-panel .mini-card,
+  .specialty-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+</style>
+
+
+<style id="compact-dashboard-patch">
+/* Compact table layout */
+.table-wrap, .table-container, .results-table-wrap {
+  max-height: 560px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+table {
+  width: 100% !important;
+  table-layout: fixed !important;
+}
+
+th, td {
+  padding: 10px 12px !important;
+  vertical-align: top !important;
+  overflow-wrap: break-word !important;
+  word-break: break-word !important;
+  line-height: 1.2 !important;
+}
+
+th:nth-child(1), td:nth-child(1) { width: 120px !important; }
+th:nth-child(2), td:nth-child(2) { width: 250px !important; }
+th:nth-child(3), td:nth-child(3) { width: 120px !important; }
+th:nth-child(4), td:nth-child(4) { width: 90px !important; }
+th:nth-child(5), td:nth-child(5) { width: 150px !important; }
+th:nth-child(6), td:nth-child(6) { width: 120px !important; }
+th:nth-child(7), td:nth-child(7) { width: 160px !important; }
+th:nth-child(8), td:nth-child(8) { width: 150px !important; }
+
+td:nth-child(2) {
+  max-width: 250px !important;
+}
+
+.title-clamp {
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 4 !important;
+  overflow: hidden !important;
+}
+
+.compact-pills {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+  align-items: flex-start !important;
+}
+
+.compact-pill {
+  display: inline-block !important;
+  background: #eef2f7 !important;
+  border: 1px solid #d7dde8 !important;
+  border-radius: 999px !important;
+  padding: 3px 8px !important;
+  font-size: 12px !important;
+  line-height: 1.2 !important;
+  max-width: 100% !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.compact-more {
+  display: inline-block !important;
+  font-size: 12px !important;
+  color: #5f6b7a !important;
+  padding: 4px 0 !important;
+}
+
+.location-name {
+  display: block !important;
+  font-weight: 500 !important;
+}
+
+.location-city {
+  display: block !important;
+  font-size: 12px !important;
+  color: #667085 !important;
+  margin-top: 2px !important;
+}
+
+.alias-stack {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+}
+
+.alias-pill {
+  display: inline-block !important;
+  width: fit-content !important;
+  max-width: 100% !important;
+  background: #f4f6f8 !important;
+  border: 1px solid #dde3ea !important;
+  border-radius: 999px !important;
+  padding: 4px 8px !important;
+  font-size: 12px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+</style>
+
 </head>
 <body>
+  <div class="wrap">
+    <h1>UACOMP Active Trials Dashboard</h1>
+    <div class="sub">
+      This version uses the ClinicalTrials.gov v2 API and searches across several UACOMP-related aliases, then merges duplicate studies by NCT ID. Because public trial records may be filed under the medical school, Banner Phoenix, or broader University of Arizona naming, this dashboard is designed as a practical approximation of Phoenix-campus trial activity rather than a guaranteed official census.
+    </div>
 
-<h1 style="padding:20px;">Arizona Overdose Dashboard (CDC-based)</h1>
+    <div class="layout">
+      <div class="panel pad stack">
+        <div>
+          <div class="section-title">Institution aliases to search, one per line</div>
+          <textarea id="terms">University of Arizona College of Medicine Phoenix
+Banner - University Medical Center Phoenix
+Banner University Medical Center Phoenix
+University of Arizona Phoenix
+University of Arizona Health Sciences Phoenix</textarea>
+          <div class="small">Tip: you can also add investigator names, departments, centers, or program names to broaden recall.</div>
+        </div>
 
-<div class="container">
+        <div>
+          <div class="section-title">Study statuses to include</div>
+          <select id="status" multiple size="4">
+            <option selected value="RECRUITING">Recruiting</option>
+            <option selected value="ENROLLING_BY_INVITATION">Enrolling by invitation</option>
+            <option selected value="ACTIVE_NOT_RECRUITING">Active, not recruiting</option>
+            <option selected value="NOT_YET_RECRUITING">Not yet recruiting</option>
+          </select>
+        </div>
 
-<div class="left">
-<h3>County Risk Map</h3>
-<div class="grid" id="grid"></div>
-</div>
+        <div class="row2">
+          <div>
+            <div class="section-title">Location city filter</div>
+            <input id="cityFilter" value="Phoenix" />
+          </div>
+          <div>
+            <div class="section-title">Max results per alias</div>
+            <input id="pageSize" type="number" value="100" min="20" max="300" step="20" />
+          </div>
+        </div>
 
-<div class="right">
-<h3>County Snapshot</h3>
-<div class="metric">Overdoses: <span id="od"></span></div>
-<div class="metric">Trend (%): <span id="trend"></span></div>
-<div class="metric">Risk: <span id="risk"></span></div>
-</div>
+        <div>
+          <div class="section-title">Optional keyword filter</div>
+          <input id="keywordFilter" placeholder="pediatrics, oncology, neurology, opioid, cardiology..." />
+        </div>
 
-</div>
+        <div class="btn-row">
+          <button class="primary" id="loadBtn">Load active trials</button>
+          <button id="csvBtn">Export CSV</button>
+          <button id="resetBtn">Reset defaults</button>
+        </div>
+
+        <div class="callout">
+          If your browser blocks file-to-web API calls, open this HTML through a simple local server instead of double-clicking the file directly. Most modern browsers allow this dashboard, but some stricter setups do not.
+        </div>
+
+        <div class="footer-note">
+          Data source: ClinicalTrials.gov public API.<br>
+          Method: search aliases, normalize fields, filter to selected statuses and Phoenix locations, then deduplicate by NCT ID.<br>
+          Best use: faculty outreach, UACOMP trial landscape scans, admissions updates, and identifying live research programs.
+        </div>
+      </div>
+
+      <div class="right-stack">
+        <div class="metrics">
+          <div class="metric"><div class="k">Total active trials</div><div class="v" id="mTotal">0</div></div>
+          <div class="metric"><div class="k">Recruiting</div><div class="v" id="mRecruiting">0</div></div>
+          <div class="metric"><div class="k">Active, not recruiting</div><div class="v" id="mActive">0</div></div>
+          <div class="metric"><div class="k">Unique conditions</div><div class="v" id="mConditions">0</div></div>
+          <div class="metric"><div class="k">Specialty buckets</div><div class="v" id="mBuckets">0</div></div>
+        </div>
+
+        <div class="split">
+          <div class="panel">
+            <div class="toolbar">
+              <div>
+                <div class="title">Trial list</div>
+                <div class="mini" id="resultMeta">No studies loaded yet.</div>
+              </div>
+              <div class="right-note">Click an NCT ID to open the full ClinicalTrials.gov record.</div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>NCT ID</th>
+                    <th>Title</th>
+                    <th>Status</th>
+                    <th>Phase</th>
+                    <th>Conditions</th>
+                    <th>Lead sponsor</th>
+                    <th>Phoenix locations</th>
+                    <th>Matched aliases</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody">
+                  <tr><td colspan="8" class="empty">Use the controls on the left to load studies.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="panel legend-box">
+            <div class="legend-title">Specialty summary</div>
+            <table class="mini-table">
+              <thead>
+                <tr>
+                  <th>Bucket</th>
+                  <th>Trials</th>
+                  <th>Share</th>
+                </tr>
+              </thead>
+              <tbody id="bucketBody">
+                <tr><td colspan="3" class="empty">No specialty summary yet.</td></tr>
+              </tbody>
+            </table>
+            <div class="footer-note">
+              Buckets are inferred from titles and condition names. They are useful for scanning the portfolio quickly, but they are not official trial specialty assignments.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const DEFAULT_TERMS = [
+      'University of Arizona College of Medicine Phoenix',
+      'Banner - University Medical Center Phoenix',
+      'Banner University Medical Center Phoenix',
+      'University of Arizona Phoenix',
+      'University of Arizona Health Sciences Phoenix'
+    ];
+
+    const DEFAULT_STATUSES = [
+      'RECRUITING',
+      'ENROLLING_BY_INVITATION',
+      'ACTIVE_NOT_RECRUITING',
+      'NOT_YET_RECRUITING'
+    ];
+
+    const state = { rows: [] };
+
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    function clean(value) {
+      return String(value ?? '').trim();
+    }
+
+    function toArray(value) {
+      if (Array.isArray(value)) return value;
+      if (value == null || value === '') return [];
+      return [value];
+    }
+
+    function csvEscape(value) {
+      const s = String(value ?? '');
+      if (/[",\n]/.test(s)) return '"' + s.replace(/"/g, '""') + '"';
+      return s;
+    }
+
+    function selectedStatuses() {
+      return Array.from(document.getElementById('status').selectedOptions).map(option => option.value);
+    }
+
+    function statusClass(status) {
+      const normalized = String(status || 'UNKNOWN').toLowerCase();
+      return 's-' + normalized;
+    }
+
+    function isSelectedStatus(status, statuses) {
+      return statuses.includes(clean(status));
+    }
+
+    function textBlobForStudy(row) {
+      return [
+        row.title,
+        row.sponsor,
+        row.phase,
+        row.status,
+        ...row.conditions,
+        ...row.locations.map(loc => [loc.facility, loc.city, loc.state, loc.country].filter(Boolean).join(' '))
+      ].join(' ').toLowerCase();
+    }
+
+    function inferBucket(row) {
+      const text = textBlobForStudy(row);
+      const rules = [
+        ['Oncology', ['cancer', 'tumor', 'carcinoma', 'leukemia', 'lymphoma', 'melanoma', 'oncology']],
+        ['Neurology', ['neurology', 'neurologic', 'stroke', 'epilepsy', 'parkinson', 'alzheimer', 'migraine', 'brain', 'spinal']],
+        ['Cardiology', ['cardiac', 'cardiology', 'heart', 'vascular', 'coronary', 'arrhythmia', 'hypertension', 'atrial']],
+        ['Pediatrics', ['pediatric', 'children', 'childhood', 'adolescent', 'infant', 'neonatal']],
+        ['Psychiatry', ['depression', 'anxiety', 'psychiatric', 'mental health', 'bipolar', 'schizophrenia', 'addiction', 'substance']],
+        ['Endocrine / Metabolic', ['diabetes', 'obesity', 'metabolic', 'endocrine', 'thyroid', 'glucose']],
+        ['Infectious Disease', ['infection', 'infectious', 'covid', 'viral', 'bacterial', 'hepatitis', 'hiv']],
+        ['Pulmonary', ['lung', 'pulmonary', 'asthma', 'copd', 'respiratory', 'sleep apnea']],
+        ['Women\'s Health', ['pregnancy', 'maternal', 'gyne', 'ovarian', 'breastfeeding', 'obstetric', 'uterine']],
+        ['Surgery / Device', ['surgery', 'surgical', 'implant', 'device', 'catheter', 'robotic', 'stent']]
+      ];
+
+      for (const [bucket, keywords] of rules) {
+        if (keywords.some(keyword => text.includes(keyword))) return bucket;
+      }
+      return 'Other';
+    }
+
+    function summarizeBuckets(rows) {
+      const counts = new Map();
+      for (const row of rows) {
+        const bucket = inferBucket(row);
+        counts.set(bucket, (counts.get(bucket) || 0) + 1);
+      }
+      return Array.from(counts.entries())
+        .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+        .map(([bucket, count]) => ({ bucket, count }));
+    }
+
+    async function fetchByAlias(alias, pageSize) {
+      const allStudies = [];
+      let pageToken = '';
+      let loops = 0;
+
+      while (loops < 10) {
+        const url = new URL('https://clinicaltrials.gov/api/v2/studies');
+        url.searchParams.set('query.term', alias);
+        url.searchParams.set('pageSize', String(pageSize));
+        url.searchParams.set('format', 'json');
+        if (pageToken) url.searchParams.set('pageToken', pageToken);
+
+        const res = await fetch(url.toString());
+        if (!res.ok) {
+          throw new Error(`ClinicalTrials.gov request failed for alias: ${alias} (${res.status})`);
+        }
+
+        const data = await res.json();
+        const studies = Array.isArray(data.studies) ? data.studies : [];
+        allStudies.push(...studies);
+
+        if (!data.nextPageToken || studies.length >= pageSize) break;
+        pageToken = data.nextPageToken;
+        loops += 1;
+      }
+
+      return allStudies;
+    }
+
+    function normalizeStudy(study, alias) {
+      const ps = study.protocolSection || {};
+      const idMod = ps.identificationModule || {};
+      const statusMod = ps.statusModule || {};
+      const sponsorMod = ps.sponsorCollaboratorsModule || {};
+      const condMod = ps.conditionsModule || {};
+      const designMod = ps.designModule || {};
+      const contactsMod = ps.contactsLocationsModule || {};
+
+      const locations = toArray(contactsMod.locations).map(loc => ({
+        facility: clean(loc.facility),
+        city: clean(loc.city),
+        state: clean(loc.state),
+        country: clean(loc.country)
+      }));
+
+      return {
+        nctId: clean(idMod.nctId),
+        title: clean(idMod.briefTitle),
+        status: clean(statusMod.overallStatus),
+        phase: toArray(designMod.phases).map(clean).filter(Boolean).join(', '),
+        conditions: toArray(condMod.conditions).map(clean).filter(Boolean),
+        sponsor: clean(sponsorMod.leadSponsor?.name),
+        locations,
+        aliases: new Set([alias])
+      };
+    }
+
+    function mergeStudies(entries, selectedStatusList, cityFilter, keywordFilter) {
+      const map = new Map();
+      const cityNeedle = cityFilter.toLowerCase();
+      const keywordNeedle = keywordFilter.toLowerCase();
+
+      for (const { study, alias } of entries) {
+        const row = normalizeStudy(study, alias);
+        if (!row.nctId) continue;
+        if (!isSelectedStatus(row.status, selectedStatusList)) continue;
+
+        const cityMatch = !cityNeedle || row.locations.some(loc => loc.city.toLowerCase().includes(cityNeedle));
+        if (!cityMatch) continue;
+
+        const keywordMatch = !keywordNeedle || textBlobForStudy(row).includes(keywordNeedle);
+        if (!keywordMatch) continue;
+
+        if (!map.has(row.nctId)) {
+          map.set(row.nctId, row);
+          continue;
+        }
+
+        const existing = map.get(row.nctId);
+        existing.aliases.add(alias);
+        const seenConditions = new Set(existing.conditions);
+        for (const condition of row.conditions) {
+          if (!seenConditions.has(condition)) existing.conditions.push(condition);
+        }
+
+        const seenLocs = new Set(existing.locations.map(loc => `${loc.facility}|${loc.city}|${loc.state}|${loc.country}`));
+        for (const loc of row.locations) {
+          const key = `${loc.facility}|${loc.city}|${loc.state}|${loc.country}`;
+          if (!seenLocs.has(key)) existing.locations.push(loc);
+        }
+      }
+
+      const order = ['RECRUITING', 'ENROLLING_BY_INVITATION', 'NOT_YET_RECRUITING', 'ACTIVE_NOT_RECRUITING'];
+      return Array.from(map.values()).sort((a, b) => {
+        const ai = order.includes(a.status) ? order.indexOf(a.status) : 99;
+        const bi = order.includes(b.status) ? order.indexOf(b.status) : 99;
+        if (ai !== bi) return ai - bi;
+        return a.title.localeCompare(b.title);
+      });
+    }
+
+    function renderBuckets(rows) {
+      const buckets = summarizeBuckets(rows);
+      document.getElementById('mBuckets').textContent = buckets.length;
+
+      const tbody = document.getElementById('bucketBody');
+      if (!buckets.length) {
+        tbody.innerHTML = `<tr><td colspan="3" class="empty">No specialty summary yet.</td></tr>`;
+        return;
+      }
+
+      const total = rows.length || 1;
+      tbody.innerHTML = buckets.map(item => {
+        const share = Math.round((item.count / total) * 100);
+        return `
+          <tr>
+            <td>${escapeHtml(item.bucket)}</td>
+            <td><strong>${item.count}</strong></td>
+            <td>
+              ${share}%
+              <div class="status-bar"><div class="status-fill" style="width:${share}%"></div></div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function render(rows, aliasCount) {
+      state.rows = rows;
+      document.getElementById('mTotal').textContent = rows.length;
+      document.getElementById('mRecruiting').textContent = rows.filter(r => r.status === 'RECRUITING').length;
+      document.getElementById('mActive').textContent = rows.filter(r => r.status === 'ACTIVE_NOT_RECRUITING').length;
+      document.getElementById('mConditions').textContent = new Set(rows.flatMap(r => r.conditions)).size;
+      document.getElementById('resultMeta').textContent = `${rows.length} unique trials found across ${aliasCount} alias searches after Phoenix and status filtering.`;
+      renderBuckets(rows);
+
+      const tbody = document.getElementById('tbody');
+      if (!rows.length) {
+        tbody.innerHTML = `<tr><td colspan="8" class="empty">No studies matched the current filters. Try removing the keyword or city filter, or add broader aliases like Banner program names or faculty names.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = rows.map(row => {
+        const conditionsHtml = row.conditions.length
+          ? row.conditions.slice(0, 6).map(condition => `<span class="chip">${escapeHtml(condition)}</span>`).join('')
+          : '<span class="muted">None listed</span>';
+
+        const locationsHtml = row.locations.length
+          ? row.locations.map(loc => `<div>${escapeHtml([loc.facility, loc.city, loc.state].filter(Boolean).join(', '))}</div>`).join('')
+          : '<span class="muted">None parsed</span>';
+
+        const aliasesHtml = Array.from(row.aliases)
+          .sort((a, b) => a.localeCompare(b))
+          .map(alias => `<span class="chip">${escapeHtml(alias)}</span>`)
+          .join('');
+
+        return `
+          <tr>
+            <td><a class="link" href="https://clinicaltrials.gov/study/${encodeURIComponent(row.nctId)}" target="_blank" rel="noopener">${escapeHtml(row.nctId)}</a></td>
+            <td>${escapeHtml(row.title || '')}</td>
+            <td><span class="status ${statusClass(row.status)}">${escapeHtml((row.status || 'UNKNOWN').replaceAll('_', ' '))}</span></td>
+            <td>${escapeHtml(row.phase || 'N/A')}</td>
+            <td>${conditionsHtml}</td>
+            <td>${escapeHtml(row.sponsor || '')}</td>
+            <td>${locationsHtml}</td>
+            <td>${aliasesHtml}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderError(errorMessage) {
+      const tbody = document.getElementById('tbody');
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="8" class="error">
+            <strong>Failed to load data.</strong><br>
+            ${escapeHtml(errorMessage)}<br><br>
+            Try opening the file through a simple local server, or refresh and run again.
+          </td>
+        </tr>
+      `;
+      document.getElementById('resultMeta').textContent = 'Error loading studies.';
+      document.getElementById('bucketBody').innerHTML = `<tr><td colspan="3" class="empty">No specialty summary available.</td></tr>`;
+    }
+
+    async function loadTrials() {
+      const loadBtn = document.getElementById('loadBtn');
+      const tbody = document.getElementById('tbody');
+      const aliases = document.getElementById('terms').value.split('\n').map(line => line.trim()).filter(Boolean);
+      const statuses = selectedStatuses();
+      const cityFilter = clean(document.getElementById('cityFilter').value).toLowerCase();
+      const keywordFilter = clean(document.getElementById('keywordFilter').value);
+      const pageSize = Math.max(20, Math.min(300, Number(document.getElementById('pageSize').value || 100)));
+
+      if (!aliases.length) {
+        renderError('Please enter at least one alias or investigator term.');
+        return;
+      }
+
+      if (!statuses.length) {
+        renderError('Please select at least one study status.');
+        return;
+      }
+
+      loadBtn.disabled = true;
+      tbody.innerHTML = `<tr><td colspan="8" class="loading">Loading studies from ClinicalTrials.gov...</td></tr>`;
+      document.getElementById('bucketBody').innerHTML = `<tr><td colspan="3" class="loading">Building specialty summary...</td></tr>`;
+      document.getElementById('resultMeta').textContent = 'Loading...';
+
+      try {
+        const nested = await Promise.all(aliases.map(async alias => {
+          const studies = await fetchByAlias(alias, pageSize);
+          return studies.map(study => ({ study, alias }));
+        }));
+
+        const merged = mergeStudies(nested.flat(), statuses, cityFilter, keywordFilter);
+        render(merged, aliases.length);
+      } catch (error) {
+        renderError(error.message || 'Unknown error');
+      } finally {
+        loadBtn.disabled = false;
+      }
+    }
+
+    function exportCsv() {
+      if (!state.rows.length) return;
+      const header = ['NCT ID', 'Title', 'Status', 'Phase', 'Conditions', 'Lead Sponsor', 'Phoenix Locations', 'Matched Aliases', 'Bucket'];
+      const lines = [header.map(csvEscape).join(',')];
+      for (const row of state.rows) {
+        const fields = [
+          row.nctId,
+          row.title,
+          row.status,
+          row.phase,
+          row.conditions.join(' | '),
+          row.sponsor,
+          row.locations.map(loc => [loc.facility, loc.city, loc.state, loc.country].filter(Boolean).join(' / ')).join(' | '),
+          Array.from(row.aliases).join(' | '),
+          inferBucket(row)
+        ];
+        lines.push(fields.map(csvEscape).join(','));
+      }
+
+      const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'uacomp_active_trials.csv';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function resetDefaults() {
+      document.getElementById('terms').value = DEFAULT_TERMS.join('\n');
+      document.getElementById('cityFilter').value = 'Phoenix';
+      document.getElementById('keywordFilter').value = '';
+      document.getElementById('pageSize').value = '100';
+      Array.from(document.getElementById('status').options).forEach(option => {
+        option.selected = DEFAULT_STATUSES.includes(option.value);
+      });
+      document.getElementById('tbody').innerHTML = `<tr><td colspan="8" class="empty">Use the controls on the left to load studies.</td></tr>`;
+      document.getElementById('bucketBody').innerHTML = `<tr><td colspan="3" class="empty">No specialty summary yet.</td></tr>`;
+      document.getElementById('resultMeta').textContent = 'No studies loaded yet.';
+      document.getElementById('mTotal').textContent = '0';
+      document.getElementById('mRecruiting').textContent = '0';
+      document.getElementById('mActive').textContent = '0';
+      document.getElementById('mConditions').textContent = '0';
+      document.getElementById('mBuckets').textContent = '0';
+      state.rows = [];
+    }
+
+    document.getElementById('loadBtn').addEventListener('click', loadTrials);
+    document.getElementById('csvBtn').addEventListener('click', exportCsv);
+    document.getElementById('resetBtn').addEventListener('click', resetDefaults);
+  </script>
 
 <script>
-const data = [
-{county:"Maricopa", overdoses:4200, trend:12, risk:"high"},
-{county:"Pima", overdoses:1800, trend:5, risk:"moderate"},
-{county:"Pinal", overdoses:900, trend:3, risk:"moderate"},
-{county:"Yavapai", overdoses:600, trend:-2, risk:"low"},
-{county:"Mohave", overdoses:550, trend:1, risk:"low"},
-{county:"Yuma", overdoses:500, trend:4, risk:"moderate"},
-{county:"Coconino", overdoses:300, trend:-1, risk:"low"},
-{county:"Navajo", overdoses:280, trend:2, risk:"low"},
-{county:"Apache", overdoses:200, trend:3, risk:"low"}
-];
-
-function render(){
-const grid = document.getElementById("grid");
-data.forEach(d=>{
-let div = document.createElement("div");
-div.className = "tile " + d.risk;
-div.innerText = d.county;
-div.onclick = ()=>select(d);
-grid.appendChild(div);
+window.addEventListener('DOMContentLoaded', () => {
+  const btn =
+    document.querySelector('#loadTrialsBtn') ||
+    document.querySelector('button[data-action="load-trials"]') ||
+    Array.from(document.querySelectorAll('button')).find(b => /load active trials/i.test(b.textContent || ''));
+  if (btn) {
+    setTimeout(() => btn.click(), 150);
+  } else if (typeof loadActiveTrials === 'function') {
+    setTimeout(() => loadActiveTrials(), 150);
+  } else if (typeof loadTrials === 'function') {
+    setTimeout(() => loadTrials(), 150);
+  }
 });
-}
+</script>
 
-function select(d){
-document.getElementById("od").innerText = d.overdoses;
-document.getElementById("trend").innerText = d.trend + "%";
-document.getElementById("risk").innerText = d.risk.toUpperCase();
-}
 
-render();
-select(data[0]);
+<script>
+(function () {
+  function cleanPhoenixLocations() {
+    const tables = Array.from(document.querySelectorAll('table'));
+    tables.forEach((table) => {
+      const headerCells = Array.from(table.querySelectorAll('thead th, tr th'));
+      if (!headerCells.length) return;
+
+      const phoenixIdx = headerCells.findIndex(th =>
+        (th.textContent || '').replace(/\s+/g, ' ').trim().toLowerCase().includes('phoenix locations')
+      );
+      if (phoenixIdx === -1) return;
+
+      const rows = Array.from(table.querySelectorAll('tbody tr'));
+      rows.forEach((row) => {
+        const cells = row.querySelectorAll('td');
+        if (!cells[phoenixIdx]) return;
+        const cell = cells[phoenixIdx];
+
+        const keepNode = (node) => {
+          const txt = (node.textContent || '').replace(/\s+/g, ' ').trim().toLowerCase();
+          return txt.includes('phoenix');
+        };
+
+        const directChildren = Array.from(cell.children);
+        if (directChildren.length) {
+          let kept = 0;
+          directChildren.forEach((child) => {
+            if (keepNode(child)) {
+              child.style.display = '';
+              kept += 1;
+            } else {
+              child.remove();
+            }
+          });
+          if (kept === 0) {
+            const txt = (cell.textContent || '').replace(/\s+/g, ' ').trim();
+            const matches = txt
+              .split(/(?<=\b(?:Arizona|AZ))\s+(?=[A-Z])|[\n\r]+|(?<=\.)\s+/)
+              .map(s => s.trim())
+              .filter(Boolean)
+              .filter(s => /phoenix/i.test(s));
+            cell.textContent = matches.length ? matches.join('\n') : 'Phoenix only filter applied';
+            cell.style.whiteSpace = 'pre-line';
+          }
+        } else {
+          const txt = (cell.textContent || '').replace(/\s+/g, ' ').trim();
+          const matches = txt
+            .split(/(?<=\b(?:Arizona|AZ))\s+(?=[A-Z])|[\n\r]+|(?<=\.)\s+/)
+            .map(s => s.trim())
+            .filter(Boolean)
+            .filter(s => /phoenix/i.test(s));
+          cell.textContent = matches.length ? matches.join('\n') : 'Phoenix only filter applied';
+          cell.style.whiteSpace = 'pre-line';
+        }
+      });
+    });
+  }
+
+  window.addEventListener('DOMContentLoaded', function () {
+    setTimeout(cleanPhoenixLocations, 500);
+    setTimeout(cleanPhoenixLocations, 1200);
+    setTimeout(cleanPhoenixLocations, 2500);
+    const obs = new MutationObserver(() => cleanPhoenixLocations());
+    obs.observe(document.body, { childList: true, subtree: true });
+  });
+})();
+</script>
+
+
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+  const candidates = Array.from(document.querySelectorAll('*')).filter(el => {
+    const txt = (el.textContent || '').replace(/\s+/g,' ').trim().toLowerCase();
+    return txt.includes('specialty summary') && el.children.length > 0;
+  });
+  const specialty = candidates.find(el => el.offsetHeight > 80) || candidates[0];
+  const trialListHeading = Array.from(document.querySelectorAll('h1,h2,h3,div,strong')).find(el =>
+    /trial list/i.test((el.textContent || '').trim())
+  );
+  if (specialty && trialListHeading) {
+    let trialPanel = trialListHeading.closest('section,article,div');
+    for (let i = 0; i < 4 && trialPanel; i++) {
+      if (trialPanel.querySelector && trialPanel.querySelector('table')) break;
+      trialPanel = trialPanel.parentElement;
+    }
+    if (trialPanel && trialPanel.parentElement && specialty.parentElement !== trialPanel.parentElement) {
+      trialPanel.parentElement.appendChild(specialty);
+    } else if (trialPanel && trialPanel.parentElement) {
+      trialPanel.insertAdjacentElement('afterend', specialty);
+    }
+  }
+});
+</script>
+
+
+<script id="compact-row-render-patch">
+(function () {
+  function clampTitle(cell) {
+    if (!cell || cell.dataset.compactedTitle === '1') return;
+    const text = (cell.textContent || '').trim();
+    if (!text) return;
+    cell.innerHTML = '<div class="title-clamp"></div>';
+    cell.firstElementChild.textContent = text;
+    cell.dataset.compactedTitle = '1';
+  }
+
+  function compactConditions(cell) {
+    if (!cell || cell.dataset.compactedConditions === '1') return;
+    const pills = Array.from(cell.querySelectorAll('*')).filter(el => {
+      const txt = (el.textContent || '').trim();
+      return txt.length > 0;
+    });
+    let items = pills.map(el => (el.textContent || '').replace(/\s+/g, ' ').trim()).filter(Boolean);
+
+    if (!items.length) {
+      const raw = (cell.textContent || '').replace(/\s+/g, ' ').trim();
+      if (raw) items = raw.split(/\s{2,}|,\s+(?=[A-Z])/).map(s => s.trim()).filter(Boolean);
+    }
+
+    if (!items.length) return;
+
+    const visible = items.slice(0, 2);
+    const remaining = items.length - visible.length;
+    let inner = '<div class="compact-pills">';
+    inner += visible.map(item => `<span class="compact-pill" title="${item.replace(/"/g, '&quot;')}">${item}</span>`).join('');
+    if (remaining > 0) inner += `<span class="compact-more">+${remaining} more</span>`;
+    inner += '</div>';
+    cell.innerHTML = inner;
+    cell.dataset.compactedConditions = '1';
+  }
+
+  function compactLocations(cell) {
+    if (!cell || cell.dataset.compactedLocations === '1') return;
+    const raw = (cell.textContent || '').replace(/\s+/g, ' ').trim();
+    if (!raw) return;
+
+    const phoenixMatches = raw.match(/[^,]+,\s*Phoenix,\s*Arizona/gi) || raw.match(/[^,]+Phoenix[^,]*/gi) || [];
+    let chosen = phoenixMatches[0] || raw;
+    chosen = chosen.replace(/\s+/g, ' ').trim();
+
+    let name = chosen.replace(/,\s*Phoenix,\s*Arizona/i, '').trim();
+    if (!name) name = chosen;
+
+    cell.innerHTML = `<span class="location-name">${name}</span><span class="location-city">Phoenix</span>`;
+    cell.dataset.compactedLocations = '1';
+  }
+
+  function compactAliases(cell) {
+    if (!cell || cell.dataset.compactedAliases === '1') return;
+    let items = Array.from(cell.querySelectorAll('*')).map(el => (el.textContent || '').replace(/\s+/g, ' ').trim()).filter(Boolean);
+    if (!items.length) {
+      const raw = (cell.textContent || '').replace(/\s+/g, ' ').trim();
+      if (raw) items = raw.split(/(?<=Phoenix)\s+(?=[A-Z])|[\n\r]+/).map(s => s.trim()).filter(Boolean);
+    }
+    if (!items.length) return;
+
+    const visible = items.slice(0, 2);
+    const remaining = items.length - visible.length;
+    let inner = '<div class="alias-stack">';
+    inner += visible.map(item => `<span class="alias-pill" title="${item.replace(/"/g, '&quot;')}">${item}</span>`).join('');
+    if (remaining > 0) inner += `<span class="compact-more">+${remaining} more</span>`;
+    inner += '</div>';
+    cell.innerHTML = inner;
+    cell.dataset.compactedAliases = '1';
+  }
+
+  function compactTable() {
+    const tables = Array.from(document.querySelectorAll('table'));
+    tables.forEach(table => {
+      const headers = Array.from(table.querySelectorAll('thead th, tr th')).map(th =>
+        (th.textContent || '').replace(/\s+/g, ' ').trim().toLowerCase()
+      );
+      if (!headers.length || !headers.some(h => h.includes('nct id'))) return;
+
+      const rows = Array.from(table.querySelectorAll('tbody tr'));
+      rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        if (cells.length < 8) return;
+        clampTitle(cells[1]);
+        compactConditions(cells[4]);
+        compactLocations(cells[6]);
+        compactAliases(cells[7]);
+      });
+    });
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    setTimeout(compactTable, 700);
+    setTimeout(compactTable, 1500);
+    setTimeout(compactTable, 3000);
+    const observer = new MutationObserver(() => compactTable());
+    observer.observe(document.body, { childList: true, subtree: true });
+  });
+})();
 </script>
 
 </body>
