@@ -3,2107 +3,1180 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shared Care Coordination Dashboard — UArizona Health</title>
+<title>Shared Care Coordination — UArizona COM Phoenix</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#f5f5f5;
-  --panel:#ffffff;
-  --border:#dce3e5;
-  --border-strong:#b8c4c8;
-  --text:#0C234B;
-  --muted:#49595E;
-  --muted-light:#7a8f94;
-  --accent:#AB0520;
-  --accent-soft:#fcedef;
-  --accent-border:#f5b8be;
-  --blue:#1E5288;
-  --blue-soft:#e8eff8;
-  --high-bg:#fcedef;
-  --high:#AB0520;
-  --med-bg:#fff8ec;
-  --med:#C65809;
-  --green:#2D6A4F;
-  --green-bg:#edf7f1;
-  --orange:#C65809;
-  --red:#AB0520;
-  --shadow:0 1px 3px rgba(12,35,75,.07),0 1px 2px rgba(12,35,75,.05);
-  --shadow-md:0 4px 12px rgba(12,35,75,.1),0 2px 4px rgba(12,35,75,.05);
-  --radius:10px;
-  --radius-lg:14px;
-  --radius-xl:18px;
+/* ── UArizona COM-Phoenix color palette ─────────────────────────── */
+:root {
+  /* Brand */
+  --ua-red:        #AB0520;   /* UArizona Cardinal */
+  --ua-navy:       #0C234B;   /* UArizona Navy */
+  --ua-red-light:  #F9E5E8;
+  --ua-red-mid:    #D64B5F;
+  --ua-navy-light: #E8EDF5;
+  --ua-navy-mid:   #3A5A8C;
+
+  /* Surfaces */
+  --bg:       #F5F3EF;
+  --bg2:      #EDEAE3;
+  --surface:  #FFFFFF;
+  --surface2: #FAFAF8;
+  --border:   #DDD9D0;
+  --border2:  #C8C3B8;
+
+  /* Text */
+  --text:     #1A1614;
+  --text2:    #4A4540;
+  --text3:    #7A7570;
+
+  /* Semantic */
+  --green:     #1A6B46;
+  --green-bg:  #EBF5EF;
+  --amber:     #8A5A00;
+  --amber-bg:  #FBF3E0;
+  --red:       #9B1C1C;
+  --red-bg:    #FEE8E8;
+  --blue:      #1A4F8A;
+  --blue-bg:   #E8F0FA;
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.04);
+  --shadow:    0 2px 8px rgba(0,0,0,0.07), 0 8px 24px rgba(0,0,0,0.05);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06);
+  --r:  10px;
+  --r-lg: 16px;
 }
-*{box-sizing:border-box}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
 body{
-  margin:0;
-  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  font-family:'DM Sans',sans-serif;
   background:var(--bg);
   color:var(--text);
-  -webkit-font-smoothing:antialiased;
-  font-size:15px;
-  line-height:1.5;
+  font-size:14px;
+  line-height:1.55;
 }
-.wrap{
+
+/* ── LOGIN SCREEN ───────────────────────────────────────────────── */
+#loginScreen {
+  min-height:100vh;
+  display:flex;
+  align-items:stretch;
+}
+.login-brand {
+  width:420px;
+  flex-shrink:0;
+  background:var(--ua-navy);
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  padding:52px 48px;
+  position:relative;
+  overflow:hidden;
+}
+.login-brand::before {
+  content:'';
+  position:absolute;
+  top:-80px; right:-80px;
+  width:300px; height:300px;
+  border-radius:50%;
+  background:rgba(171,5,32,0.15);
+}
+.login-brand::after {
+  content:'';
+  position:absolute;
+  bottom:-60px; left:-60px;
+  width:220px; height:220px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.04);
+}
+.brand-top { position:relative; z-index:1; }
+.ua-lockup { display:flex; align-items:center; gap:14px; margin-bottom:36px; }
+.ua-seal {
+  width:52px; height:52px; border-radius:50%;
+  background:var(--ua-red);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Libre Baskerville',serif;
+  font-size:18px; font-weight:700; color:#fff;
+  flex-shrink:0; letter-spacing:-0.5px;
+}
+.ua-wordmark { }
+.ua-wordmark-top { font-size:11px; font-weight:600; color:rgba(255,255,255,0.5); letter-spacing:0.1em; text-transform:uppercase; }
+.ua-wordmark-name { font-size:16px; font-weight:700; color:#fff; line-height:1.2; }
+.ua-wordmark-dept { font-size:11px; color:rgba(255,255,255,0.5); margin-top:1px; }
+.brand-headline {
+  font-family:'Libre Baskerville',serif;
+  font-size:30px; font-weight:700; color:#fff;
+  line-height:1.25; letter-spacing:-0.3px;
+  margin-bottom:16px;
+}
+.brand-sub { font-size:14px; color:rgba(255,255,255,0.55); line-height:1.65; max-width:280px; }
+.brand-pills { display:flex; flex-direction:column; gap:8px; margin-top:28px; }
+.brand-pill {
+  display:flex; align-items:center; gap:10px;
+  font-size:12px; color:rgba(255,255,255,0.65);
+}
+.brand-pill-dot {
+  width:6px; height:6px; border-radius:50%; flex-shrink:0;
+}
+.brand-footer { position:relative; z-index:1; font-size:11px; color:rgba(255,255,255,0.25); }
+.login-form-panel {
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--bg);
+  padding:48px;
+}
+.login-card {
+  width:100%; max-width:420px;
+}
+.login-title {
+  font-family:'Libre Baskerville',serif;
+  font-size:26px; font-weight:700; color:var(--text);
+  margin-bottom:6px;
+}
+.login-sub { font-size:14px; color:var(--text3); margin-bottom:32px; }
+.login-role-row {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:10px; margin-bottom:24px;
+}
+.login-role-btn {
+  border:2px solid var(--border);
+  border-radius:var(--r-lg);
+  background:var(--surface);
+  padding:18px 16px;
+  cursor:pointer;
+  transition:all 0.15s;
+  text-align:left;
+}
+.login-role-btn:hover { border-color:var(--ua-navy-mid); background:#F8F7F5; }
+.login-role-btn.active { border-color:var(--ua-navy); background:var(--ua-navy-light); }
+.role-icon { font-size:24px; margin-bottom:8px; }
+.role-label { font-size:13px; font-weight:700; color:var(--text); display:block; }
+.role-desc { font-size:11px; color:var(--text3); margin-top:2px; display:block; }
+.form-group { margin-bottom:16px; }
+.form-label { font-size:12px; font-weight:600; color:var(--text2); display:block; margin-bottom:5px; letter-spacing:0.02em; }
+.form-input {
+  width:100%; padding:10px 14px;
+  border:1.5px solid var(--border);
+  border-radius:var(--r);
+  font-family:'DM Sans',sans-serif;
+  font-size:14px; color:var(--text);
+  background:var(--surface);
+  transition:border-color 0.15s;
+}
+.form-input:focus { outline:none; border-color:var(--ua-navy); }
+.login-btn {
+  width:100%; padding:12px;
+  background:var(--ua-navy);
+  color:#fff; border:none;
+  border-radius:var(--r);
+  font-family:'DM Sans',sans-serif;
+  font-size:14px; font-weight:700;
+  cursor:pointer; margin-top:8px;
+  transition:background 0.15s;
+  letter-spacing:0.01em;
+}
+.login-btn:hover { background:#0A1D40; }
+.demo-hint {
+  text-align:center; margin-top:20px;
+  font-size:12px; color:var(--text3);
+  background:var(--bg2);
+  border-radius:var(--r);
+  padding:12px 14px;
+  border:1px solid var(--border);
+}
+.demo-hint strong { color:var(--text2); }
+
+/* ── APP SHELL ──────────────────────────────────────────────────── */
+#appShell { display:none; flex-direction:column; min-height:100vh; }
+.app-topbar {
+  background:var(--ua-navy);
+  padding:0 28px;
+  height:56px;
+  display:flex; align-items:center;
+  justify-content:space-between;
+  flex-shrink:0;
+  position:sticky; top:0; z-index:50;
+  box-shadow:0 1px 0 rgba(255,255,255,0.06);
+}
+.topbar-left { display:flex; align-items:center; gap:20px; }
+.topbar-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+.topbar-seal {
+  width:30px; height:30px; border-radius:50%;
+  background:var(--ua-red);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Libre Baskerville',serif;
+  font-size:12px; font-weight:700; color:#fff;
+}
+.topbar-name { font-size:14px; font-weight:700; color:#fff; }
+.topbar-dept { font-size:10px; color:rgba(255,255,255,0.45); }
+.topbar-divider { width:1px; height:24px; background:rgba(255,255,255,0.12); }
+.topbar-app-name { font-size:13px; color:rgba(255,255,255,0.65); font-weight:500; }
+.topbar-right { display:flex; align-items:center; gap:12px; }
+.topbar-user {
+  display:flex; align-items:center; gap:8px;
+}
+.topbar-avatar {
+  width:30px; height:30px; border-radius:50%;
+  background:var(--ua-red);
+  display:flex; align-items:center; justify-content:center;
+  font-size:11px; font-weight:700; color:#fff;
+}
+.topbar-uname { font-size:12px; color:rgba(255,255,255,0.75); font-weight:500; }
+.topbar-role-badge {
+  font-size:10px; font-weight:700;
+  padding:3px 8px; border-radius:20px;
+  background:rgba(255,255,255,0.1);
+  color:rgba(255,255,255,0.6);
+  letter-spacing:0.05em; text-transform:uppercase;
+}
+.topbar-role-badge.provider { background:rgba(171,5,32,0.4); color:#FFB8C0; }
+.topbar-role-badge.patient { background:rgba(26,75,140,0.5); color:#A8C8FF; }
+.logout-btn {
+  font-size:12px; font-weight:600;
+  color:rgba(255,255,255,0.5); cursor:pointer;
+  padding:5px 10px; border-radius:6px;
+  border:1px solid rgba(255,255,255,0.12);
+  background:transparent;
+  transition:all 0.12s;
+  font-family:'DM Sans',sans-serif;
+}
+.logout-btn:hover { color:rgba(255,255,255,0.85); background:rgba(255,255,255,0.06); }
+
+.app-body { flex:1; }
+.wrap {
   max-width:1640px;
   margin:0 auto;
-  padding:16px 20px 32px;
-}
-.top{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  gap:16px;
-  margin-bottom:16px;
-}
-h1{
-  margin:0;
-  font-size:26px;
-  line-height:1.2;
-  font-weight:600;
-  letter-spacing:-0.3px;
-  color:var(--text);
-}
-.subtitle{
-  margin-top:6px;
-  color:var(--muted);
-  font-size:14px;
-  line-height:1.5;
-  max-width:860px;
-}
-.top-actions{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  flex-shrink:0;
-}
-.btn{
-  background:var(--panel);
-  border:1px solid var(--border);
-  color:var(--text);
-  padding:7px 13px;
-  border-radius:8px;
-  font-size:13.5px;
-  font-weight:500;
-  cursor:pointer;
-  font-family:inherit;
-  transition:background .12s,border-color .12s;
-}
-.btn:hover{background:#f5f5f3;border-color:var(--border-strong)}
-.btn.primary{
-  background:#0C234B;
-  color:#fff;
-  border-color:#0C234B;
-}
-.btn.primary:hover{background:#AB0520;border-color:#AB0520;}
-.layout{
-  display:grid;
-  grid-template-columns:300px 1fr;
-  gap:16px;
-  align-items:start;
-}
-.panel{
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:var(--radius-lg);
-  box-shadow:var(--shadow);
-}
-.sidebar{
-  padding:14px;
-  position:sticky;
-  top:12px;
-}
-.section-label{
-  color:var(--muted);
-  font-size:11.5px;
-  font-weight:600;
-  text-transform:uppercase;
-  letter-spacing:.08em;
-  line-height:1.35;
-  margin:4px 2px 10px;
-}
-.patient-card{
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  padding:12px;
-  margin:8px 0;
-  background:var(--bg);
-  cursor:pointer;
-  transition:background .12s,border-color .12s;
-}
-.patient-card:hover{
-  background:#f3f3f1;
-  border-color:var(--border-strong);
-}
-.patient-card.active{
-  background:#fcedef;
-  border:1.5px solid var(--accent-border);
-}
-.patient-name{
-  font-size:14.5px;
-  font-weight:600;
-  margin-bottom:3px;
-}
-.patient-meta{
-  color:var(--muted);
-  font-size:13px;
-  line-height:1.4;
-}
-.tag-row{
-  display:flex;
-  gap:6px;
-  flex-wrap:wrap;
-  margin-top:10px;
-}
-.pill{
-  padding:3px 9px;
-  border-radius:999px;
-  font-size:11.5px;
-  font-weight:500;
-  border:1px solid var(--border);
-  background:var(--bg);
-  color:var(--muted);
-}
-.pill.high{background:var(--high-bg); color:var(--high); border-color:#fecaca;}
-.pill.med{background:var(--med-bg); color:var(--med); border-color:var(--accent-border);}
-.workflow-box{
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  background:var(--bg);
-  padding:12px;
-  margin:10px 0 0;
-}
-.workflow-item{
-  display:flex;
-  gap:10px;
-  margin-bottom:12px;
-}
-.workflow-item:last-child{margin-bottom:0}
-.dot{
-  width:7px;
-  height:7px;
-  border-radius:50%;
-  flex:0 0 7px;
-  margin-top:7px;
-}
-.dot.red{background:var(--red)}
-.dot.orange{background:var(--orange)}
-.dot.green{background:var(--green)}
-.workflow-title{
-  font-size:13.5px;
-  font-weight:600;
-  margin-bottom:2px;
-}
-.workflow-desc{
-  color:var(--muted);
-  font-size:12.5px;
-  line-height:1.4;
-}
-.hero{
-  padding:18px 20px;
-}
-.hero-top{
-  display:flex;
-  justify-content:space-between;
-  gap:16px;
-  align-items:flex-start;
-}
-.person{
-  display:flex;
-  gap:12px;
-  align-items:flex-start;
-}
-.avatar{
-  width:44px;
-  height:44px;
-  border-radius:50%;
-  background:linear-gradient(135deg,#AB0520,#0C234B);
-  color:#fff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:17px;
-  font-weight:600;
-  flex-shrink:0;
-}
-.hero-name{
-  font-size:22px;
-  line-height:1.2;
-  font-weight:600;
-  margin:0 0 4px;
-  letter-spacing:-0.3px;
-}
-.hero-meta{
-  color:var(--muted);
-  font-size:13.5px;
-  line-height:1.4;
-}
-.risk-badge{
-  padding:4px 12px;
-  border-radius:999px;
-  font-size:12px;
-  font-weight:600;
-  background:var(--high-bg);
-  color:var(--high);
-  border:1px solid #fecaca;
-  white-space:nowrap;
-}
-.metric-grid{
-  margin-top:14px;
-  display:grid;
-  grid-template-columns:repeat(4, 1fr);
-  gap:10px;
-}
-.metric{
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  padding:12px 14px 10px;
-  background:var(--bg);
-  transition:border-color .12s;
-}
-.metric:hover{border-color:var(--border-strong)}
-.metric-label{
-  font-size:12px;
-  font-weight:500;
-  color:var(--muted);
-  margin-bottom:6px;
-  text-transform:uppercase;
-  letter-spacing:.05em;
-}
-.metric-value{
-  font-size:20px;
-  font-weight:600;
-  line-height:1;
-  color:var(--text);
-}
-.tabbar{
-  display:flex;
-  gap:4px;
-  margin-top:14px;
-  border-bottom:2px solid #AB0520;
-  padding-bottom:0;
-}
-.tab{
-  padding:7px 12px;
-  border-radius:6px 6px 0 0;
-  border:1px solid transparent;
-  border-bottom:none;
-  background:transparent;
-  font-weight:500;
-  font-size:13px;
-  color:var(--muted);
-  cursor:pointer;
-  font-family:inherit;
-  margin-bottom:-1px;
-  transition:color .12s;
-}
-.tab:hover{color:var(--text)}
-.tab.active{
-  background:var(--panel);
-  border-color:var(--border);
-  border-bottom-color:var(--panel);
-  color:#AB0520;
-  font-weight:600;
-}
-.view{display:none}
-.view.active{display:block}
-.grid2{
-  margin-top:14px;
-  display:grid;
-  grid-template-columns:1.1fr .9fr;
-  gap:14px;
-  align-items:start;
-}
-.content-panel{
-  padding:16px 18px;
-}
-.header-row{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  gap:10px;
-  margin-bottom:14px;
-}
-.header-row > div:first-child{
-  min-width:0;
-}
-.content-title{
-  font-size:18px;
-  font-weight:600;
-  line-height:1.2;
-  margin:0 0 4px;
-}
-.content-sub{
-  color:var(--muted);
-  font-size:13.5px;
-  line-height:1.4;
-}
-.count-pill{
-  padding:3px 9px;
-  border-radius:999px;
-  background:var(--bg);
-  color:var(--muted);
-  font-size:12px;
-  font-weight:500;
-  white-space:nowrap;
-  border:1px solid var(--border);
-}
-.columns2{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:14px;
-  align-items:start;
-}
-.block{
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  padding:14px;
-  background:var(--bg);
-  height:100%;
-}
-.block-title{
-  font-size:15px;
-  font-weight:600;
-  margin-bottom:12px;
-}
-.item{
-  display:flex;
-  gap:10px;
-  margin-bottom:14px;
-}
-.item:last-child{margin-bottom:0}
-.item-text{
-  font-size:16px;
-  font-weight:600;
-  line-height:1.25;
-}
-.item-sub{
-  color:var(--muted);
-  font-size:13px;
-  margin-top:3px;
-  line-height:1.3;
-}
-.alert{
-  border:1px solid #fecaca;
-  background:var(--high-bg);
-  border-radius:var(--radius);
-  padding:14px 16px;
-  margin-bottom:12px;
-}
-.alert.warn{
-  border-color:var(--accent-border);
-  background:var(--med-bg);
-}
-.alert.good{
-  border-color:#bbf7d0;
-  background:var(--green-bg);
-}
-.alert-title{
-  font-size:16px;
-  font-weight:600;
-  line-height:1.25;
-  margin-bottom:5px;
-}
-.alert-sub{
-  color:var(--muted);
-  font-size:13px;
-  line-height:1.35;
-}
-.detail-grid{
-  margin-top:16px;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:16px;
-  align-items:start;
-}
-.detail-card{
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  padding:16px;
-  background:var(--bg);
-}
-.detail-title{
-  font-size:19px;
-  font-weight:600;
-  margin:0 0 12px;
-}
-.list{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-}
-.list-row{
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  padding:14px 16px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:14px;
-  background:var(--bg);
-}
-.list-name{
-  font-size:16px;
-  font-weight:600;
-}
-.list-desc{
-  margin-top:4px;
-  color:var(--muted);
-  font-size:13px;
-}
-.status{
-  min-width:110px;
-  text-align:center;
-  padding:8px 12px;
-  border-radius:999px;
-  font-size:12px;
-  font-weight:600;
-  white-space:nowrap;
-  letter-spacing:.01em;
-}
-.status.good{background:var(--green-bg); color:var(--green)}
-.status.warn{background:var(--med-bg); color:#b45309}
-.status.bad{background:#f9e7e7; color:var(--red)}
-.chart-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));
-  gap:12px;
-  align-items:start;
-}
-.chart-card{
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  padding:10px 10px 8px;
-  background:var(--bg);
-  transition:.16s ease;
-  height:100%;
-  display:flex;
-  flex-direction:column;
-  justify-content:flex-start;
-}
-.chart-card:hover{
-  transform:translateY(-1px);
-  box-shadow:0 12px 24px rgba(0,0,0,.06);
-}
-.chart-title{
-  font-size:15px;
-  font-weight:600;
-  margin:0 0 3px;
-}
-.chart-meta{
-  color:var(--muted);
-  font-size:11px;
-  margin-bottom:8px;
-}
-.chart-card svg{
-  width:100%;
-  height:auto;
-  display:block;
-  margin-top:2px;
-}
-.legend-row{
-  margin-top:10px;
-  color:var(--muted);
-  font-size:12px;
-  display:flex;
-  gap:14px;
-  flex-wrap:wrap;
-}
-.legend-row span{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-}
-.swatch{
-  width:11px;
-  height:11px;
-  border-radius:999px;
-  display:inline-block;
-}
-.timeline{
-  display:flex;
-  flex-direction:column;
-  gap:14px;
-}
-.event{
-  display:grid;
-  grid-template-columns:120px 1fr;
-  gap:16px;
-  align-items:start;
-}
-.event-date{
-  color:var(--muted);
-  font-size:13px;
-  font-weight:600;
-  text-transform:uppercase;
-  letter-spacing:.04em;
-  padding-top:2px;
-}
-.event-card{
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  background:var(--bg);
-  padding:14px;
-}
-.source{
-  display:inline-block;
-  border-radius:999px;
-  padding:5px 9px;
-  font-size:11px;
-  font-weight:600;
-  margin-bottom:8px;
-}
-.source.hospital{background:#fff8e7;color:#16a34a}
-.source.fqhc{background:#edf8ef;color:#15803d}
-.source.chw{background:var(--med-bg);color:var(--med)}
-.source.wearable{background:#faf5ff;color:#6941c6}
-.event-title{
-  font-size:16px;
-  font-weight:600;
-  margin-bottom:4px;
-}
-.event-desc{
-  color:var(--muted);
-  font-size:14px;
-  line-height:1.4;
-}
-.task-table{
-  width:100%;
-  border-collapse:collapse;
-  font-size:14px;
-}
-.task-table th,.task-table td{
-  text-align:left;
-  padding:12px 10px;
-  border-bottom:1px solid var(--border);
-  vertical-align:top;
-}
-.task-table th{
-  color:var(--muted);
-  font-size:12px;
-  text-transform:uppercase;
-  letter-spacing:.05em;
-}
-.priority{
-  display:inline-block;
-  padding:5px 10px;
-  border-radius:999px;
-  font-size:12px;
-  font-weight:600;
-}
-.priority.high{background:var(--high-bg);color:var(--red)}
-.priority.medium{background:var(--med-bg);color:var(--orange)}
-.priority.low{background:var(--green-bg);color:var(--green)}
-.footer-note{
-  color:var(--muted);
-  font-size:12px;
-  margin-top:10px;
-}
-.snapshot{
-  white-space:pre-wrap;
-  line-height:1.55;
-  font-size:15px;
-}
-.modal-backdrop{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.4);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-  z-index:50;
-}
-.modal-backdrop.open{display:flex}
-.modal{
-  max-width:900px;
-  width:100%;
-  max-height:85vh;
-  overflow:auto;
-  background:#fff;
-  border-radius:var(--radius-lg);
-  border:1px solid var(--border);
-  box-shadow:0 24px 60px rgba(0,0,0,.16);
-}
-.modal-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  gap:12px;
-  padding:20px 22px 12px 22px;
-  border-bottom:1px solid var(--border);
-}
-.modal-header h3{
-  margin:0;
-  font-size:28px;
-}
-.modal-body{
-  padding:20px 22px;
-}
-.modal-close{
-  border:1px solid var(--border);
-  background:#fff;
-  border-radius:10px;
-  padding:8px 12px;
-  font-weight:500;
-  cursor:pointer;
-}
-.toast{
-  position:fixed;
-  right:20px;
-  bottom:20px;
-  background:#172638;
-  color:#fff;
-  padding:12px 14px;
-  border-radius:12px;
-  box-shadow:var(--shadow);
-  font-size:14px;
-  opacity:0;
-  transform:translateY(8px);
-  transition:.2s;
-  pointer-events:none;
-  z-index:40;
-}
-.toast.show{
-  opacity:1;
-  transform:translateY(0);
+  padding:20px 24px 32px;
 }
 
-.view-toggle{
+/* ── MODE SWITCHER ──────────────────────────────────────────────── */
+.mode-strip {
   display:flex;
-  gap:8px;
-  margin-top:14px;
-}
-.mode-btn{
-  padding:10px 14px;
-  border-radius:12px;
+  gap:6px;
+  margin-bottom:20px;
+  background:var(--surface);
   border:1px solid var(--border);
-  background:#fff;
-  font-weight:600;
-  font-size:13px;
-  color:var(--text);
-  cursor:pointer;
+  border-radius:var(--r-lg);
+  padding:5px;
+  width:fit-content;
+  box-shadow:var(--shadow-sm);
 }
-.mode-btn.active{
-  background:#fff8e7;
-  border-color:#fde68a;
-}
-.app-mode{display:none;}
-.app-mode.active{display:block;}
-.pop-layout{
-  display:grid;
-  grid-template-columns:300px 1fr;
-  gap:16px;
-  align-items:start;
-  margin-top:16px;
-}
-.filter-panel{
-  padding:16px;
-  position:sticky;
-  top:12px;
-}
-.filter-group{margin-bottom:18px;}
-.filter-title{
-  font-size:12px;
-  font-weight:600;
-  color:var(--muted);
-  text-transform:uppercase;
-  letter-spacing:.08em;
-  margin-bottom:10px;
-}
-.filter-chip-row{display:flex; flex-wrap:wrap; gap:8px;}
-.filter-chip{
-  border:1px solid var(--border);
-  background:#fff;
-  border-radius:999px;
-  padding:8px 11px;
-  font-size:12px;
-  font-weight:600;
-  cursor:pointer;
-  color:var(--muted);
-}
-.filter-chip.active{background:#fff8e7;border-color:#fde68a;color:#1a6cf0;}
-.pop-summary-grid{
-  display:grid;
-  grid-template-columns:repeat(6,1fr);
-  gap:12px;
-  margin-bottom:16px;
-}
-.pop-card{
-  border:1px solid var(--border);
-  border-radius:var(--radius-lg);
-  padding:12px 14px 10px;
-  background:var(--bg);
-}
-.pop-card-label{font-size:13px;font-weight:600;color:var(--muted);margin-bottom:8px;}
-.pop-card-value{font-size:28px;font-weight:600;line-height:1;}
-.pop-card-sub{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.35;}
-.cohort-chip-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
-.cohort-chip{
-  padding:8px 12px;
-  border-radius:999px;
-  border:1px solid var(--border);
-  background:#fff;
-  font-weight:600;
-  font-size:12px;
-  cursor:pointer;
-  color:var(--text);
-}
-.cohort-chip.active{background:#fff8e7;border-color:#fde68a;color:#1a6cf0;}
-.registry-table{width:100%;border-collapse:collapse;font-size:14px;}
-.registry-table th,.registry-table td{
-  text-align:left;
-  padding:12px 10px;
-  border-bottom:1px solid var(--border);
-  vertical-align:top;
-}
-.registry-table th{
-  color:var(--muted);
-  font-size:12px;
-  text-transform:uppercase;
-  letter-spacing:.05em;
-}
-.registry-row-btn{
+.mode-btn {
+  padding:8px 16px;
+  border-radius:10px;
   border:none;
   background:transparent;
-  padding:0;
-  font:inherit;
-  color:#1a6cf0;
+  font-family:'DM Sans',sans-serif;
   font-weight:600;
-  cursor:pointer;
-}
-.registry-sub{display:block;color:var(--muted);font-size:12px;margin-top:4px;}
-.mini-note{font-size:12px;color:var(--muted);margin-top:8px;}
-
-
-.series-label-row{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  margin:-2px 0 10px;
-}
-.series-pill{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  padding:6px 10px;
-  border-radius:999px;
-  font-size:11px;
-  font-weight:600;
-  background:var(--bg);
-  border:1px solid var(--border);
-  color:var(--muted);
-}
-.series-dot{
-  width:10px;
-  height:10px;
-  border-radius:999px;
-  display:inline-block;
-}
-.med-adherence{
-  border:1px solid var(--border);
-  background:#fff;
-  border-radius:var(--radius);
-  padding:11px 12px;
-  margin-bottom:12px;
-}
-.med-adherence-top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-  margin-bottom:6px;
-}
-.med-adherence-title{
-  font-size:12px;
-  font-weight:600;
-  color:var(--muted);
-}
-.adherence-pill{
-  padding:6px 10px;
-  border-radius:999px;
-  font-size:11px;
-  font-weight:600;
-}
-.adherence-pill.good{background:var(--green-bg);color:var(--green)}
-.adherence-pill.warn{background:var(--med-bg);color:#b45309}
-.adherence-pill.bad{background:var(--high-bg);color:var(--red)}
-.med-adherence-sub{
-  color:var(--muted);
   font-size:13px;
-  line-height:1.35;
+  color:var(--text3);
+  cursor:pointer;
+  transition:all 0.15s;
+  white-space:nowrap;
 }
-.referral-summary-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:12px;
-  margin-bottom:14px;
+.mode-btn:hover { color:var(--text2); background:var(--bg2); }
+.mode-btn.active {
+  background:var(--ua-navy);
+  color:#fff;
+  box-shadow:0 1px 4px rgba(12,35,75,0.25);
 }
-.referral-summary-card{
+.app-mode { display:none; }
+.app-mode.active { display:block; }
+
+/* ── PANELS ─────────────────────────────────────────────────────── */
+.panel {
+  background:var(--surface);
   border:1px solid var(--border);
-  border-radius:var(--radius);
+  border-radius:var(--r-lg);
+  box-shadow:var(--shadow-sm);
+}
+.layout {
+  display:grid;
+  grid-template-columns:300px 1fr;
+  gap:16px;
+  align-items:start;
+}
+.sidebar { padding:16px; position:sticky; top:76px; }
+
+/* ── SIDEBAR PATIENTS ───────────────────────────────────────────── */
+.section-label {
+  font-size:10px; font-weight:700;
+  text-transform:uppercase; letter-spacing:0.1em;
+  color:var(--text3);
+  margin:4px 2px 10px;
+}
+.patient-card {
+  border:1.5px solid var(--border);
+  border-radius:var(--r-lg);
+  padding:13px;
+  margin:10px 2px;
+  background:var(--surface2);
+  cursor:pointer;
+  transition:all 0.13s;
+}
+.patient-card:hover { transform:translateY(-1px); box-shadow:var(--shadow-sm); }
+.patient-card.active {
+  background:var(--ua-navy-light);
+  border-color:var(--ua-navy);
+}
+.patient-name { font-size:15px; font-weight:700; margin-bottom:4px; }
+.patient-meta { color:var(--text3); font-size:12px; line-height:1.4; }
+.tag-row { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+.pill {
+  padding:5px 10px; border-radius:999px;
+  font-size:11px; font-weight:700;
+  border:1px solid var(--border2);
+  background:var(--bg2); color:var(--text2);
+}
+.pill.high { background:var(--red-bg); color:var(--red); border:none; }
+.pill.med  { background:var(--amber-bg); color:var(--amber); border:none; }
+
+.workflow-box {
+  border:1px solid var(--border);
+  border-radius:var(--r-lg);
+  background:var(--surface2);
   padding:14px;
-  background:var(--bg);
+  margin:12px 2px 0;
 }
-.referral-summary-card .big{
-  font-size:24px;
-  font-weight:600;
-  line-height:1;
-  margin-bottom:6px;
+.workflow-item { display:flex; gap:10px; margin-bottom:14px; }
+.workflow-item:last-child { margin-bottom:0; }
+.dot { width:8px; height:8px; border-radius:50%; flex:0 0 8px; margin-top:7px; }
+.dot.red    { background:var(--red); }
+.dot.orange { background:var(--amber); }
+.dot.green  { background:var(--green); }
+.workflow-title { font-size:13px; font-weight:700; margin-bottom:2px; }
+.workflow-desc  { color:var(--text3); font-size:12px; line-height:1.4; }
+
+/* ── HERO ───────────────────────────────────────────────────────── */
+.hero { padding:20px 22px; }
+.hero-top { display:flex; justify-content:space-between; gap:16px; align-items:flex-start; }
+.person { display:flex; gap:14px; align-items:flex-start; }
+.avatar {
+  width:50px; height:50px; border-radius:50%;
+  background:linear-gradient(135deg,var(--ua-navy),var(--ua-navy-mid));
+  color:#fff; display:flex; align-items:center; justify-content:center;
+  font-size:18px; font-weight:800; flex-shrink:0;
 }
-.referral-area-tabs{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  margin-bottom:14px;
+.hero-name { font-family:'Libre Baskerville',serif; font-size:24px; font-weight:700; margin:0 0 5px; letter-spacing:-0.3px; }
+.hero-meta { color:var(--text3); font-size:13px; line-height:1.4; }
+.risk-badge {
+  padding:6px 14px; border-radius:999px;
+  font-size:12px; font-weight:800;
+  background:var(--red-bg); color:var(--red);
+  white-space:nowrap; letter-spacing:0.03em;
 }
-.referral-tab{
+.risk-badge.med { background:var(--amber-bg); color:var(--amber); }
+.metric-grid { margin-top:16px; display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+.metric {
   border:1px solid var(--border);
-  background:#fff;
-  color:var(--text);
-  border-radius:999px;
-  padding:8px 12px;
-  font-size:12px;
-  font-weight:600;
-  cursor:pointer;
+  border-radius:var(--r-lg);
+  padding:12px 14px;
+  background:var(--surface2);
+  transition:all 0.13s;
 }
-.referral-tab.active{
-  background:#fff8e7;
-  border-color:#fde68a;
-  color:#1a6cf0;
+.metric.clickable { cursor:pointer; }
+.metric.clickable:hover { border-color:var(--ua-navy); background:var(--ua-navy-light); }
+.metric-label { font-size:11px; font-weight:700; color:var(--text3); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.05em; }
+.metric-value { font-size:20px; font-weight:700; color:var(--text); line-height:1; }
+
+/* ── TABS ───────────────────────────────────────────────────────── */
+.tabbar { display:flex; gap:4px; margin-top:14px; flex-wrap:wrap; }
+.tab {
+  padding:7px 13px;
+  border-radius:8px;
+  border:1.5px solid var(--border);
+  background:var(--surface);
+  font-family:'DM Sans',sans-serif;
+  font-weight:600; font-size:12px;
+  color:var(--text2); cursor:pointer;
+  transition:all 0.12s;
 }
-.referral-status-chip{
-  display:inline-block;
-  margin-top:6px;
-  padding:6px 10px;
-  border-radius:999px;
-  font-size:11px;
-  font-weight:600;
-}
-.referral-status-chip.not-needed{background:var(--bg);color:var(--muted)}
-.referral-status-chip.referral-made{background:var(--med-bg);color:#b45309}
-.referral-status-chip.referral-completed{background:var(--green-bg);color:var(--green)}
-.trigger-box{
+.tab:hover { background:var(--bg2); }
+.tab.active { background:var(--ua-navy-light); border-color:var(--ua-navy); color:var(--ua-navy); }
+.view { display:none; }
+.view.active { display:block; }
+
+/* ── CONTENT PANELS ─────────────────────────────────────────────── */
+.content-panel { padding:18px 20px; }
+.header-row { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:14px; }
+.header-row>div:first-child { min-width:0; }
+.content-title { font-family:'Libre Baskerville',serif; font-size:18px; font-weight:700; margin:0 0 4px; }
+.content-sub { color:var(--text3); font-size:13px; line-height:1.5; }
+.count-pill {
+  padding:5px 10px; border-radius:999px;
+  background:var(--bg2); color:var(--text2);
+  font-size:11px; font-weight:700; white-space:nowrap;
   border:1px solid var(--border);
-  border-radius:var(--radius);
-  background:var(--bg);
-  padding:16px;
-}
-.trigger-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:14px;
-}
-.trigger-title{
-  font-size:18px;
-  font-weight:600;
-  margin:0 0 8px;
-}
-.trigger-subtitle{
-  color:var(--muted);
-  font-size:13px;
-  margin-bottom:12px;
-}
-.trigger-label{
-  color:var(--muted);
-  font-size:12px;
-  font-weight:600;
-  text-transform:uppercase;
-  letter-spacing:.05em;
-  margin-bottom:6px;
-}
-.trigger-text{
-  font-size:14px;
-  line-height:1.45;
-  color:var(--text);
 }
 
+/* ── GRID HELPERS ───────────────────────────────────────────────── */
+.grid2 { margin-top:16px; display:grid; grid-template-columns:1.1fr 0.9fr; gap:16px; align-items:start; }
+.columns2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; align-items:start; }
+.block { border:1px solid var(--border); border-radius:var(--r-lg); padding:14px; background:var(--surface2); }
+.block-title { font-size:12px; font-weight:700; margin-bottom:10px; color:var(--text2); text-transform:uppercase; letter-spacing:0.05em; }
+.item { display:flex; gap:8px; margin-bottom:12px; }
+.item:last-child { margin-bottom:0; }
+.item-text { font-size:14px; font-weight:600; line-height:1.3; }
+.item-sub { color:var(--text3); font-size:12px; margin-top:2px; line-height:1.3; }
 
-.home-referral-list{display:flex;flex-direction:column;gap:8px;}
-.home-referral-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--border);border-radius:12px;background:#fff;cursor:pointer;}
-.home-referral-item:hover{background:var(--bg);}
-.home-referral-copy{font-size:12px;line-height:1.25;}
-.home-referral-copy strong{display:block;font-size:13px;color:var(--text);margin-bottom:1px;}
-.home-referral-empty{border:1px dashed var(--border);border-radius:12px;padding:10px;background:var(--bg);color:var(--muted);font-size:12px;}
-.home-referral-panel .content-panel{padding:14px 14px 12px;}
-.home-referral-panel .header-row{margin-bottom:10px;}
-.home-referral-panel .content-title{font-size:20px;}
-.home-referral-panel .content-sub{font-size:13px;}
-.home-referral-panel .count-pill{font-size:12px;padding:6px 10px;}
-.home-referral-panel{align-self:start;}
-.home-referral-list{margin-top:2px;}
-.compact-home-grid .content-panel{height:100%;}
-.compact-home-grid{grid-template-columns:320px minmax(0,1fr);align-items:start;}
-.list-row.clickable{cursor:pointer;transition:.12s ease;}
-.list-row.clickable:hover{background:var(--bg);border-color:#cdd9ea;}
-.trigger-box{height:100%;}
+/* ── ALERTS ─────────────────────────────────────────────────────── */
+.alert { border-radius:var(--r-lg); padding:13px 15px; margin-bottom:10px; }
+.alert.bad  { border:1px solid #F5C2C2; background:var(--red-bg); }
+.alert.warn { border:1px solid #F0D99A; background:var(--amber-bg); }
+.alert.good { border:1px solid #A8D9B8; background:var(--green-bg); }
+.alert-title { font-size:14px; font-weight:700; margin-bottom:3px; }
+.alert.bad  .alert-title { color:var(--red); }
+.alert.warn .alert-title { color:var(--amber); }
+.alert.good .alert-title { color:var(--green); }
+.alert-sub { color:var(--text3); font-size:12px; line-height:1.4; }
 
+/* ── LIST ROWS ──────────────────────────────────────────────────── */
+.list { display:flex; flex-direction:column; gap:8px; }
+.list-row {
+  border:1px solid var(--border);
+  border-radius:var(--r-lg);
+  padding:12px 14px;
+  display:flex; align-items:center;
+  justify-content:space-between; gap:12px;
+  background:var(--surface);
+}
+.list-row.clickable { cursor:pointer; transition:0.12s ease; }
+.list-row.clickable:hover { background:var(--bg2); border-color:var(--border2); }
+.list-name { font-size:14px; font-weight:600; }
+.list-desc { margin-top:3px; color:var(--text3); font-size:12px; }
+.status {
+  min-width:100px; text-align:center;
+  padding:6px 10px; border-radius:999px;
+  font-size:11px; font-weight:700; white-space:nowrap;
+}
+.status.good { background:var(--green-bg); color:var(--green); }
+.status.warn { background:var(--amber-bg); color:var(--amber); }
+.status.bad  { background:var(--red-bg); color:var(--red); }
+
+/* ── DETAIL CARDS ───────────────────────────────────────────────── */
+.detail-grid { margin-top:16px; display:grid; grid-template-columns:1fr 1fr; gap:16px; align-items:start; }
+.detail-card { border:1px solid var(--border); border-radius:var(--r-lg); padding:16px; background:var(--surface); }
+.detail-title { font-family:'Libre Baskerville',serif; font-size:17px; font-weight:700; margin:0 0 12px; }
+
+/* ── CHART CARDS ─────────────────────────────────────────────────── */
+.chart-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:10px; align-items:start; }
+.chart-card {
+  border:1px solid var(--border);
+  border-radius:var(--r-lg);
+  padding:12px;
+  background:var(--surface);
+  transition:0.15s ease;
+  display:flex; flex-direction:column;
+}
+.chart-card:hover { transform:translateY(-1px); box-shadow:var(--shadow); }
+.chart-title { font-size:13px; font-weight:700; margin:0 0 2px; }
+.chart-meta  { color:var(--text3); font-size:11px; margin-bottom:8px; }
+.chart-card svg { width:100%; height:auto; display:block; }
+.legend-row { margin-top:10px; color:var(--text3); font-size:11px; display:flex; gap:12px; flex-wrap:wrap; }
+.legend-row span { display:inline-flex; align-items:center; gap:5px; }
+.swatch { width:10px; height:10px; border-radius:999px; display:inline-block; }
+
+/* ── TIMELINE ───────────────────────────────────────────────────── */
+.timeline { display:flex; flex-direction:column; gap:12px; }
+.event { display:grid; grid-template-columns:110px 1fr; gap:14px; align-items:start; }
+.event-date { color:var(--text3); font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; padding-top:3px; font-family:'DM Mono',monospace; }
+.event-card { border:1px solid var(--border); border-radius:var(--r-lg); background:var(--surface); padding:12px 14px; }
+.source { display:inline-block; border-radius:999px; padding:3px 8px; font-size:10px; font-weight:800; margin-bottom:7px; }
+.source.hospital  { background:var(--blue-bg);  color:var(--blue); }
+.source.fqhc      { background:var(--green-bg); color:var(--green); }
+.source.chw       { background:var(--amber-bg); color:var(--amber); }
+.source.wearable  { background:#F0EEFF; color:#5A2D9A; }
+.event-title { font-size:14px; font-weight:700; margin-bottom:3px; }
+.event-desc  { color:var(--text3); font-size:13px; line-height:1.45; }
+
+/* ── TASK TABLE ─────────────────────────────────────────────────── */
+.task-table { width:100%; border-collapse:collapse; font-size:13px; }
+.task-table th, .task-table td { text-align:left; padding:10px 8px; border-bottom:1px solid var(--border); vertical-align:top; }
+.task-table th { color:var(--text3); font-size:11px; text-transform:uppercase; letter-spacing:0.05em; font-weight:700; background:var(--bg2); }
+.task-table tr:last-child td { border-bottom:none; }
+.priority { display:inline-block; padding:4px 9px; border-radius:999px; font-size:11px; font-weight:700; }
+.priority.high   { background:var(--red-bg);   color:var(--red); }
+.priority.medium { background:var(--amber-bg); color:var(--amber); }
+.priority.low    { background:var(--green-bg); color:var(--green); }
+.footer-note { color:var(--text3); font-size:11px; margin-top:10px; font-style:italic; }
+
+/* ── SNAPSHOT ───────────────────────────────────────────────────── */
+.snapshot { white-space:pre-wrap; line-height:1.65; font-size:14px; color:var(--text2); }
+
+/* ── MODAL ──────────────────────────────────────────────────────── */
+.modal-backdrop {
+  position:fixed; inset:0;
+  background:rgba(12,35,75,0.45);
+  display:none; align-items:center; justify-content:center;
+  padding:20px; z-index:100;
+}
+.modal-backdrop.open { display:flex; }
+.modal {
+  max-width:860px; width:100%; max-height:85vh; overflow:auto;
+  background:var(--surface);
+  border-radius:var(--r-lg);
+  border:1px solid var(--border);
+  box-shadow:var(--shadow-lg);
+}
+.modal-header {
+  display:flex; justify-content:space-between; align-items:flex-start; gap:12px;
+  padding:20px 22px 14px;
+  border-bottom:1px solid var(--border);
+  position:sticky; top:0; background:var(--surface);
+}
+.modal-header h3 { margin:0; font-family:'Libre Baskerville',serif; font-size:22px; }
+.modal-body { padding:20px 22px; }
+.modal-close {
+  border:1.5px solid var(--border); background:var(--surface);
+  border-radius:var(--r); padding:7px 13px;
+  font-family:'DM Sans',sans-serif;
+  font-weight:700; font-size:13px; cursor:pointer; color:var(--text2);
+}
+.modal-close:hover { background:var(--bg2); }
+
+/* ── TOAST ──────────────────────────────────────────────────────── */
+.toast {
+  position:fixed; right:20px; bottom:20px;
+  background:var(--ua-navy); color:#fff;
+  padding:11px 14px; border-radius:var(--r);
+  box-shadow:var(--shadow-lg); font-size:13px;
+  opacity:0; transform:translateY(8px);
+  transition:0.2s; pointer-events:none; z-index:200;
+}
+.toast.show { opacity:1; transform:translateY(0); }
+
+/* ── BUTTONS ─────────────────────────────────────────────────────── */
+.btn {
+  background:var(--surface);
+  border:1.5px solid var(--border);
+  color:var(--text2);
+  padding:8px 14px;
+  border-radius:var(--r);
+  font-family:'DM Sans',sans-serif;
+  font-size:13px; font-weight:700;
+  cursor:pointer; transition:all 0.13s;
+}
+.btn:hover { background:var(--bg2); border-color:var(--border2); }
+.btn.primary { background:var(--ua-navy); color:#fff; border-color:var(--ua-navy); }
+.btn.primary:hover { background:#0A1D40; }
+.btn.danger { background:var(--ua-red); color:#fff; border-color:var(--ua-red); }
+.top { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; margin-bottom:16px; }
+.top-actions { display:flex; gap:8px; flex-wrap:wrap; }
+
+/* ── MED ADHERENCE ───────────────────────────────────────────────── */
+.med-adherence { border:1px solid var(--border); background:var(--surface); border-radius:var(--r-lg); padding:10px 12px; margin-bottom:10px; }
+.med-adherence-top { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:5px; }
+.med-adherence-title { font-size:11px; font-weight:700; color:var(--text2); text-transform:uppercase; letter-spacing:0.05em; }
+.adherence-pill { padding:4px 9px; border-radius:999px; font-size:11px; font-weight:700; }
+.adherence-pill.good { background:var(--green-bg); color:var(--green); }
+.adherence-pill.warn { background:var(--amber-bg); color:var(--amber); }
+.adherence-pill.bad  { background:var(--red-bg);   color:var(--red); }
+.med-adherence-sub { color:var(--text3); font-size:12px; line-height:1.4; }
+
+/* ── SERIES PILLS / CARE TEAM ───────────────────────────────────── */
+.series-label-row { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px; }
+.series-pill { display:inline-flex; align-items:center; gap:5px; padding:5px 9px; border-radius:999px; font-size:11px; font-weight:700; background:var(--bg2); border:1px solid var(--border); color:var(--text2); }
+.series-dot { width:8px; height:8px; border-radius:999px; display:inline-block; }
+.care-team-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.care-team-card { border:1px solid var(--border); border-radius:var(--r-lg); padding:12px; background:var(--surface2); }
+.care-team-role { font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:0.07em; color:var(--text3); margin-bottom:5px; }
+.care-team-name { font-size:15px; font-weight:700; color:var(--text); margin-bottom:3px; }
+.care-team-meta { color:var(--text3); font-size:12px; line-height:1.35; }
+.care-team-pill { display:inline-block; margin-top:7px; padding:4px 8px; border-radius:999px; background:var(--ua-navy-light); color:var(--ua-navy); font-size:11px; font-weight:700; }
+
+/* ── TRIAL PILLS ─────────────────────────────────────────────────── */
+.trial-pill { background:var(--blue-bg); color:var(--blue); border:1px solid #B0C8EC; }
+.trial-pill.enrolled { background:var(--green-bg); color:var(--green); border:1px solid #A8D9B8; }
+.trial-pill.screening { background:var(--amber-bg); color:var(--amber); border:1px solid #E8C97A; }
+.trial-match-card { border:1px solid var(--border); border-radius:var(--r-lg); padding:12px 14px; background:var(--surface2); }
+.trial-match-title { font-size:14px; font-weight:700; margin-bottom:4px; }
+.trial-match-sub { color:var(--text3); font-size:12px; line-height:1.4; }
+.trial-match-action { margin-top:7px; font-size:12px; font-weight:700; color:var(--text2); }
+.trial-match-pill { display:inline-block; margin-top:7px; padding:5px 9px; border-radius:999px; font-size:11px; font-weight:700; }
+.trial-match-pill.enrolled  { background:var(--green-bg); color:var(--green); border:1px solid #A8D9B8; }
+.trial-match-pill.screening { background:var(--amber-bg); color:var(--amber); border:1px solid #E8C97A; }
+.trial-match-pill { background:var(--blue-bg); color:var(--blue); border:1px solid #B0C8EC; }
+.trial-note { margin-top:10px; padding:10px 12px; border-radius:var(--r); border:1px solid var(--border); background:var(--surface2); font-size:12px; line-height:1.45; color:var(--text2); }
+.clickable-pill { cursor:pointer; transition:0.12s ease; }
+.clickable-pill:hover { transform:translateY(-1px); box-shadow:var(--shadow-sm); }
+
+/* ── REFERRALS ───────────────────────────────────────────────────── */
+.referral-summary-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:14px; }
+.referral-summary-card { border:1px solid var(--border); border-radius:var(--r-lg); padding:13px; background:var(--surface2); }
+.referral-summary-card .big { font-size:22px; font-weight:800; line-height:1; margin-bottom:5px; color:var(--text); }
+.referral-area-tabs { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px; }
+.referral-tab { border:1.5px solid var(--border); background:var(--surface); color:var(--text2); border-radius:999px; padding:6px 12px; font-size:12px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; }
+.referral-tab.active { background:var(--ua-navy-light); border-color:var(--ua-navy); color:var(--ua-navy); }
+.referral-status-chip { display:inline-block; margin-top:5px; padding:5px 9px; border-radius:999px; font-size:11px; font-weight:700; }
+.referral-status-chip.not-needed         { background:var(--bg2); color:var(--text3); }
+.referral-status-chip.referral-made      { background:var(--amber-bg); color:var(--amber); }
+.referral-status-chip.referral-completed { background:var(--green-bg); color:var(--green); }
+.trigger-box { border:1px solid var(--border); border-radius:var(--r-lg); background:var(--surface2); padding:16px; }
+.trigger-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.trigger-title { font-size:16px; font-weight:700; margin:0 0 7px; }
+.trigger-subtitle { color:var(--text3); font-size:12px; margin-bottom:11px; }
+.trigger-label { color:var(--text3); font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:5px; }
+.trigger-text { font-size:13px; line-height:1.5; color:var(--text2); }
+
+/* ── HOME REFERRAL ───────────────────────────────────────────────── */
+.home-referral-list { display:flex; flex-direction:column; gap:7px; }
+.home-referral-item { display:flex; justify-content:space-between; align-items:center; gap:10px; padding:8px 10px; border:1px solid var(--border); border-radius:var(--r); background:var(--surface); cursor:pointer; }
+.home-referral-item:hover { background:var(--bg2); }
+.home-referral-copy { font-size:12px; line-height:1.3; }
+.home-referral-copy strong { display:block; font-size:13px; color:var(--text); margin-bottom:1px; }
+.home-referral-empty { border:1px dashed var(--border); border-radius:var(--r); padding:10px; background:var(--surface2); color:var(--text3); font-size:12px; }
+.compact-home-grid { grid-template-columns:320px minmax(0,1fr); }
+
+/* ── LIFESTYLE ───────────────────────────────────────────────────── */
+.lifestyle-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+.lifestyle-stat { border:1px solid var(--border); border-radius:var(--r-lg); padding:13px; background:var(--surface2); }
+.lifestyle-label { font-size:12px; font-weight:700; color:var(--text2); margin-bottom:9px; }
+.lifestyle-row { display:flex; justify-content:space-between; align-items:center; gap:10px; }
+.lifestyle-input { min-width:80px; padding:7px 11px; border:1px solid var(--border); border-radius:var(--r); background:var(--surface); color:var(--text); font-size:16px; font-weight:700; font-family:'DM Mono',monospace; display:inline-flex; align-items:center; }
+.lifestyle-status { font-size:11px; font-weight:700; padding:5px 9px; border-radius:999px; white-space:nowrap; }
+.lifestyle-status.below   { background:var(--bg2); color:var(--text3); }
+.lifestyle-status.meeting { background:var(--green-bg); color:var(--green); }
+.lifestyle-status.above   { background:var(--blue-bg); color:var(--blue); }
+
+/* ── VIDEO/EDU ───────────────────────────────────────────────────── */
+.edu-section h3 { cursor:pointer; margin-top:10px; margin-bottom:0; font-size:15px; font-weight:700; color:var(--text); }
+.edu-content { display:none; margin-top:10px; }
+.edu-helper { color:var(--text3); font-size:12px; margin-bottom:11px; }
+.video-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+.video-link { text-decoration:none; }
+.video-card { border:1px solid var(--border); border-radius:var(--r-lg); padding:12px; background:var(--surface2); transition:0.13s; }
+.video-card:hover { border-color:var(--ua-navy); background:var(--ua-navy-light); }
+.video-thumb { font-size:22px; margin-bottom:7px; }
+.video-card-title { font-size:13px; font-weight:700; color:var(--text); }
+
+/* ── PATIENT-FACING MODE ─────────────────────────────────────────── */
+.patient-facing-wrap { display:grid; grid-template-columns:280px 1fr; gap:16px; align-items:start; }
+.patient-facing-sidebar { padding:16px; position:sticky; top:76px; }
+.patient-facing-main { display:flex; flex-direction:column; gap:16px; }
+.patient-hero { padding:22px; }
+.patient-hero-title { font-family:'Libre Baskerville',serif; font-size:26px; font-weight:700; line-height:1.15; margin:0 0 8px; }
+.patient-hero-sub { color:var(--text3); font-size:14px; line-height:1.5; max-width:800px; }
+.patient-pill-row { display:flex; gap:8px; flex-wrap:wrap; margin-top:13px; }
+.patient-big-pill { padding:6px 12px; border-radius:999px; background:var(--bg2); color:var(--text2); font-size:12px; font-weight:700; border:1px solid var(--border); }
+.patient-status-pill { background:var(--amber-bg); color:var(--amber); border-color:#E8C97A; }
+.patient-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; align-items:start; }
+.patient-card-panel { padding:18px; }
+.patient-card-title { font-family:'Libre Baskerville',serif; font-size:18px; font-weight:700; margin:0 0 5px; }
+.patient-card-sub { color:var(--text3); font-size:13px; line-height:1.4; margin-bottom:13px; }
+.patient-checklist,.patient-team-list,.patient-warning-list { display:flex; flex-direction:column; gap:9px; }
+.patient-check,.patient-team-item,.patient-warning,.patient-summary-item { border:1px solid var(--border); border-radius:var(--r-lg); background:var(--surface2); padding:11px 13px; }
+.patient-check { display:flex; gap:11px; align-items:flex-start; }
+.patient-check-icon { width:22px; height:22px; border-radius:50%; background:var(--ua-navy-light); color:var(--ua-navy); display:flex; align-items:center; justify-content:center; font-weight:800; flex:0 0 22px; margin-top:1px; font-size:12px; }
+.patient-check-title,.patient-warning-title { font-size:14px; font-weight:700; line-height:1.25; }
+.patient-check-sub,.patient-warning-sub,.patient-team-doing,.patient-summary-sub { color:var(--text3); font-size:12px; line-height:1.4; margin-top:3px; }
+.patient-team-role { font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:0.06em; color:var(--text3); margin-bottom:4px; }
+.patient-warning { background:var(--amber-bg); border-color:#E8C97A; }
+.patient-warning-title { color:var(--amber); }
+.patient-summary-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.patient-summary-stat { border:1px solid var(--border); border-radius:var(--r-lg); background:var(--surface2); padding:13px; }
+.patient-summary-label { font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:0.07em; color:var(--text3); margin-bottom:7px; }
+.patient-summary-value { font-size:24px; font-weight:800; line-height:1; color:var(--text); }
+.patient-summary-sub { color:var(--text3); font-size:12px; margin-top:5px; }
+.patient-edu-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.patient-edu-card { border:1px solid var(--border); border-radius:var(--r-lg); background:var(--surface2); padding:12px; }
+.patient-edu-media { height:160px; border-radius:var(--r); margin-bottom:10px; border:1px solid var(--border); background:linear-gradient(135deg,var(--bg2),var(--ua-navy-light)); display:flex; align-items:center; justify-content:center; padding:16px; text-align:center; }
+.patient-edu-media-inner { max-width:300px; }
+.patient-edu-kicker { font-size:11px; font-weight:800; letter-spacing:0.06em; text-transform:uppercase; color:var(--text3); margin-bottom:7px; }
+.patient-edu-button { display:inline-flex; align-items:center; justify-content:center; margin-top:11px; padding:9px 14px; border-radius:var(--r); background:var(--ua-navy); color:#fff; text-decoration:none; font-weight:700; font-size:13px; font-family:'DM Sans',sans-serif; }
+.patient-edu-title { font-size:15px; font-weight:700; margin-bottom:4px; }
+.patient-edu-copy { color:var(--text3); font-size:12px; line-height:1.35; }
+
+/* ── POPULATION MODE ─────────────────────────────────────────────── */
+.pop-layout { display:grid; grid-template-columns:280px 1fr; gap:16px; align-items:start; margin-top:0; }
+.filter-panel { padding:16px; position:sticky; top:76px; }
+.filter-group { margin-bottom:16px; }
+.filter-title { font-size:10px; font-weight:800; color:var(--text3); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:9px; }
+.filter-chip-row { display:flex; flex-wrap:wrap; gap:6px; }
+.filter-chip { border:1.5px solid var(--border); background:var(--surface); border-radius:999px; padding:6px 10px; font-size:12px; font-weight:700; cursor:pointer; color:var(--text2); font-family:'DM Sans',sans-serif; }
+.filter-chip.active { background:var(--ua-navy-light); border-color:var(--ua-navy); color:var(--ua-navy); }
+.pop-summary-grid { display:grid; grid-template-columns:repeat(6,1fr); gap:10px; margin-bottom:14px; }
+.pop-card { border:1px solid var(--border); border-radius:var(--r-lg); padding:12px 13px; background:var(--surface); }
+.pop-card-label { font-size:10px; font-weight:800; color:var(--text3); margin-bottom:7px; text-transform:uppercase; letter-spacing:0.05em; }
+.pop-card-value { font-size:24px; font-weight:800; line-height:1; color:var(--text); }
+.pop-card-sub { font-size:11px; color:var(--text3); margin-top:5px; line-height:1.3; }
+.cohort-chip-row { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px; }
+.cohort-chip { padding:6px 11px; border-radius:999px; border:1.5px solid var(--border); background:var(--surface); font-weight:700; font-size:12px; cursor:pointer; color:var(--text2); font-family:'DM Sans',sans-serif; }
+.cohort-chip.active { background:var(--ua-navy-light); border-color:var(--ua-navy); color:var(--ua-navy); }
+.registry-table { width:100%; border-collapse:collapse; font-size:13px; }
+.registry-table th, .registry-table td { text-align:left; padding:10px 9px; border-bottom:1px solid var(--border); vertical-align:top; }
+.registry-table th { color:var(--text3); font-size:10px; text-transform:uppercase; letter-spacing:0.06em; font-weight:700; background:var(--bg2); }
+.registry-table tbody tr:hover { background:var(--bg2); }
+.registry-row-btn { border:none; background:transparent; padding:0; font:inherit; color:var(--ua-navy); font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; }
+.registry-sub { display:block; color:var(--text3); font-size:11px; margin-top:3px; }
+.mini-note { font-size:11px; color:var(--text3); margin-top:8px; line-height:1.5; }
+
+/* ── GRANT NOTE ──────────────────────────────────────────────────── */
+#grantNote { border-left:3px solid var(--ua-red); }
+
+/* ── PATIENT PORTAL HEADER (for patient login) ───────────────────── */
+.portal-banner {
+  background:linear-gradient(135deg, var(--ua-navy) 0%, var(--ua-navy-mid) 100%);
+  border-radius:var(--r-lg);
+  padding:20px 24px;
+  margin-bottom:20px;
+  display:flex; align-items:center; gap:16px;
+}
+.portal-banner-icon { font-size:28px; }
+.portal-banner-text .t1 { font-family:'Libre Baskerville',serif; font-size:20px; font-weight:700; color:#fff; margin-bottom:3px; }
+.portal-banner-text .t2 { font-size:13px; color:rgba(255,255,255,0.6); }
+
+/* ── RESPONSIVE ──────────────────────────────────────────────────── */
 @media (max-width:1400px){
   .metric-grid{grid-template-columns:repeat(2,1fr)}
   .grid2,.detail-grid,.columns2,.chart-grid,.pop-summary-grid,.referral-summary-grid,.trigger-grid,.compact-home-grid{grid-template-columns:1fr 1fr}
 }
 @media (max-width:980px){
-  .layout{grid-template-columns:1fr}
-  .top{flex-direction:column}
-  .sidebar,.filter-panel{position:static}
+  .layout,.patient-facing-wrap,.pop-layout{grid-template-columns:1fr}
+  .sidebar,.filter-panel,.patient-facing-sidebar{position:static}
   .event{grid-template-columns:1fr}
-  .pop-layout,.pop-summary-grid,.referral-summary-grid,.trigger-grid{grid-template-columns:1fr}
+  .login-brand{display:none}
 }
 
-
-
-
-.patient-facing-wrap{
-  display:grid;
-  grid-template-columns:300px 1fr;
-  gap:16px;
-  align-items:start;
-}
-.patient-facing-sidebar{padding:16px;position:sticky;top:12px;}
-.patient-facing-main{display:flex;flex-direction:column;gap:16px;}
-.patient-hero{padding:22px;}
-.patient-hero-title{font-size:34px;font-weight:600;line-height:1.02;margin:0 0 8px;}
-.patient-hero-sub{color:var(--muted);font-size:16px;line-height:1.45;max-width:900px;}
-.patient-pill-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;}
-.patient-big-pill{padding:8px 14px;border-radius:999px;background:var(--bg);color:var(--muted);font-size:13px;font-weight:600;}
-.patient-status-pill{background:var(--med-bg);color:#b45309;}
-.patient-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;}
-.patient-card-panel{padding:18px;}
-.patient-card-title{font-size:24px;font-weight:600;margin:0 0 6px;}
-.patient-card-sub{color:var(--muted);font-size:14px;line-height:1.4;margin-bottom:14px;}
-.patient-checklist,.patient-team-list,.patient-warning-list,.patient-edu-grid{display:flex;flex-direction:column;gap:10px;}
-.patient-check,.patient-team-item,.patient-warning,.patient-summary-item{border:1px solid var(--border);border-radius:var(--radius);background:#fff;padding:12px 14px;}
-.patient-check{display:flex;gap:12px;align-items:flex-start;}
-.patient-check-icon{width:24px;height:24px;border-radius:50%;background:#fff8e7;color:#16a34a;display:flex;align-items:center;justify-content:center;font-weight:600;flex:0 0 24px;margin-top:1px;}
-.patient-check-title,.patient-warning-title{font-size:16px;font-weight:600;line-height:1.25;}
-.patient-check-sub,.patient-warning-sub,.patient-team-doing,.patient-summary-sub{color:var(--muted);font-size:13px;line-height:1.4;margin-top:4px;}
-.patient-team-role{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:5px;}
-.patient-warning{background:var(--med-bg);border-color:var(--accent-border);}
-.patient-warning-title{color:#b45309;}
-.patient-summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
-.patient-summary-stat{border:1px solid var(--border);border-radius:var(--radius);background:var(--bg);padding:14px;}
-.patient-summary-label{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:8px;}
-.patient-summary-value{font-size:28px;font-weight:600;line-height:1;}
-.patient-summary-sub{margin-top:6px;}
-.patient-edu-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.patient-edu-card{border:1px solid var(--border);border-radius:var(--radius);background:var(--bg);padding:12px;}
-.patient-edu-media{height:180px;border-radius:10px;margin-bottom:10px;border:1px solid var(--border);background:linear-gradient(135deg,var(--bg),#eef3fb);display:flex;align-items:center;justify-content:center;padding:18px;text-align:center;}
-.patient-edu-media-inner{max-width:360px;}
-.patient-edu-kicker{font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
-.patient-edu-button{display:inline-flex;align-items:center;justify-content:center;margin-top:12px;padding:10px 14px;border-radius:10px;background:#1a6cf0;color:#fff;text-decoration:none;font-weight:600;font-size:14px;}
-.patient-edu-title{font-size:16px;font-weight:600;margin-bottom:4px;}
-.patient-edu-copy{color:var(--muted);font-size:13px;line-height:1.35;}
-@media (max-width:980px){
-  .patient-facing-wrap,.patient-grid,.patient-summary-grid,.patient-edu-grid{grid-template-columns:1fr;}
-  .patient-facing-sidebar{position:static;}
-}
-.lifestyle-grid {
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:14px;
-}
-.lifestyle-stat{
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  padding:14px;
-  background:var(--bg);
-}
-.lifestyle-label{
-  font-size:13px;
-  font-weight:600;
-  color:var(--muted);
-  margin-bottom:10px;
-}
-.lifestyle-row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-}
-
-.lifestyle-input{
-  min-width:90px;
-  padding:8px 12px;
-  border:1px solid var(--border);
-  border-radius:10px;
-  background:var(--bg);
-  color:var(--text);
-  font-size:18px;
-  font-weight:600;
-  line-height:1;
-  display:inline-flex;
-  align-items:center;
-  justify-content:flex-start;
-}
-
-.lifestyle-status{
-  font-size:12px;
-  font-weight:600;
-  padding:6px 10px;
-  border-radius:999px;
-  white-space:nowrap;
-}
-.lifestyle-status.below{background:var(--bg);color:var(--muted);}
-.lifestyle-status.meeting{background:var(--green-bg);color:var(--green);}
-.lifestyle-status.above{background:#fff8e7;color:#1a6cf0;}
-.edu-section h3 {
-  cursor:pointer;
-  margin-top:10px;
-  margin-bottom:0;
-  font-size:17px;
-}
-.edu-content {
-  display:none;
-  margin-top:12px;
-}
-.edu-content iframe {
-  width:100%;
-  height:180px;
-  border-radius:8px;
-  margin-bottom:14px;
-  border:none;
-}
-.video-topic{
-  font-size:13px;
-  font-weight:600;
-  color:var(--muted);
-  margin-bottom:6px;
-}
-.edu-helper{
-  color:var(--muted);
-  font-size:13px;
-  margin-bottom:12px;
-}
-.video-grid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:14px;
-}
-.video-card{
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  padding:12px;
-  background:var(--bg);
-}
-.video-card iframe{
-  margin-bottom:0;
-}
-.video-reason{
-  color:var(--muted);
-  font-size:12px;
-  line-height:1.35;
-  margin-bottom:8px;
-}
-@media (max-width:980px){
-  .video-grid{grid-template-columns:1fr;}
-}
-
-
-.care-team-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-}
-.care-team-card{
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  padding:12px;
-  background:#fff;
-}
-.care-team-role{
-  font-size:12px;
-  font-weight:600;
-  text-transform:uppercase;
-  letter-spacing:.05em;
-  color:var(--muted);
-  margin-bottom:6px;
-}
-.care-team-name{
-  font-size:16px;
-  font-weight:600;
-  color:var(--text);
-  margin-bottom:4px;
-}
-.care-team-meta{
-  color:var(--muted);
-  font-size:13px;
-  line-height:1.35;
-}
-.care-team-pill{
-  display:inline-block;
-  margin-top:8px;
-  padding:5px 9px;
-  border-radius:999px;
-  background:var(--bg);
-  color:var(--muted);
-  font-size:11px;
-  font-weight:600;
-}
-@media (max-width:980px){
-  .care-team-grid{grid-template-columns:1fr;}
-}
-
-
-
-.compact-home-grid{
-  margin-top:16px;
-}
-
-#view-home .grid2{
-  margin-top:16px;
-}
-
-#topProblemsList .list-row{
-  padding:10px 12px;
-  border-radius:12px;
-}
-
-#topProblemsList .list-name{
-  font-size:15px;
-}
-
-#topProblemsList .list-desc{
-  font-size:12px;
-}
-
-.block-title{
-  font-size:14px;
-}
-
-.hero .tag-row .pill{
-  padding:6px 10px;
-  font-size:10px;
-}
-
-.chart-card{
-  border-radius:12px;
-}
-
-.task-table th,.task-table td{
-  padding:10px 8px;
-}
-
-
-.trial-pill{
-  background:#eff6ff;
-  color:#1d4ed8;
-  border:1px solid #bfdbfe;
-}
-.trial-pill.enrolled{
-  background:var(--green-bg);
-  color:var(--green);
-  border:1px solid #bbf7d0;
-}
-.trial-pill.screening{
-  background:var(--med-bg);
-  color:#b45309;
-  border:1px solid var(--accent-border);
-}
-
-
-.trial-match-card{
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  padding:12px 14px;
-  background:var(--bg);
-}
-.trial-match-title{
-  font-size:15px;
-  font-weight:600;
-  margin-bottom:4px;
-}
-.trial-match-sub{
-  color:var(--muted);
-  font-size:13px;
-  line-height:1.4;
-}
-.trial-match-action{
-  margin-top:8px;
-  font-size:12px;
-  font-weight:600;
-  color:var(--muted);
-}
-.trial-match-pill.enrolled{background:var(--green-bg);color:var(--green);border:1px solid #bbf7d0;}
-.trial-match-pill.screening{background:var(--med-bg);color:#b45309;border:1px solid var(--accent-border);}
-.trial-match-pill{
-  display:inline-block;
-  margin-top:8px;
-  padding:6px 10px;
-  border-radius:999px;
-  background:#eff6ff;
-  color:#1d4ed8;
-  border:1px solid #bfdbfe;
-  font-size:11px;
-  font-weight:600;
-}
-
-.clickable-pill{
-  cursor:pointer;
-  transition:.12s ease;
-}
-.clickable-pill:hover{
-  transform:translateY(-1px);
-  box-shadow:0 8px 18px rgba(0,0,0,.05);
-}
-.trial-note{
-  margin-top:10px;
-  padding:10px 12px;
-  border-radius:12px;
-  border:1px solid var(--border);
-  background:var(--bg);
-  font-size:13px;
-  line-height:1.4;
-  color:var(--muted);
-}
-
-html, body { height: 100%; margin: 0; }
-.app-container { min-height: 100vh; display: flex; flex-direction: column; background:var(--panel); }
-
-
-/* Claude-style overrides */
-.columns2{gap:12px;}
-.block{border-radius:var(--radius);background:var(--bg);}
-.alert{border-radius:var(--radius);}
-.detail-card{border-radius:var(--radius);background:var(--bg);}
-.list-row{border-radius:var(--radius);background:var(--panel);}
-.chart-card{border-radius:var(--radius);background:var(--bg);}
-.event-card{border-radius:var(--radius);background:var(--panel);}
-.modal{border-radius:var(--radius-lg);}
-.modal-body{padding:18px 20px;}
-.modal-close{border-radius:8px;font-family:inherit;font-size:13px;}
-.toast{background:var(--text);border-radius:10px;font-size:13px;}
-.mode-btn{border-radius:8px;font-family:inherit;font-size:13px;font-weight:500;color:var(--muted);}
-.mode-btn.active{background:#0C234B;border-color:#0C234B;color:#fff;}
-.filter-chip{border-radius:999px;font-weight:500;font-size:12px;}
-.filter-chip.active{background:#fcedef;border-color:var(--accent-border);color:#AB0520;}
-.pop-card{border-radius:var(--radius);background:var(--bg);}
-.pop-card-value{font-size:24px;font-weight:600;}
-.cohort-chip{border-radius:999px;font-weight:500;font-size:12px;}
-.cohort-chip.active{background:#fcedef;border-color:var(--accent-border);color:#AB0520;}
-.registry-row-btn{color:#1E5288;}
-.referral-summary-card{border-radius:var(--radius);background:var(--bg);}
-.referral-tab.active{background:#fff8e7;border-color:var(--accent-border);color:#92400e;}
-.trigger-box{border-radius:var(--radius);background:var(--bg);}
-.patient-card-panel{padding:16px 18px;}
-.patient-card-title{font-size:20px;font-weight:600;}
-.patient-check{border-radius:var(--radius);}
-.patient-check-icon{background:#e8eff8;color:#1E5288;}
-.patient-warning{background:var(--med-bg);border-color:var(--accent-border);}
-.patient-warning-title{color:#92400e;}
-.patient-summary-stat{border-radius:var(--radius);background:var(--bg);}
-.patient-summary-value{font-size:24px;font-weight:600;}
-.patient-edu-card{border-radius:var(--radius);background:var(--bg);}
-.patient-edu-media{border-radius:8px;}
-.patient-edu-button{border-radius:8px;background:#0C234B;}
-.lifestyle-stat{border-radius:var(--radius);background:var(--bg);}
-.lifestyle-input{border-radius:8px;background:var(--panel);}
-.lifestyle-status.below{background:var(--bg);color:var(--muted);}
-.lifestyle-status.meeting{background:var(--green-bg);color:var(--green);}
-.lifestyle-status.above{background:#e8eff8;color:var(--blue);}
-.video-card{border-radius:var(--radius);background:var(--bg);}
-.care-team-card{border-radius:var(--radius);background:var(--panel);}
-.med-adherence{border-radius:var(--radius);}
-.adherence-pill.good{background:var(--green-bg);color:var(--green);}
-.adherence-pill.warn{background:var(--med-bg);color:var(--orange);}
-.adherence-pill.bad{background:var(--high-bg);color:var(--red);}
-.referral-area-tabs .referral-tab{border-radius:999px;}
-.referral-status-chip.not-needed{background:var(--bg);color:var(--muted);}
-.referral-status-chip.referral-made{background:var(--med-bg);color:var(--orange);}
-.referral-status-chip.referral-completed{background:var(--green-bg);color:var(--green);}
-.home-referral-item{border-radius:var(--radius);}
-.home-referral-item:hover{background:var(--bg);}
-.trial-match-card{border-radius:var(--radius);background:var(--bg);}
-.trial-note{border-radius:var(--radius);background:var(--bg);}
-.trial-pill{background:#e8eff8;color:#0C234B;border-color:#b8c4c8;}
-.trial-pill.enrolled{background:var(--green-bg);color:var(--green);border-color:#bbf7d0;}
-.trial-pill.screening{background:var(--med-bg);color:var(--orange);border-color:var(--accent-border);}
-.trial-match-pill{background:#e8eff8;color:#0C234B;border-color:#b8c4c8;}
-.trial-match-pill.enrolled{background:var(--green-bg);color:var(--green);border-color:#bbf7d0;}
-.trial-match-pill.screening{background:var(--med-bg);color:var(--orange);border-color:var(--accent-border);}
-.care-team-pill{background:var(--bg);color:var(--muted);}
-.patient-big-pill{background:var(--bg);color:var(--muted);}
-.patient-status-pill{background:var(--accent-soft);color:var(--accent);}
-.series-pill{background:var(--bg);border-color:var(--border);}
-.filter-title{color:var(--muted);}
-.pop-card-label{color:var(--muted);}
-.med-adherence-title{color:var(--muted);}
-.referral-tab{font-weight:500;}
-.trigger-label{color:var(--muted);}
-.trigger-text{color:var(--text);}
-.trigger-title{font-weight:600;}
-.home-referral-empty{border-color:var(--border);}
-.patient-team-role{color:var(--muted);}
-.patient-edu-kicker{color:var(--muted);}
-.section-label br{display:inline}
-
-
-
-/* Role-based login screen */
-.app-container.locked{display:none;}
-.login-shell{
-  min-height:100vh;
-  background:linear-gradient(135deg,#f5f5f5 0%,#ffffff 45%,#fcedef 100%);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:28px;
-}
-.login-card{
-  width:min(980px,100%);
-  display:grid;
-  grid-template-columns:.95fr 1.05fr;
-  background:#fff;
-  border:1px solid var(--border);
-  border-radius:22px;
-  box-shadow:0 24px 70px rgba(12,35,75,.16);
-  overflow:hidden;
-}
-.login-brand{
-  background:#0C234B;
-  color:#fff;
-  padding:34px;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  min-height:560px;
-}
-.login-logo{display:flex;align-items:center;gap:12px;margin-bottom:24px;}
-.login-a{color:#AB0520;font-size:34px;font-weight:800;line-height:1;}
-.login-org{font-size:14px;font-weight:600;letter-spacing:.04em;}
-.login-brand h2{font-size:34px;line-height:1.05;margin:0 0 14px;font-weight:650;letter-spacing:-.8px;}
-.login-brand p{color:#d7e2ef;font-size:15px;line-height:1.55;margin:0;max-width:360px;}
-.login-feature-list{display:flex;flex-direction:column;gap:12px;margin-top:28px;}
-.login-feature{border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:12px 14px;background:rgba(255,255,255,.06);}
-.login-feature strong{display:block;font-size:14px;margin-bottom:3px;}
-.login-feature span{font-size:12.5px;color:#d7e2ef;line-height:1.35;}
-.login-form-wrap{padding:34px;}
-.login-kicker{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;margin-bottom:8px;}
-.login-title{font-size:28px;font-weight:650;letter-spacing:-.4px;margin:0 0 6px;}
-.login-subtitle{color:var(--muted);font-size:14px;line-height:1.45;margin-bottom:22px;}
-.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px;}
-.role-card{border:1px solid var(--border);border-radius:14px;background:var(--bg);padding:14px;text-align:left;cursor:pointer;font-family:inherit;color:var(--text);}
-.role-card.active{border-color:#0C234B;background:#e8eff8;box-shadow:inset 0 0 0 1px #0C234B;}
-.role-icon{font-size:22px;margin-bottom:8px;}
-.role-name{font-weight:700;font-size:15px;margin-bottom:3px;}
-.role-copy{font-size:12.5px;color:var(--muted);line-height:1.35;}
-.login-field{margin-bottom:13px;}
-.login-field label{display:block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:7px;}
-.login-field input{width:100%;border:1px solid var(--border);border-radius:11px;padding:12px 13px;font:inherit;color:var(--text);background:#fff;}
-.login-field input:focus{outline:none;border-color:#0C234B;box-shadow:0 0 0 3px rgba(12,35,75,.10);}
-.demo-box{border:1px solid var(--border);border-radius:14px;background:var(--bg);padding:12px 14px;margin:16px 0;color:var(--muted);font-size:13px;line-height:1.4;}
-.demo-box strong{color:var(--text);}
-.login-submit{width:100%;border:none;border-radius:12px;background:#0C234B;color:white;padding:13px 16px;font:inherit;font-weight:700;cursor:pointer;}
-.login-submit:hover{background:#AB0520;}
-.login-error{display:none;margin-top:12px;border:1px solid #fecaca;background:#fcedef;color:#AB0520;border-radius:12px;padding:10px 12px;font-size:13px;}
-.login-error.show{display:block;}
-.logout-btn{background:rgba(255,255,255,.12)!important;color:#fff!important;border-color:rgba(255,255,255,.3)!important;}
-.user-chip{color:#fff;font-size:13px;margin-left:auto;opacity:.9;}
-@media(max-width:900px){.login-card{grid-template-columns:1fr}.login-brand{min-height:auto}.role-grid{grid-template-columns:1fr}}
-
-
-
-/* Collapsible dashboard panels */
-.collapsible-panel{overflow:hidden;}
-.collapsible-panel .header-row,
-.collapsible-panel .collapsible-title-row{
-  cursor:pointer;
-  user-select:none;
-}
-.collapsible-panel .header-row:hover .content-title,
-.collapsible-panel .collapsible-title-row:hover .patient-card-title,
-.collapsible-panel .collapsible-title-row:hover .detail-title{color:var(--accent);}
-.collapsible-toggle{
-  margin-left:8px;
-  border:1px solid var(--border);
-  background:var(--bg);
-  color:var(--muted);
-  border-radius:999px;
-  width:28px;
-  height:28px;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  font-size:16px;
-  line-height:1;
-  cursor:pointer;
-  flex:0 0 auto;
-}
-.collapsible-toggle:hover{border-color:var(--border-strong);color:var(--text);background:#fff;}
-.collapsible-body{display:block;}
-.collapsible-panel.collapsed .collapsible-body{display:none;}
-.collapsible-panel.collapsed{padding-bottom:16px;}
-.collapsible-panel.collapsed .collapsible-toggle{transform:rotate(-90deg);}
-.collapsible-title-row{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  gap:12px;
-  margin-bottom:12px;
-}
-.collapsible-title-row .patient-card-title,
-.collapsible-title-row .detail-title{margin:0;}
-
+/* ── ANIMATIONS ──────────────────────────────────────────────────── */
+@keyframes fadeIn { from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)} }
+.app-mode.active { animation:fadeIn 0.25s ease; }
+#loginScreen { animation:fadeIn 0.3s ease; }
 </style>
 </head>
 <body>
 
-<div id="loginScreen" class="login-shell">
-  <div class="login-card">
-    <div class="login-brand">
-      <div>
-        <div class="login-logo">
-          <div class="login-a">A</div>
-          <div class="login-org">UArizona Health<br>Shared Care Coordination</div>
-        </div>
-        <h2>One dashboard, two entry points.</h2>
-        <p>Providers see the clinical coordination workspace. Patients see simple next steps, care-team updates, education, and warning signs.</p>
-        <div class="login-feature-list">
-          <div class="login-feature"><strong>Provider login</strong><span>Opens clinical view with care gaps, tasks, referrals, trends, trials, and population registry.</span></div>
-          <div class="login-feature"><strong>Patient login</strong><span>Opens patient-friendly view only, with plain language and no internal clinical queue.</span></div>
-          <div class="login-feature"><strong>Demo mode</strong><span>Use any email and password, or click one of the sample accounts below.</span></div>
+<!-- ══════════════════════════ LOGIN SCREEN ══════════════════════════ -->
+<div id="loginScreen">
+  <div class="login-brand">
+    <div class="brand-top">
+      <div class="ua-lockup">
+        <div class="ua-seal">UA</div>
+        <div class="ua-wordmark">
+          <div class="ua-wordmark-top">University of Arizona</div>
+          <div class="ua-wordmark-name">College of Medicine<br>Phoenix</div>
         </div>
       </div>
+      <div class="brand-headline">Shared Care Coordination</div>
+      <div class="brand-sub">A prototype interface connecting community health workers, FQHCs, and hospitals around a single patient care plan.</div>
+      <div class="brand-pills">
+        <div class="brand-pill"><div class="brand-pill-dot" style="background:#AB0520"></div>Transitions-of-care follow-up</div>
+        <div class="brand-pill"><div class="brand-pill-dot" style="background:#5A9ED4"></div>Chronic disease quality indicators</div>
+        <div class="brand-pill"><div class="brand-pill-dot" style="background:#4CAF80"></div>Preventive care gap tracking</div>
+        <div class="brand-pill"><div class="brand-pill-dot" style="background:#C49A28"></div>Wearable & recovery trend signals</div>
+      </div>
     </div>
-    <div class="login-form-wrap">
-      <div class="login-kicker">Demo access</div>
-      <h1 class="login-title">Sign in</h1>
-      <div class="login-subtitle">Choose the role you want to preview. This is a front-end prototype, so the login is simulated.</div>
+    <div class="brand-footer">Prototype only · Synthetic patient records · UArizona COM-Phoenix</div>
+  </div>
 
-      <div class="role-grid">
-        <button type="button" class="role-card active" id="providerRole" onclick="setLoginRole('provider')">
+  <div class="login-form-panel">
+    <div class="login-card">
+      <div class="login-title">Welcome back</div>
+      <div class="login-sub">Sign in to access the care coordination dashboard</div>
+
+      <div class="login-role-row">
+        <button class="login-role-btn active" id="roleProviderBtn" onclick="selectRole('provider')">
           <div class="role-icon">🩺</div>
-          <div class="role-name">Provider</div>
-          <div class="role-copy">Clinical dashboard, population view, referrals, quality indicators.</div>
+          <span class="role-label">Provider / CHW</span>
+          <span class="role-desc">Clinical view, population registry, and care coordination tools</span>
         </button>
-        <button type="button" class="role-card" id="patientRole" onclick="setLoginRole('patient')">
+        <button class="login-role-btn" id="rolePatientBtn" onclick="selectRole('patient')">
           <div class="role-icon">👤</div>
-          <div class="role-name">Patient</div>
-          <div class="role-copy">Simple weekly care plan, team updates, education, warning signs.</div>
+          <span class="role-label">Patient portal</span>
+          <span class="role-desc">View your care plan, team, and next steps in plain language</span>
         </button>
       </div>
 
-      <form onsubmit="return handleLogin(event)">
-        <div class="login-field">
-          <label for="loginEmail">Email</label>
-          <input id="loginEmail" type="email" value="provider@demo.org" autocomplete="username">
-        </div>
-        <div class="login-field">
-          <label for="loginPassword">Password</label>
-          <input id="loginPassword" type="password" value="demo123" autocomplete="current-password">
-        </div>
-        <div class="demo-box">
-          <strong>Sample accounts:</strong><br>
-          Provider: provider@demo.org / demo123<br>
-          Patient: patient@demo.org / demo123
-        </div>
-        <button class="login-submit" type="submit">Log in to dashboard</button>
-        <div class="login-error" id="loginError">Enter any email and password to continue in demo mode.</div>
-      </form>
+      <div class="form-group">
+        <label class="form-label">Email or NetID</label>
+        <input class="form-input" id="loginEmail" type="text" placeholder="e.g. drsmith@arizona.edu" value=""/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input class="form-input" id="loginPassword" type="password" placeholder="••••••••" value=""/>
+      </div>
+      <button class="login-btn" onclick="doLogin()">Sign in to dashboard →</button>
+
+      <div class="demo-hint">
+        <strong>Demo credentials (prototype):</strong><br>
+        Provider: <code>provider@arizona.edu</code> · Patient: <code>patient@arizona.edu</code><br>
+        Any password works for demo access.
+      </div>
     </div>
   </div>
 </div>
 
-<div class="app-container locked" id="appContainer">
-<div style="background:#0C234B;padding:10px 20px;display:flex;align-items:center;gap:12px;">
-  <div style="color:#AB0520;font-size:22px;font-weight:700;letter-spacing:-0.5px;font-family:'Inter',sans-serif;">A</div>
-  <div style="color:#ffffff;font-size:13.5px;font-weight:500;letter-spacing:.02em;font-family:'Inter',sans-serif;">UArizona Health | Shared Care Coordination</div>
-  <div class="user-chip" id="signedInChip">Not signed in</div>
-  <button class="btn logout-btn" onclick="logoutDemo()">Log out</button>
-</div>
-<div class="wrap">
-  <div class="top">
-    <div>
-      <h1>Shared Care Coordination Dashboard</h1>
-      <div class="subtitle">Prototype interface for sharing quality data and comprehensive care plans across community health workers, FQHCs, and hospitals. Health maintenance quality indicators and chronic disease quality indicators are layered onto a transitions-of-care workflow rather than replacing it.</div>
+<!-- ══════════════════════════ APP SHELL ══════════════════════════ -->
+<div id="appShell" style="display:none;flex-direction:column;">
+  <!-- Top navbar -->
+  <div class="app-topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo">
+        <div class="topbar-seal">UA</div>
+        <div>
+          <div class="topbar-name">UArizona COM–Phoenix</div>
+          <div class="topbar-dept">Shared Care Coordination</div>
+        </div>
+      </div>
+      <div class="topbar-divider"></div>
+      <div class="topbar-app-name" id="topbarAppName">Clinical dashboard</div>
     </div>
-    <div class="top-actions">
-      <button class="btn" id="grantViewBtn">Grant view</button>
-      <button class="btn" id="exportBtn">Export summary</button>
-      <button class="btn primary" id="topSnapshotBtn">Patient action snapshot</button>
+    <div class="topbar-right">
+      <div class="topbar-user">
+        <div class="topbar-avatar" id="topbarAvatar">DR</div>
+        <div>
+          <div class="topbar-uname" id="topbarUname">Dr. Smith</div>
+          <div class="topbar-role-badge provider" id="topbarRoleBadge">Provider</div>
+        </div>
+      </div>
+      <button class="logout-btn" onclick="doLogout()">Sign out</button>
     </div>
   </div>
 
-  <div class="view-toggle">
-    <button class="mode-btn active" id="patientModeBtn" onclick="setMode('patient')">Clinical View</button>
-    <button class="mode-btn" id="patientFacingModeBtn" onclick="setMode('patientFacing')">Patient View</button>
-    <button class="mode-btn" id="populationModeBtn" onclick="setMode('population')">Population Health View</button>
-  </div>
+  <!-- App body -->
+  <div class="app-body">
+    <div class="wrap">
 
-  <div id="patientMode" class="app-mode active">
-  <div class="layout">
-    <div class="panel sidebar">
-      <div class="section-label">Patients in care coordination<br>queue</div>
-      <div id="patientList"></div>
-
-      <div class="section-label" style="margin-top:20px;">Shared workflow focus</div>
-      <div class="workflow-box">
-        <div class="workflow-item">
-          <div class="dot red"></div>
+      <!-- ── PROVIDER VIEW ─────────────────────────────────────────── -->
+      <div id="providerView" style="display:none;">
+        <div class="top">
           <div>
-            <div class="workflow-title">Transitions of care follow-up</div>
-            <div class="workflow-desc">Identify recent discharges without timely outpatient follow-up and coordinate next contact.</div>
+            <h1 style="font-family:'Libre Baskerville',serif;font-size:26px;font-weight:700;letter-spacing:-0.3px;margin-bottom:4px;">Care Coordination Dashboard</h1>
+            <div style="color:var(--text3);font-size:13px;max-width:820px;line-height:1.5;">Prototype interface for sharing quality data and care plans across community health workers, FQHCs, and hospitals. Health maintenance and chronic disease quality indicators layered onto a transitions-of-care workflow.</div>
           </div>
-        </div>
-        <div class="workflow-item">
-          <div class="dot orange"></div>
-          <div>
-            <div class="workflow-title">Closed-loop communication</div>
-            <div class="workflow-desc">Track whether the hospital, outpatient team, and community workers are acting on the same plan.</div>
-          </div>
-        </div>
-        <div class="workflow-item">
-          <div class="dot green"></div>
-          <div>
-            <div class="workflow-title">Rapid care-gap review</div>
-            <div class="workflow-desc">Surface screenings, chronic disease tasks, and social barriers in one place before outreach.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="main">
-      <div class="panel hero">
-        <div class="hero-top">
-          <div class="person">
-            <div class="avatar" id="avatar">MR</div>
-            <div>
-              <div class="hero-name" id="heroName">Maria Reyes</div>
-              <div class="hero-meta" id="heroMeta"></div>
-              <div class="tag-row" id="heroTags"></div>
-            </div>
-          </div>
-          <div class="risk-badge" id="heroRisk">HIGH RISK</div>
-        </div>
-
-        <div class="metric-grid">
-          <div class="metric clickable" onclick="openExplain('risk')">
-            <div class="metric-label">Risk</div>
-            <div class="metric-value" id="riskLevelMetric">High risk</div>
-            
-          </div>
-          <div class="metric">
-            <div class="metric-label">Open care gaps</div>
-            <div class="metric-value" id="gapsMetric">4</div>
-          </div>
-          <div class="metric">
-            <div class="metric-label">Shared tasks</div>
-            <div class="metric-value" id="tasksMetric">5</div>
-          </div>
-          <div class="metric clickable" onclick="openExplain('trend')">
-            <div class="metric-label">Trend</div>
-            <div class="metric-value" id="trendMetric">Worsening</div>
-            
+          <div class="top-actions">
+            <button class="btn" id="grantViewBtn">Grant view</button>
+            <button class="btn" id="exportBtn">Export summary</button>
+            <button class="btn primary" id="topSnapshotBtn">Patient action snapshot</button>
           </div>
         </div>
 
-        <div class="tabbar">
-          <button class="tab active" onclick="showTab('home', this)">Home</button>
-          <button class="tab" onclick="showTab('preventive', this)">Health maintenance</button>
-          <button class="tab" onclick="showTab('chronic', this)">Chronic</button>
-          <button class="tab" onclick="showTab('timeline', this)">Timeline</button>
-          <button class="tab" onclick="showTab('snapshot', this)">Action snapshot</button>
-          <button class="tab" onclick="showTab('referrals', this)">Referrals</button>
-          <button class="tab" onclick="showTab('education', this)">Lifestyle & education</button>
-        </div>
-      </div>
-
-      <div id="view-home" class="view active">
-        <div id="grantNote" class="panel content-panel" style="display:none; margin-top:16px;">
-          <div class="header-row">
-            <div>
-              <div class="content-title">Grant summary view</div>
-              <div class="content-sub">This prototype is designed to support cross-setting care coordination by combining transitions-of-care signals, preventive care gaps, chronic disease quality indicators, and wearable recovery trends in a single workflow.</div>
-            </div>
-            <div class="count-pill">Prototype scope</div>
-          </div>
-          <div class="content-sub">
-            Core functions shown here include patient-level risk stratification, shared task visibility, preventive care review, chronic disease quality monitoring, cross-system timeline visibility, and wearables-informed outreach prioritization.
-          </div>
+        <div class="mode-strip">
+          <button class="mode-btn active" id="patientModeBtn" onclick="setMode('patient')">Clinical view</button>
+          <button class="mode-btn" id="patientFacingModeBtn" onclick="setMode('patientFacing')">Patient view</button>
+          <button class="mode-btn" id="populationModeBtn" onclick="setMode('population')">Population health</button>
         </div>
 
-        <div class="panel content-panel" style="margin-top:16px;">
-          <div class="header-row">
-            <div>
-              <div class="content-title">Care Team</div>
-              <div class="content-sub">Providers and support staff involved in the shared care plan.</div>
-            </div>
-            <div class="count-pill" id="careTeamCount">4 team members</div>
-          </div>
-          <div class="care-team-grid" id="careTeamGrid"></div>
-        </div>
-
-        <div class="panel content-panel" style="margin-top:16px;">
-          <div class="header-row">
-            <div>
-              <div class="content-title">Top problems</div>
-              <div class="content-sub">Highest priority issues to address first.</div>
-            </div>
-          </div>
-          <div class="list" id="topProblemsList"></div>
-        </div>
-
-        <div style="display:none;">
-          <div id="trialMatchesCount">0 possible matches</div>
-          <div id="trialMatchesList"></div>
-        </div>
-
-        <div class="grid2">
-          <div class="panel content-panel">
-            <div class="header-row">
-              <div>
-                <div class="content-title">Shared care plan</div>
-                <div class="content-sub">Single source of truth for current goals, responsibilities, and barriers.</div>
-              </div>
-              <div class="count-pill" id="alignedTeams">3 teams aligned</div>
-            </div>
-            <div class="columns2">
-              <div class="block">
-                <div class="block-title">Active goals</div>
-                <div id="goalsList"></div>
-              </div>
-              <div class="block">
-                <div class="block-title">Current barriers</div>
-                <div id="barriersList"></div>
-              </div>
-              <div class="block">
-                <div class="block-title">Assigned actions</div>
-                <div id="actionsList"></div>
-              </div>
-              <div class="block">
-                <div class="block-title">Medications</div>
-                <div id="medAdherence"></div>
-                <div id="medsList"></div>
+        <div id="patientMode" class="app-mode active">
+          <div class="layout">
+            <div class="panel sidebar">
+              <div class="section-label">Patients in care coordination queue</div>
+              <div id="patientList"></div>
+              <div class="section-label" style="margin-top:18px;">Shared workflow focus</div>
+              <div class="workflow-box">
+                <div class="workflow-item">
+                  <div class="dot red"></div>
+                  <div>
+                    <div class="workflow-title">Transitions of care follow-up</div>
+                    <div class="workflow-desc">Identify recent discharges without timely outpatient follow-up and coordinate next contact.</div>
+                  </div>
+                </div>
+                <div class="workflow-item">
+                  <div class="dot orange"></div>
+                  <div>
+                    <div class="workflow-title">Closed-loop communication</div>
+                    <div class="workflow-desc">Track whether the hospital, outpatient team, and community workers are acting on the same plan.</div>
+                  </div>
+                </div>
+                <div class="workflow-item">
+                  <div class="dot green"></div>
+                  <div>
+                    <div class="workflow-title">Rapid care-gap review</div>
+                    <div class="workflow-desc">Surface screenings, chronic disease tasks, and social barriers in one place before outreach.</div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div class="panel content-panel">
-            <div class="header-row">
-              <div>
-                <div class="content-title">Alerts and care gaps</div>
-                <div class="content-sub">Signals that should change what the team does next.</div>
+            <div class="main">
+              <div class="panel hero">
+                <div class="hero-top">
+                  <div class="person">
+                    <div class="avatar" id="avatar">MR</div>
+                    <div>
+                      <div class="hero-name" id="heroName">Maria Reyes</div>
+                      <div class="hero-meta" id="heroMeta"></div>
+                      <div class="tag-row" id="heroTags"></div>
+                    </div>
+                  </div>
+                  <div class="risk-badge" id="heroRisk">HIGH RISK</div>
+                </div>
+                <div class="metric-grid">
+                  <div class="metric clickable" onclick="openExplain('risk')"><div class="metric-label">Risk level</div><div class="metric-value" id="riskLevelMetric">High risk</div></div>
+                  <div class="metric"><div class="metric-label">Open care gaps</div><div class="metric-value" id="gapsMetric">4</div></div>
+                  <div class="metric"><div class="metric-label">Shared tasks</div><div class="metric-value" id="tasksMetric">5</div></div>
+                  <div class="metric clickable" onclick="openExplain('trend')"><div class="metric-label">Trend</div><div class="metric-value" id="trendMetric">Worsening</div></div>
+                </div>
+                <div class="tabbar">
+                  <button class="tab active" onclick="showTab('home',this)">Home</button>
+                  <button class="tab" onclick="showTab('preventive',this)">Health maintenance</button>
+                  <button class="tab" onclick="showTab('chronic',this)">Chronic</button>
+                  <button class="tab" onclick="showTab('timeline',this)">Timeline</button>
+                  <button class="tab" onclick="showTab('snapshot',this)">Action snapshot</button>
+                  <button class="tab" onclick="showTab('referrals',this)">Referrals</button>
+                  <button class="tab" onclick="showTab('education',this)">Lifestyle &amp; education</button>
+                </div>
               </div>
-              <div class="count-pill" id="prioritySignals">3 priority signals</div>
-            </div>
-            <div id="alertsList"></div>
-          </div>
-        </div>
-<div class="grid2 compact-home-grid">
-          <div class="panel content-panel home-referral-panel">
-            <div class="header-row">
-              <div>
-                <div class="content-title">Referral summary</div>
-                <div class="content-sub">Open referrals that have not yet been closed.</div>
+
+              <div id="view-home" class="view active">
+                <div id="grantNote" class="panel content-panel" style="display:none;margin-top:16px;">
+                  <div class="header-row"><div><div class="content-title">Grant summary view</div><div class="content-sub">This prototype is designed to support cross-setting care coordination by combining transitions-of-care signals, preventive care gaps, chronic disease quality indicators, and wearable recovery trends in a single workflow.</div></div><div class="count-pill">Prototype scope</div></div>
+                  <div class="content-sub">Core functions shown here include patient-level risk stratification, shared task visibility, preventive care review, chronic disease quality monitoring, cross-system timeline visibility, and wearables-informed outreach prioritization.</div>
+                </div>
+                <div class="panel content-panel" style="margin-top:16px;">
+                  <div class="header-row"><div><div class="content-title">Care Team</div><div class="content-sub">Providers and support staff involved in the shared care plan.</div></div><div class="count-pill" id="careTeamCount">4 team members</div></div>
+                  <div class="care-team-grid" id="careTeamGrid"></div>
+                </div>
+                <div class="panel content-panel" style="margin-top:16px;">
+                  <div class="header-row"><div><div class="content-title">Top problems</div><div class="content-sub">Highest priority issues to address first.</div></div></div>
+                  <div class="list" id="topProblemsList"></div>
+                </div>
+                <div class="panel content-panel" style="margin-top:16px;">
+                  <div class="header-row"><div><div class="content-title">Possible clinical trial matches</div><div class="content-sub">Research studies that may fit this patient and still need coordinator review.</div></div><div class="count-pill" id="trialMatchesCount">0 possible matches</div></div>
+                  <div class="list" id="trialMatchesList"></div>
+                </div>
+                <div class="grid2">
+                  <div class="panel content-panel">
+                    <div class="header-row"><div><div class="content-title">Shared care plan</div><div class="content-sub">Single source of truth for current goals, responsibilities, and barriers.</div></div><div class="count-pill" id="alignedTeams">3 teams aligned</div></div>
+                    <div class="columns2">
+                      <div class="block"><div class="block-title">Active goals</div><div id="goalsList"></div></div>
+                      <div class="block"><div class="block-title">Current barriers</div><div id="barriersList"></div></div>
+                      <div class="block"><div class="block-title">Assigned actions</div><div id="actionsList"></div></div>
+                      <div class="block"><div class="block-title">Medications</div><div id="medAdherence"></div><div id="medsList"></div></div>
+                    </div>
+                  </div>
+                  <div class="panel content-panel">
+                    <div class="header-row"><div><div class="content-title">Alerts and care gaps</div><div class="content-sub">Signals that should change what the team does next.</div></div><div class="count-pill" id="prioritySignals">3 priority signals</div></div>
+                    <div id="alertsList"></div>
+                  </div>
+                </div>
+                <div class="grid2 compact-home-grid">
+                  <div class="panel content-panel home-referral-panel">
+                    <div class="header-row"><div><div class="content-title">Referral summary</div><div class="content-sub">Open referrals that have not yet been closed.</div></div><div class="count-pill" id="openReferralCount">0 open referrals</div></div>
+                    <div id="homeReferralSummary"></div>
+                  </div>
+                  <div class="panel content-panel">
+                    <div class="header-row"><div><div class="content-title">Clinical and recovery trends</div><div class="content-sub">Condition-specific trends and recovery signals shown only when clinically relevant.</div></div><div class="count-pill" id="wearableSummaryPill">7-day trend</div></div>
+                    <div class="chart-grid" id="chartGrid"></div>
+                    <div class="legend-row">
+                      <span><i class="swatch" style="background:var(--ua-navy)"></i>current trajectory</span>
+                      <span><i class="swatch" style="background:var(--border2)"></i>target / baseline</span>
+                      <span id="wearableNarrative"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="grid2">
+                  <div class="panel content-panel">
+                    <div class="header-row"><div><div class="content-title">Who needs to do what next</div><div class="content-sub">Operational queue for the next 24 to 72 hours.</div></div><div class="count-pill" id="handoffCount">5 tasks</div></div>
+                    <table class="task-table">
+                      <thead><tr><th>Owner</th><th>Task</th><th>Reason</th><th>Due</th><th>Priority</th></tr></thead>
+                      <tbody id="taskTable"></tbody>
+                    </table>
+                    <div class="footer-note">Prototype only. Uses synthetic patient records designed to demonstrate shared care planning across community and hospital settings.</div>
+                  </div>
+                </div>
               </div>
-              <div class="count-pill" id="openReferralCount">0 open referrals</div>
-            </div>
-            <div id="homeReferralSummary"></div>
-          </div>
 
-          <div class="panel content-panel">
-            <div class="header-row">
-              <div>
-                <div class="content-title">Clinical and recovery trends</div>
-                <div class="content-sub">Condition-specific trends and recovery signals shown only when clinically relevant.</div>
+              <div id="view-preventive" class="view">
+                <div class="detail-grid">
+                  <div class="detail-card"><div class="detail-title">Health Maintenance Quality Indicators</div><div id="preventiveList" class="list"></div></div>
+                  <div class="detail-card"><div class="detail-title">Health maintenance summary</div><div class="content-sub" id="preventiveSummary"></div></div>
+                </div>
               </div>
-              <div class="count-pill" id="wearableSummaryPill">7-day trend</div>
-            </div>
-            <div class="chart-grid" id="chartGrid"></div>
-            <div class="legend-row">
-              <span><i class="swatch" style="background:#2559d6"></i>current trajectory</span>
-              <span><i class="swatch" style="background:#cfd8e6"></i>target / baseline</span>
-              <span id="wearableNarrative"></span>
-            </div>
-          </div>
-        </div>
 
-        <div class="grid2">
-          <div class="panel content-panel">
-            <div class="header-row">
-              <div>
-                <div class="content-title">Who needs to do what next</div>
-                <div class="content-sub">Operational queue for the next 24 to 72 hours.</div>
+              <div id="view-chronic" class="view">
+                <div class="detail-grid">
+                  <div class="detail-card"><div class="detail-title">Chronic disease quality indicators</div><div id="chronicList" class="list"></div></div>
+                  <div class="detail-card"><div class="detail-title">Shared next steps</div><div class="content-sub" id="chronicSummary"></div></div>
+                </div>
               </div>
-              <div class="count-pill" id="handoffCount">5 tasks</div>
-            </div>
-            <table class="task-table">
-              <thead>
-                <tr><th>Owner</th><th>Task</th><th>Reason</th><th>Due</th><th>Priority</th></tr>
-              </thead>
-              <tbody id="taskTable"></tbody>
-            </table>
-            <div class="footer-note">Prototype only. Uses synthetic patient records designed to demonstrate shared care planning across community and hospital settings.</div>
-          </div>
-        </div>
-      </div>
 
-      <div id="view-preventive" class="view">
-        <div class="detail-grid">
-          <div class="detail-card">
-            <div class="detail-title">Health Maintenance Quality Indicators</div>
-            <div id="preventiveList" class="list"></div>
-          </div>
-          <div class="detail-card">
-            <div class="detail-title">Health maintenance summary</div>
-            <div class="content-sub" id="preventiveSummary"></div>
-          </div>
-        </div>
-      </div>
+              <div id="view-timeline" class="view">
+                <div class="panel content-panel" style="margin-top:16px;">
+                  <div class="header-row"><div><div class="content-title">Cross-system timeline</div><div class="content-sub">Chronological view of what happened and where it happened.</div></div><div class="count-pill">Hospital + FQHC + CHW + wearable</div></div>
+                  <div class="timeline" id="timelineList"></div>
+                </div>
+              </div>
 
-      <div id="view-chronic" class="view">
-        <div class="detail-grid">
-          <div class="detail-card">
-            <div class="detail-title">Chronic disease quality indicators</div>
-            <div id="chronicList" class="list"></div>
-          </div>
-          <div class="detail-card">
-            <div class="detail-title">Shared next steps</div>
-            <div class="content-sub" id="chronicSummary"></div>
-          </div>
-        </div>
-      </div>
+              <div id="view-snapshot" class="view">
+                <div class="detail-grid">
+                  <div class="detail-card"><div class="detail-title">Patient action snapshot</div><div class="content-sub snapshot" id="snapshotText"></div></div>
+                  <div class="detail-card"><div class="detail-title">Trend quick view</div><div class="content-sub" id="snapshotWearable"></div></div>
+                </div>
+              </div>
 
-      <div id="view-timeline" class="view">
-        <div class="panel content-panel" style="margin-top:16px;">
-          <div class="header-row">
-            <div>
-              <div class="content-title">Cross-system timeline</div>
-              <div class="content-sub">Chronological view of what happened and where it happened.</div>
-            </div>
-            <div class="count-pill">Hospital + FQHC + CHW + wearable</div>
-          </div>
-          <div class="timeline" id="timelineList"></div>
-        </div>
-      </div>
+              <div id="view-referrals" class="view">
+                <div class="panel content-panel" style="margin-top:16px;">
+                  <div class="header-row"><div><div class="content-title">Referral section</div><div class="content-sub">Select a sub area to see status and trigger response.</div></div><div class="count-pill" id="referralSelectedArea">Primary care</div></div>
+                  <div class="referral-summary-grid" id="referralSummary"></div>
+                  <div class="referral-area-tabs" id="referralTabs"></div>
+                  <div class="trigger-box" id="referralDetail"></div>
+                </div>
+              </div>
 
-      <div id="view-snapshot" class="view">
-        <div class="detail-grid">
-          <div class="detail-card">
-            <div class="detail-title">Patient action snapshot</div>
-            <div class="content-sub snapshot" id="snapshotText"></div>
-          </div>
-          <div class="detail-card">
-            <div class="detail-title">Trend quick view</div>
-            <div class="content-sub" id="snapshotWearable"></div>
-          </div>
-        </div>
-      </div>
-
-      <div id="view-referrals" class="view">
-        <div class="panel content-panel" style="margin-top:16px;">
-          <div class="header-row">
-            <div>
-              <div class="content-title">Referral section</div>
-              <div class="content-sub">Select a sub area to see status and trigger response.</div>
-            </div>
-            <div class="count-pill" id="referralSelectedArea">Primary care</div>
-          </div>
-          <div class="referral-summary-grid" id="referralSummary"></div>
-          <div class="referral-area-tabs" id="referralTabs"></div>
-          <div class="trigger-box" id="referralDetail"></div>
-        </div>
-
-      </div>
-
-      <div id="view-education" class="view">
-        <div class="panel content-panel" style="margin-top:16px;">
-          <div class="header-row">
-            <div>
-              <div class="content-title">Lifestyle Summary</div>
-              <div class="content-sub">Patient-reported activity and behaviors over the past 7 days.</div>
-            </div>
-            <div class="count-pill">Weekly inputs</div>
-          </div>
-
-          
-<div class="lifestyle-grid">
-  <div class="lifestyle-stat">
-    <div class="lifestyle-label">Fruits &amp; Vegetables (servings)</div>
-    <div class="lifestyle-row">
-      <div class="lifestyle-input" id="fv"></div>
-      <span id="fvStatus" class="lifestyle-status"></span>
-    </div>
-  </div>
-
-  <div class="lifestyle-stat">
-    <div class="lifestyle-label">Home Cooked Meals</div>
-    <div class="lifestyle-row">
-      <div class="lifestyle-input" id="home"></div>
-      <span id="homeStatus" class="lifestyle-status"></span>
-    </div>
-  </div>
-
-  <div class="lifestyle-stat">
-    <div class="lifestyle-label">Sugary Drinks</div>
-    <div class="lifestyle-row">
-      <div class="lifestyle-input" id="sugar"></div>
-      <span id="sugarStatus" class="lifestyle-status"></span>
-    </div>
-  </div>
-
-  <div class="lifestyle-stat">
-    <div class="lifestyle-label">Fast/Processed Food Servings</div>
-    <div class="lifestyle-row">
-      <div class="lifestyle-input" id="fast"></div>
-      <span id="fastStatus" class="lifestyle-status"></span>
-    </div>
-  </div>
-
-  <div class="lifestyle-stat">
-    <div class="lifestyle-label">Cardio Minutes</div>
-    <div class="lifestyle-row">
-      <div class="lifestyle-input" id="cardio"></div>
-      <span id="cardioStatus" class="lifestyle-status"></span>
-    </div>
-  </div>
-
-  <div class="lifestyle-stat">
-    <div class="lifestyle-label">Strength Training Minutes</div>
-    <div class="lifestyle-row">
-      <div class="lifestyle-input" id="strength"></div>
-      <span id="strengthStatus" class="lifestyle-status"></span>
-    </div>
-  </div>
-
-  <div class="lifestyle-stat">
-    <div class="lifestyle-label">Brain Games Minutes</div>
-    <div class="lifestyle-row">
-      <div class="lifestyle-input" id="brain"></div>
-      <span id="brainStatus" class="lifestyle-status"></span>
-    </div>
-  </div>
-
-  <div class="lifestyle-stat">
-    <div class="lifestyle-label">Stress Reduction Minutes</div>
-    <div class="lifestyle-row">
-      <div class="lifestyle-input" id="stress"></div>
-      <span id="stressStatus" class="lifestyle-status"></span>
-    </div>
-  </div>
-</div>
-
-<div id="lifestyleSummaryText" class="content-sub" style="margin-top:12px;"></div>
-
-        </div>
-
-        <div class="panel content-panel" style="margin-top:16px;">
-          <div class="header-row">
-            <div>
-              <div class="content-title">Educational Library</div>
-              <div class="content-sub">Patient-facing education across healthy lifestyle and chronic disease self management.</div>
-            </div>
-            <div class="count-pill">Curated resources</div>
-          </div>
-
-          <div class="edu-section">
-            <h3 onclick="toggleEdu('lifestyleEdu')">Healthy Lifestyle</h3>
-            <div id="lifestyleEdu" class="edu-content" style="display:block;">
-              <div class="edu-helper">These official resources change based on the selected patient\'s risks and current problems.</div>
-              <div id="lifestyleEduList" class="video-grid"></div>
-            </div>
-          </div>
-
-          <div class="edu-section">
-            <h3 onclick="toggleEdu('chronicEdu')">Chronic Disease Self Management</h3>
-            <div id="chronicEdu" class="edu-content" style="display:block;">
-              <div class="edu-helper">Condition-specific resources are filtered to the problems this patient actually has.</div>
-              <div id="chronicEduList" class="video-grid"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      </div>
-
-    </div>
-  </div>
-  </div>
-
-  
-
-  <div id="patientFacingMode" class="app-mode">
-    <div class="patient-facing-wrap">
-      <div class="panel patient-facing-sidebar">
-        <div class="section-label">Patients in care coordination<br>queue</div>
-        <div id="patientFacingList"></div>
-
-        <div class="section-label" style="margin-top:20px;">What patients should see</div>
-        <div class="workflow-box">
-          <div class="workflow-item">
-            <div class="dot green"></div>
-            <div>
-              <div class="workflow-title">What you need to do</div>
-              <div class="workflow-desc">Simple next steps in everyday language.</div>
-            </div>
-          </div>
-          <div class="workflow-item">
-            <div class="dot orange"></div>
-            <div>
-              <div class="workflow-title">What your care team is doing</div>
-              <div class="workflow-desc">Shared tasks translated into patient-friendly updates.</div>
-            </div>
-          </div>
-          <div class="workflow-item">
-            <div class="dot red"></div>
-            <div>
-              <div class="workflow-title">When to ask for help</div>
-              <div class="workflow-desc">Warning signs that should trigger outreach.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="patient-facing-main">
-        <div class="panel patient-hero">
-          <div class="hero-top">
-            <div class="person">
-              <div class="avatar" id="patientFacingAvatar">MR</div>
-              <div>
-                <h2 class="patient-hero-title" id="patientFacingHeadline">Your care plan for this week</h2>
-                <div class="patient-hero-sub" id="patientFacingSubtitle">Simple next steps, care-team updates, and warning signs.</div>
-                <div class="patient-pill-row">
-                  <span class="patient-big-pill patient-status-pill" id="patientFacingStatusPill">Needs attention</span>
-                  <span class="patient-big-pill" id="patientFacingVisitPill">Visit still needed</span>
-                  <span class="patient-big-pill" id="patientFacingSupportPill">Care team helping now</span>
-                  <span class="patient-big-pill" id="patientFacingTrialPill">Not in a clinical trial</span>
+              <div id="view-education" class="view">
+                <div class="panel content-panel" style="margin-top:16px;">
+                  <div class="header-row"><div><div class="content-title">Lifestyle Summary</div><div class="content-sub">Patient-reported activity and behaviors over the past 7 days.</div></div><div class="count-pill">Weekly inputs</div></div>
+                  <div class="lifestyle-grid">
+                    <div class="lifestyle-stat"><div class="lifestyle-label">Fruits &amp; Vegetables (servings)</div><div class="lifestyle-row"><div class="lifestyle-input" id="fv"></div><span id="fvStatus" class="lifestyle-status"></span></div></div>
+                    <div class="lifestyle-stat"><div class="lifestyle-label">Home Cooked Meals</div><div class="lifestyle-row"><div class="lifestyle-input" id="home"></div><span id="homeStatus" class="lifestyle-status"></span></div></div>
+                    <div class="lifestyle-stat"><div class="lifestyle-label">Sugary Drinks</div><div class="lifestyle-row"><div class="lifestyle-input" id="sugar"></div><span id="sugarStatus" class="lifestyle-status"></span></div></div>
+                    <div class="lifestyle-stat"><div class="lifestyle-label">Fast/Processed Food</div><div class="lifestyle-row"><div class="lifestyle-input" id="fast"></div><span id="fastStatus" class="lifestyle-status"></span></div></div>
+                    <div class="lifestyle-stat"><div class="lifestyle-label">Cardio Minutes</div><div class="lifestyle-row"><div class="lifestyle-input" id="cardio"></div><span id="cardioStatus" class="lifestyle-status"></span></div></div>
+                    <div class="lifestyle-stat"><div class="lifestyle-label">Strength Training Minutes</div><div class="lifestyle-row"><div class="lifestyle-input" id="strength"></div><span id="strengthStatus" class="lifestyle-status"></span></div></div>
+                    <div class="lifestyle-stat"><div class="lifestyle-label">Brain Games Minutes</div><div class="lifestyle-row"><div class="lifestyle-input" id="brain"></div><span id="brainStatus" class="lifestyle-status"></span></div></div>
+                    <div class="lifestyle-stat"><div class="lifestyle-label">Stress Reduction Minutes</div><div class="lifestyle-row"><div class="lifestyle-input" id="stress"></div><span id="stressStatus" class="lifestyle-status"></span></div></div>
+                  </div>
+                  <div id="lifestyleSummaryText" class="content-sub" style="margin-top:12px;"></div>
+                </div>
+                <div class="panel content-panel" style="margin-top:16px;">
+                  <div class="header-row"><div><div class="content-title">Educational Library</div><div class="content-sub">Patient-facing education across healthy lifestyle and chronic disease self management.</div></div><div class="count-pill">Curated resources</div></div>
+                  <div class="edu-section"><h3 onclick="toggleEdu('lifestyleEdu')">Healthy Lifestyle</h3><div id="lifestyleEdu" class="edu-content" style="display:block;"><div class="edu-helper">These official resources change based on the selected patient's risks and current problems.</div><div id="lifestyleEduList" class="video-grid"></div></div></div>
+                  <div class="edu-section"><h3 onclick="toggleEdu('chronicEdu')">Chronic Disease Self Management</h3><div id="chronicEdu" class="edu-content" style="display:block;"><div class="edu-helper">Condition-specific resources are filtered to the problems this patient actually has.</div><div id="chronicEduList" class="video-grid"></div></div></div>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="patient-summary-grid">
-          <div class="patient-summary-stat">
-            <div class="patient-summary-label">Open items</div>
-            <div class="patient-summary-value" id="patientFacingGaps">0</div>
-            <div class="patient-summary-sub">Things still to take care of</div>
-          </div>
-          <div class="patient-summary-stat">
-            <div class="patient-summary-label">Care team members</div>
-            <div class="patient-summary-value" id="patientFacingTeamCount">0</div>
-            <div class="patient-summary-sub">People actively helping with your plan</div>
-          </div>
-          <div class="patient-summary-stat">
-            <div class="patient-summary-label">Main focus</div>
-            <div class="patient-summary-value" id="patientFacingFocus">Recovery</div>
-            <div class="patient-summary-sub">Most important thing to work on now</div>
-          </div>
-        </div>
-
-        <div class="patient-grid">
-          <div class="panel patient-card-panel">
-            <div class="patient-card-title">What you need to do</div>
-            <div class="patient-card-sub">Only the next steps that matter right now.</div>
-            <div class="patient-checklist" id="patientActionsList"></div>
-          </div>
-
-          <div class="panel patient-card-panel">
-            <div class="patient-card-title">What your care team is doing</div>
-            <div class="patient-card-sub">What your care team is doing to help you.</div>
-            <div class="patient-team-list" id="patientTeamActions"></div>
-          </div>
-        </div>
-
-        <div class="panel patient-card-panel">
-          <div class="patient-card-title">Your care team</div>
-          <div class="patient-card-sub">People helping you with your care right now.</div>
-          <div class="care-team-grid" id="patientFacingCareTeam"></div>
-        </div>
-
-        <div class="patient-grid">
-          <div class="panel patient-card-panel">
-            <div class="patient-card-title">When to ask for help</div>
-            <div class="patient-card-sub">Warning signs to call about sooner rather than later.</div>
-            <div class="patient-warning-list" id="patientWarningsList"></div>
-          </div>
-
-          <div class="panel patient-card-panel">
-            <div class="patient-card-title">Quick summary</div>
-            <div class="patient-card-sub">Simple reminders instead of clinical labels.</div>
-            <div class="patient-checklist" id="patientSimpleSummary"></div>
-          </div>
-        </div>
-
-        <div class="panel patient-card-panel">
-          <div class="patient-card-title">Learn more</div>
-          <div class="patient-card-sub">Short videos and education for the current situation.</div>
-          <div class="patient-edu-grid" id="patientEducationGrid">
-<div class="patient-edu-card" style="border:2px solid #f5d7a1; background:#fffaf0;">
-  <div class="patient-edu-media">
-    <div class="patient-edu-media-inner">
-      <div class="patient-edu-kicker">Important in hot weather</div>
-      <div class="patient-edu-title">Heat illness prevention</div>
-      <div class="patient-edu-copy">
-        High temperatures can worsen dehydration, fatigue, and recovery.
-      </div>
-    </div>
-  </div>
-  <a href="https://www.cdc.gov/disasters/extremeheat/index.html" target="_blank" class="patient-edu-button">
-    Open CDC resource
-  </a>
-</div>
-</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="populationMode" class="app-mode">
-    <div class="pop-layout">
-      <div class="panel filter-panel">
-        <div class="section-label">Population filters</div>
-
-        <div class="filter-group">
-          <div class="filter-title">Preset cohorts</div>
-          <div class="filter-chip-row" id="cohortFilters"></div>
-        </div>
-
-        <div class="filter-group">
-          <div class="filter-title">Risk</div>
-          <div class="filter-chip-row" id="riskFilters"></div>
-        </div>
-
-        <div class="filter-group">
-          <div class="filter-title">Focus area</div>
-          <div class="filter-chip-row" id="focusFilters"></div>
-        </div>
-
-        <div class="mini-note">This first population layer is a triage queue. Clicking a patient sends the user back to the detailed patient coordination view.</div>
-      </div>
-
-      <div>
-        <div class="pop-summary-grid" id="populationSummary"></div>
-
-        <div class="panel content-panel">
-          <div class="header-row">
-            <div>
-              <div class="content-title">Population outreach registry</div>
-              <div class="content-sub">Start with a cohort, narrow the queue, then open the detailed patient dashboard to act.</div>
+        <div id="patientFacingMode" class="app-mode">
+          <div class="patient-facing-wrap">
+            <div class="panel patient-facing-sidebar">
+              <div class="section-label">Patients in care coordination queue</div>
+              <div id="patientFacingList"></div>
+              <div class="section-label" style="margin-top:18px;">What patients should see</div>
+              <div class="workflow-box">
+                <div class="workflow-item"><div class="dot green"></div><div><div class="workflow-title">What you need to do</div><div class="workflow-desc">Simple next steps in everyday language.</div></div></div>
+                <div class="workflow-item"><div class="dot orange"></div><div><div class="workflow-title">What your care team is doing</div><div class="workflow-desc">Shared tasks translated into patient-friendly updates.</div></div></div>
+                <div class="workflow-item"><div class="dot red"></div><div><div class="workflow-title">When to ask for help</div><div class="workflow-desc">Warning signs that should trigger outreach.</div></div></div>
+              </div>
             </div>
-            <div class="count-pill" id="populationCountPill">0 patients</div>
+            <div class="patient-facing-main">
+              <div class="panel patient-hero">
+                <div class="hero-top">
+                  <div class="person">
+                    <div class="avatar" id="patientFacingAvatar">MR</div>
+                    <div>
+                      <h2 class="patient-hero-title" id="patientFacingHeadline">Your care plan for this week</h2>
+                      <div class="patient-hero-sub" id="patientFacingSubtitle">Simple next steps, care-team updates, and warning signs.</div>
+                      <div class="patient-pill-row">
+                        <span class="patient-big-pill patient-status-pill" id="patientFacingStatusPill">Needs attention</span>
+                        <span class="patient-big-pill" id="patientFacingVisitPill">Visit still needed</span>
+                        <span class="patient-big-pill" id="patientFacingSupportPill">Care team helping now</span>
+                        <span class="patient-big-pill" id="patientFacingTrialPill">Not in a clinical trial</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="patient-summary-grid">
+                <div class="patient-summary-stat"><div class="patient-summary-label">Open items</div><div class="patient-summary-value" id="patientFacingGaps">0</div><div class="patient-summary-sub">Things still to take care of</div></div>
+                <div class="patient-summary-stat"><div class="patient-summary-label">Care team members</div><div class="patient-summary-value" id="patientFacingTeamCount">0</div><div class="patient-summary-sub">People actively helping with your plan</div></div>
+                <div class="patient-summary-stat"><div class="patient-summary-label">Main focus</div><div class="patient-summary-value" id="patientFacingFocus">Recovery</div><div class="patient-summary-sub">Most important thing to work on now</div></div>
+              </div>
+              <div class="patient-grid">
+                <div class="panel patient-card-panel"><div class="patient-card-title">What you need to do</div><div class="patient-card-sub">Only the next steps that matter right now.</div><div class="patient-checklist" id="patientActionsList"></div></div>
+                <div class="panel patient-card-panel"><div class="patient-card-title">What your care team is doing</div><div class="patient-card-sub">What your care team is doing to help you.</div><div class="patient-team-list" id="patientTeamActions"></div></div>
+              </div>
+              <div class="panel patient-card-panel"><div class="patient-card-title">Your care team</div><div class="patient-card-sub">People helping you with your care right now.</div><div class="care-team-grid" id="patientFacingCareTeam"></div></div>
+              <div class="patient-grid">
+                <div class="panel patient-card-panel"><div class="patient-card-title">When to ask for help</div><div class="patient-card-sub">Warning signs to call about sooner rather than later.</div><div class="patient-warning-list" id="patientWarningsList"></div></div>
+                <div class="panel patient-card-panel"><div class="patient-card-title">Quick summary</div><div class="patient-card-sub">Simple reminders instead of clinical labels.</div><div class="patient-checklist" id="patientSimpleSummary"></div></div>
+              </div>
+              <div class="panel patient-card-panel"><div class="patient-card-title">Learn more</div><div class="patient-card-sub">Short videos and education for the current situation.</div>
+                <div class="patient-edu-grid" id="patientEducationGrid">
+                  <div class="patient-edu-card" style="border:2px solid #E8C97A;background:var(--amber-bg);">
+                    <div class="patient-edu-media"><div class="patient-edu-media-inner"><div class="patient-edu-kicker">Important in hot weather</div><div class="patient-edu-title">Heat illness prevention</div><div class="patient-edu-copy">High temperatures can worsen dehydration, fatigue, and recovery.</div></div></div>
+                    <a href="https://www.cdc.gov/disasters/extremeheat/index.html" target="_blank" class="patient-edu-button">Open CDC resource</a>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
+        </div>
 
-          <div class="cohort-chip-row" id="quickCohorts"></div>
-
-          <table class="registry-table">
-            <thead>
-              <tr>
-                <th>Patient</th>
-                <th>Risk</th>
-                <th>Primary issue</th>
-                <th>Key care gaps</th>
-                <th>Latest A1c</th>
-                <th>Latest LDL</th>
-                <th>Latest BP</th>
-                <th>Clinical trial</th>
-                <th>Possible trial match</th>
-                <th>Next action</th>
-              </tr>
-            </thead>
-            <tbody id="populationTable"></tbody>
-          </table>
+        <div id="populationMode" class="app-mode">
+          <div class="pop-layout">
+            <div class="panel filter-panel">
+              <div class="section-label">Population filters</div>
+              <div class="filter-group"><div class="filter-title">Preset cohorts</div><div class="filter-chip-row" id="cohortFilters"></div></div>
+              <div class="filter-group"><div class="filter-title">Risk</div><div class="filter-chip-row" id="riskFilters"></div></div>
+              <div class="filter-group"><div class="filter-title">Focus area</div><div class="filter-chip-row" id="focusFilters"></div></div>
+              <div class="mini-note">This first population layer is a triage queue. Clicking a patient sends the user back to the detailed patient coordination view.</div>
+            </div>
+            <div>
+              <div class="pop-summary-grid" id="populationSummary"></div>
+              <div class="panel content-panel">
+                <div class="header-row"><div><div class="content-title">Population outreach registry</div><div class="content-sub">Start with a cohort, narrow the queue, then open the detailed patient dashboard to act.</div></div><div class="count-pill" id="populationCountPill">0 patients</div></div>
+                <div class="cohort-chip-row" id="quickCohorts"></div>
+                <table class="registry-table">
+                  <thead><tr><th>Patient</th><th>Risk</th><th>Primary issue</th><th>Key care gaps</th><th>Latest A1c</th><th>Latest LDL</th><th>Latest BP</th><th>Clinical trial</th><th>Possible trial match</th><th>Next action</th></tr></thead>
+                  <tbody id="populationTable"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+
+      <!-- ── PATIENT PORTAL VIEW ─────────────────────────────────────── -->
+      <div id="patientPortalView" style="display:none;">
+        <div class="portal-banner">
+          <div class="portal-banner-icon">👋</div>
+          <div class="portal-banner-text">
+            <div class="t1">Your Care Plan</div>
+            <div class="t2">UArizona COM–Phoenix · Shared Care Coordination · Your information only</div>
+          </div>
+        </div>
+
+        <!-- Patient portal shows a single patient's patient-facing view, no sidebar -->
+        <div class="patient-facing-main" id="portalFacingMain">
+          <div class="panel patient-hero">
+            <div class="hero-top">
+              <div class="person">
+                <div class="avatar" id="portalAvatar">MR</div>
+                <div>
+                  <h2 class="patient-hero-title" id="portalHeadline">Your care plan for this week</h2>
+                  <div class="patient-hero-sub" id="portalSubtitle">Simple next steps, care-team updates, and warning signs.</div>
+                  <div class="patient-pill-row">
+                    <span class="patient-big-pill patient-status-pill" id="portalStatusPill">Needs attention</span>
+                    <span class="patient-big-pill" id="portalVisitPill">Visit still needed</span>
+                    <span class="patient-big-pill" id="portalSupportPill">Care team helping now</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="patient-summary-grid">
+            <div class="patient-summary-stat"><div class="patient-summary-label">Open items</div><div class="patient-summary-value" id="portalGaps">0</div><div class="patient-summary-sub">Things still to take care of</div></div>
+            <div class="patient-summary-stat"><div class="patient-summary-label">Care team members</div><div class="patient-summary-value" id="portalTeamCount">0</div><div class="patient-summary-sub">People actively helping</div></div>
+            <div class="patient-summary-stat"><div class="patient-summary-label">Main focus</div><div class="patient-summary-value" id="portalFocus">Recovery</div><div class="patient-summary-sub">Most important thing now</div></div>
+          </div>
+          <div class="patient-grid">
+            <div class="panel patient-card-panel"><div class="patient-card-title">What you need to do</div><div class="patient-card-sub">Only the next steps that matter right now.</div><div class="patient-checklist" id="portalActionsList"></div></div>
+            <div class="panel patient-card-panel"><div class="patient-card-title">What your care team is doing</div><div class="patient-card-sub">Active steps your team is taking on your behalf.</div><div class="patient-team-list" id="portalTeamActions"></div></div>
+          </div>
+          <div class="panel patient-card-panel"><div class="patient-card-title">Your care team</div><div class="patient-card-sub">People helping you with your care right now.</div><div class="care-team-grid" id="portalCareTeam"></div></div>
+          <div class="patient-grid">
+            <div class="panel patient-card-panel"><div class="patient-card-title">When to ask for help</div><div class="patient-card-sub">Warning signs to call about sooner rather than later.</div><div class="patient-warning-list" id="portalWarningsList"></div></div>
+            <div class="panel patient-card-panel"><div class="patient-card-title">Quick summary</div><div class="patient-card-sub">Simple reminders instead of clinical labels.</div><div class="patient-checklist" id="portalSimpleSummary"></div></div>
+          </div>
+          <div class="panel patient-card-panel">
+            <div class="patient-card-title">Learn more</div>
+            <div class="patient-card-sub">Resources tailored to your health situation.</div>
+            <div class="patient-edu-grid">
+              <div class="patient-edu-card" style="border:2px solid #E8C97A;background:var(--amber-bg);">
+                <div class="patient-edu-media"><div class="patient-edu-media-inner"><div class="patient-edu-kicker">Important in hot weather</div><div class="patient-edu-title">Heat illness prevention</div><div class="patient-edu-copy">High temperatures can worsen dehydration, fatigue, and recovery.</div></div></div>
+                <a href="https://www.cdc.gov/disasters/extremeheat/index.html" target="_blank" class="patient-edu-button">Open CDC resource</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
@@ -2113,16 +1186,12 @@ html, body { height: 100%; margin: 0; }
 <div class="modal-backdrop" id="modal">
   <div class="modal">
     <div class="modal-header">
-      <div>
-        <h3 id="modalTitle">Title</h3>
-        <div class="subtitle" id="modalSubtitle" style="font-size:15px;max-width:none"></div>
-      </div>
+      <div><h3 id="modalTitle">Title</h3><div style="color:var(--text3);font-size:14px;margin-top:3px;" id="modalSubtitle"></div></div>
       <button class="modal-close" id="closeModal">Close</button>
     </div>
     <div class="modal-body" id="modalBody"></div>
   </div>
 </div>
-
 <script>
 const patients = [
   {
@@ -3715,23 +2784,24 @@ function showTab(name, btn){
   document.getElementById("view-" + name).classList.add("active");
   btn.classList.add("active");
 }
-document.getElementById("grantViewBtn").onclick = () => {
-  document.getElementById("grantNote").style.display = document.getElementById("grantNote").style.display === "none" ? "block" : "none";
-  document.querySelector('.tab.active')?.classList.remove('active');
-  document.querySelector('.tabbar .tab').classList.add('active');
-  document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
-  document.getElementById("view-home").classList.add("active");
-};
-document.getElementById("exportBtn").onclick = exportSummary;
-document.getElementById("topSnapshotBtn").onclick = () => {
-  const p = patients[selected];
-  openModal("Patient action snapshot", `${p.name} · concise coordination summary`, `<div class="snapshot">${snapshotText(p).replace(/\n/g,'<br>')}</div>`);
-};
-document.getElementById("closeModal").onclick = closeModal;
-document.getElementById("modal").onclick = (e) => { if(e.target.id === "modal") closeModal(); };
-document.addEventListener("keydown", (e) => { if(e.key === "Escape") closeModal(); });
-
-renderPopulationView();
+function initProviderBindings() {
+  document.getElementById("grantViewBtn").onclick = () => {
+    document.getElementById("grantNote").style.display = document.getElementById("grantNote").style.display === "none" ? "block" : "none";
+    document.querySelector('.tab.active')?.classList.remove('active');
+    document.querySelector('.tabbar .tab').classList.add('active');
+    document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+    document.getElementById("view-home").classList.add("active");
+  };
+  document.getElementById("exportBtn").onclick = exportSummary;
+  document.getElementById("topSnapshotBtn").onclick = () => {
+    const p = patients[selected];
+    openModal("Patient action snapshot", `${p.name} · concise coordination summary`, `<div class="snapshot">${snapshotText(p).replace(/\n/g,'<br>')}</div>`);
+  };
+  document.getElementById("closeModal").onclick = closeModal;
+  document.getElementById("modal").onclick = (e) => { if(e.target.id === "modal") closeModal(); };
+  document.addEventListener("keydown", (e) => { if(e.key === "Escape") closeModal(); });
+  renderPopulationView();
+}
 
 const patientLifestyleData = {
   "Maria Reyes": {fv:14, home:6, sugar:6, fast:5, cardio:45, strength:20, brain:25, stress:30},
@@ -3942,46 +3012,6 @@ function renderEducationLibrary(p){
 }
 
 
-let loginRole = "provider";
-function setLoginRole(role){
-  loginRole = role;
-  document.getElementById("providerRole").classList.toggle("active", role === "provider");
-  document.getElementById("patientRole").classList.toggle("active", role === "patient");
-  const email = document.getElementById("loginEmail");
-  if(email) email.value = role === "provider" ? "provider@demo.org" : "patient@demo.org";
-}
-function handleLogin(event){
-  event.preventDefault();
-  const email = document.getElementById("loginEmail").value.trim();
-  const password = document.getElementById("loginPassword").value.trim();
-  const error = document.getElementById("loginError");
-  if(!email || !password){
-    error.classList.add("show");
-    return false;
-  }
-  error.classList.remove("show");
-  document.getElementById("loginScreen").style.display = "none";
-  document.getElementById("appContainer").classList.remove("locked");
-  document.getElementById("signedInChip").textContent = loginRole === "provider" ? "Provider demo" : "Patient demo";
-  if(loginRole === "provider"){
-    document.querySelector(".view-toggle").style.display = "flex";
-    setMode("patient");
-  } else {
-    document.querySelector(".view-toggle").style.display = "none";
-    setMode("patientFacing");
-  }
-  window.scrollTo(0,0);
-  showToast(loginRole === "provider" ? "Provider view loaded" : "Patient view loaded");
-  return false;
-}
-function logoutDemo(){
-  document.getElementById("appContainer").classList.add("locked");
-  document.getElementById("loginScreen").style.display = "flex";
-  document.querySelector(".view-toggle").style.display = "flex";
-  window.scrollTo(0,0);
-}
-
-selectPatient(0);
 
 
 function lifestyleStatus(type, val){
@@ -4071,71 +3101,135 @@ function loadDummyLifestyleData() {
   updateLifestyle();
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  loadDummyLifestyleData();
-  renderCareTeam(patients[0]);
-renderTopProblems(patients[0]);
-});
+// (DOMContentLoaded init moved to doLogin)
 
 </script>
-</div>
+
 
 <script>
-(function(){
-  function makeCollapsible(){
-    const selectors = [
-      '.panel.content-panel',
-      '.detail-card',
-      '.patient-card-panel'
-    ];
-    const panels = Array.from(document.querySelectorAll(selectors.join(',')));
-    panels.forEach((panel) => {
-      if(panel.classList.contains('collapsible-panel')) return;
-      if(panel.closest('[style*="display:none"]')) return;
-      let header = panel.querySelector(':scope > .header-row');
-      let titleEl = null;
-      if(!header){
-        titleEl = panel.querySelector(':scope > .patient-card-title, :scope > .detail-title');
-        if(titleEl){
-          header = document.createElement('div');
-          header.className = 'collapsible-title-row';
-          panel.insertBefore(header, titleEl);
-          header.appendChild(titleEl);
-        }
-      }
-      if(!header) return;
+// ── LOGIN / AUTH ───────────────────────────────────────────────────
+let currentRole = 'provider';
 
-      panel.classList.add('collapsible-panel');
-      const toggle = document.createElement('button');
-      toggle.type = 'button';
-      toggle.className = 'collapsible-toggle';
-      toggle.setAttribute('aria-label','Collapse section');
-      toggle.innerHTML = '⌄';
-      header.appendChild(toggle);
+function selectRole(role) {
+  currentRole = role;
+  document.getElementById('roleProviderBtn').classList.toggle('active', role === 'provider');
+  document.getElementById('rolePatientBtn').classList.toggle('active', role === 'patient');
+  document.getElementById('loginEmail').value = role === 'provider' ? 'provider@arizona.edu' : 'patient@arizona.edu';
+}
 
-      const body = document.createElement('div');
-      body.className = 'collapsible-body';
-      let node = header.nextSibling;
-      while(node){
-        const next = node.nextSibling;
-        body.appendChild(node);
-        node = next;
-      }
-      panel.appendChild(body);
+function doLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  if (!email) { alert('Please enter your email or NetID.'); return; }
 
-      function togglePanel(e){
-        if(e && e.target.closest('button, a, input, select, textarea, .tab, .mode-btn')) return;
-        panel.classList.toggle('collapsed');
-        toggle.setAttribute('aria-label', panel.classList.contains('collapsed') ? 'Expand section' : 'Collapse section');
-      }
-      header.addEventListener('click', togglePanel);
-      toggle.addEventListener('click', function(e){ e.stopPropagation(); togglePanel(); });
-    });
+  document.getElementById('loginScreen').style.display = 'none';
+  const shell = document.getElementById('appShell');
+  shell.style.display = 'flex';
+
+  // Set topbar user info
+  const displayName = email.includes('@') ? email.split('@')[0].replace(/[._]/g,' ').replace(/\b\w/g,c=>c.toUpperCase()) : email;
+  document.getElementById('topbarUname').textContent = displayName;
+  document.getElementById('topbarAvatar').textContent = displayName.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+
+  if (currentRole === 'provider') {
+    document.getElementById('providerView').style.display = '';
+    document.getElementById('patientPortalView').style.display = 'none';
+    document.getElementById('topbarRoleBadge').textContent = 'Provider';
+    document.getElementById('topbarRoleBadge').className = 'topbar-role-badge provider';
+    document.getElementById('topbarAppName').textContent = 'Clinical dashboard';
+    // Wire up provider button bindings
+    initProviderBindings();
+    // Init dashboard data
+    selectPatient(0);
+    renderCareTeam(patients[0]);
+    renderTopProblems(patients[0]);
+    loadDummyLifestyleData();
+  } else {
+    document.getElementById('providerView').style.display = 'none';
+    document.getElementById('patientPortalView').style.display = '';
+    document.getElementById('topbarRoleBadge').textContent = 'Patient';
+    document.getElementById('topbarRoleBadge').className = 'topbar-role-badge patient';
+    document.getElementById('topbarAppName').textContent = 'Patient care plan';
+    document.getElementById('topbarUname').textContent = 'Maria Reyes';
+    document.getElementById('topbarAvatar').textContent = 'MR';
+    renderPatientPortal(patients[0]);
   }
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', makeCollapsible);
-  else makeCollapsible();
-})();
-</script>
+}
 
+function doLogout() {
+  document.getElementById('appShell').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('loginEmail').value = '';
+  document.getElementById('loginPassword').value = '';
+}
+
+// ── PATIENT PORTAL RENDER ──────────────────────────────────────────
+function renderPatientPortal(p) {
+  const pf = patientFacingContent[p.name];
+  if (!pf) return;
+  const team = careTeams[p.name] || [];
+
+  document.getElementById('portalAvatar').textContent = p.initials;
+  document.getElementById('portalHeadline').textContent = pf.headline;
+  document.getElementById('portalSubtitle').textContent = pf.subtitle;
+  document.getElementById('portalStatusPill').textContent = pf.status;
+  document.getElementById('portalVisitPill').textContent = pf.visit;
+  document.getElementById('portalSupportPill').textContent = pf.support;
+  document.getElementById('portalGaps').textContent = p.openGaps;
+  document.getElementById('portalTeamCount').textContent = team.length;
+  document.getElementById('portalFocus').textContent = pf.focus;
+
+  document.getElementById('portalActionsList').innerHTML = (pf.actions||[]).map(a=>`
+    <div class="patient-check">
+      <div class="patient-check-icon">✓</div>
+      <div><div class="patient-check-title">${a[0]}</div><div class="patient-check-sub">${a[1]}</div></div>
+    </div>`).join('');
+
+  document.getElementById('portalTeamActions').innerHTML = (pf.team||[]).map(t=>`
+    <div class="patient-team-item">
+      <div class="patient-team-role">${t[0]}</div>
+      <div class="patient-team-doing">${t[1]}</div>
+    </div>`).join('');
+
+  document.getElementById('portalCareTeam').innerHTML = team.map(m=>`
+    <div class="care-team-card">
+      <div class="care-team-role">${m.role}</div>
+      <div class="care-team-name">${m.name}</div>
+      <div class="care-team-meta">${m.meta}</div>
+      <span class="care-team-pill">${m.tag}</span>
+    </div>`).join('');
+
+  document.getElementById('portalWarningsList').innerHTML = (pf.warnings||[]).map(w=>`
+    <div class="patient-warning">
+      <div class="patient-warning-title">${w[0]}</div>
+      <div class="patient-warning-sub">${w[1]}</div>
+    </div>`).join('');
+
+  document.getElementById('portalSimpleSummary').innerHTML = (pf.summary||[]).map(s=>`
+    <div class="patient-summary-item">
+      <div class="patient-check-title">${s[0]}</div>
+      <div class="patient-summary-sub">${s[1]}</div>
+    </div>`).join('');
+
+  // Education cards
+  const cards = getOfficialPatientEducation(p);
+  const existing = document.getElementById('portalEducationGrid');
+  if (existing) {
+    existing.innerHTML = cards.map(card=>`
+      <div class="patient-edu-card">
+        <div class="patient-edu-media">
+          <div class="patient-edu-media-inner">
+            <div class="patient-edu-kicker">${card.kicker}</div>
+            <div class="patient-edu-title">${card.title}</div>
+            <div class="patient-edu-copy">${card.copy}</div>
+          </div>
+        </div>
+        <a href="${card.url}" target="_blank" class="patient-edu-button">Open resource →</a>
+      </div>`).join('');
+  }
+}
+
+// Pre-fill on load
+window.addEventListener('DOMContentLoaded', () => { selectRole('provider'); });
+</script>
 </body>
 </html>
