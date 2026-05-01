@@ -1,135 +1,2111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Care Coordination Dashboard</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shared Care Coordination Dashboard — UArizona Health</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--panel:#fff;--border:#dbe3ef;--text:#172638;--muted:#607389;--blue:#2559d6;--green:#11865b;--amber:#b36b00;--red:#b42318;--chip:#eef3fb;--shadow:0 8px 24px rgba(22,34,51,.08);--radius:18px}
-*{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:linear-gradient(180deg,#f7f9fd 0%,#eef3f9 100%)}
-.wrap{max-width:1480px;margin:0 auto;padding:20px}.topbar{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;margin-bottom:18px}
-h1{margin:0 0 6px 0;font-size:40px;line-height:1.05;letter-spacing:-.02em}.subtitle{color:var(--muted);font-size:18px;max-width:900px}
-.top-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}.btn{border:1px solid var(--border);background:#fff;color:var(--text);border-radius:12px;padding:11px 14px;font-weight:700;cursor:pointer;box-shadow:var(--shadow)} .btn.primary{background:var(--blue);color:#fff;border-color:var(--blue)}
-.grid{display:grid;grid-template-columns:330px 1fr;gap:18px;align-items:start}.panel{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)} .sidebar{padding:18px;position:sticky;top:18px}
-.section-title{font-size:13px;font-weight:800;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px}.patient-list{display:flex;flex-direction:column;gap:10px;margin-bottom:18px}
-.patient-card{border:1px solid var(--border);border-radius:14px;padding:14px;cursor:pointer;background:#fbfcfe}.patient-card.active{border-color:#9bb8ff;background:#eef4ff;box-shadow:inset 0 0 0 1px #c6d7ff}
-.patient-name{font-weight:800;font-size:18px;margin-bottom:4px}.meta{color:var(--muted);font-size:14px;line-height:1.4}
-.chip-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.chip{background:var(--chip);color:#334a62;border:1px solid #d8e3f1;border-radius:999px;padding:5px 10px;font-size:12px;font-weight:700}
-.risk{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:800}.risk.high{background:#fdeceb;color:var(--red)}.risk.medium{background:#fff3e0;color:var(--amber)}.risk.low{background:#e9f8f1;color:var(--green)}
-.main{display:flex;flex-direction:column;gap:18px}.hero{padding:20px 22px}.hero-top{display:flex;gap:14px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;margin-bottom:16px}
-.patient-heading{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap}.avatar{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#2c62e6,#6ea1ff);color:#fff;display:grid;place-items:center;font-size:22px;font-weight:800}
-.hero-name{font-size:30px;font-weight:900;line-height:1.05;margin-bottom:6px}.hero-sub{color:var(--muted);font-size:15px}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
-.stat{border:1px solid var(--border);border-radius:14px;padding:14px;background:#fbfcff}.stat-label{color:var(--muted);font-size:13px;font-weight:700;margin-bottom:6px}.stat-value{font-size:30px;font-weight:900;line-height:1}
-.two-col{display:grid;grid-template-columns:1.15fr .85fr;gap:18px}.care-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.panel-h{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 18px 0 18px}.panel-h h2{margin:0;font-size:28px;line-height:1.05;letter-spacing:-.02em}.panel-sub{color:var(--muted);font-size:14px;margin:6px 18px 0 18px}
-.body-pad{padding:18px}.care-box{border:1px solid var(--border);background:#fbfcff;border-radius:14px;padding:14px}.care-box h3{margin:0 0 10px 0;font-size:16px}
-ul.clean{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px} ul.clean li{display:flex;gap:10px;align-items:flex-start;line-height:1.35}
-.dot{width:10px;height:10px;border-radius:50%;margin-top:5px;background:#8aa2c5}.dot.green{background:var(--green)}.dot.amber{background:var(--amber)}.dot.red{background:var(--red)}
-.owner{color:var(--muted);font-size:12px;font-weight:700;display:block;margin-top:2px}.alert-list{display:flex;flex-direction:column;gap:12px;padding:18px}
-.alert{border-radius:14px;border:1px solid var(--border);padding:14px;background:#fff}.alert.red{background:#fff7f7;border-color:#f0c7c3}.alert.amber{background:#fffaf0;border-color:#efd8aa}.alert.green{background:#f5fcf8;border-color:#cce9d9}.alert-title{font-size:15px;font-weight:800;margin-bottom:4px}.alert-desc{color:#42566d;font-size:14px;line-height:1.4}
-.timeline{padding:18px;display:flex;flex-direction:column;gap:14px}.event{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:start}.event-date{color:var(--muted);font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;padding-top:2px}.event-card{border:1px solid var(--border);border-radius:14px;background:#fbfcff;padding:14px}
-.source{display:inline-block;border-radius:999px;padding:5px 9px;font-size:11px;font-weight:800;margin-bottom:8px}.source.hospital{background:#eaf1ff;color:#2559d6}.source.fqhc{background:#edf8ef;color:#11865b}.source.chw{background:#fff3e6;color:#b36b00}.source.wearable{background:#f2efff;color:#6941c6}.event-title{font-size:16px;font-weight:800;margin-bottom:4px}.event-desc{color:#42566d;font-size:14px;line-height:1.4}
-.chart-wrap{padding:16px 18px 20px 18px}.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.mini-chart{border:1px solid var(--border);border-radius:14px;padding:12px;background:#fbfcff}.mini-chart h3{margin:0 0 4px 0;font-size:15px}.chart-meta{font-size:12px;color:var(--muted);margin-bottom:8px} svg{width:100%;height:auto;display:block}
-.legend{display:flex;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:12px;margin-top:8px}.legend span{display:inline-flex;align-items:center;gap:6px}.swatch{width:12px;height:12px;border-radius:999px;display:inline-block}
-.task-table{width:100%;border-collapse:collapse;font-size:14px}.task-table th,.task-table td{text-align:left;padding:12px 10px;border-bottom:1px solid var(--border);vertical-align:top}.task-table th{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em}
-.pill{display:inline-block;padding:4px 8px;border-radius:999px;font-size:12px;font-weight:800;background:#eef2f8;color:#42566d}.priority-high{background:#fdeceb;color:var(--red)}.priority-medium{background:#fff4e5;color:var(--amber)}.priority-low{background:#e9f8f1;color:var(--green)}
-.footer-note{color:var(--muted);font-size:12px;margin-top:12px}
-.toast{position:fixed;right:20px;bottom:20px;background:#172638;color:#fff;padding:12px 14px;border-radius:12px;box-shadow:var(--shadow);font-size:14px;opacity:0;transform:translateY(8px);transition:.2s;pointer-events:none;z-index:40}.toast.show{opacity:1;transform:translateY(0)}
-.modal-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.45);display:none;align-items:center;justify-content:center;padding:20px;z-index:50}.modal-backdrop.open{display:flex}
-.modal{max-width:880px;width:100%;max-height:85vh;overflow:auto;background:#fff;border-radius:20px;border:1px solid var(--border);box-shadow:0 24px 60px rgba(15,23,42,.24)}
-.modal-header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:20px 22px 12px 22px;border-bottom:1px solid var(--border)}.modal-header h3{margin:0;font-size:28px}
-.modal-body{padding:20px 22px}.modal-close{border:1px solid var(--border);background:#fff;border-radius:10px;padding:8px 12px;font-weight:700;cursor:pointer}.snapshot{white-space:pre-wrap;line-height:1.5;font-size:15px}
-@media (max-width:1180px){.grid{grid-template-columns:1fr}.sidebar{position:static}.two-col,.stats,.chart-grid,.care-grid{grid-template-columns:1fr}}
+:root{
+  --bg:#f5f5f5;
+  --panel:#ffffff;
+  --border:#dce3e5;
+  --border-strong:#b8c4c8;
+  --text:#0C234B;
+  --muted:#49595E;
+  --muted-light:#7a8f94;
+  --accent:#AB0520;
+  --accent-soft:#fcedef;
+  --accent-border:#f5b8be;
+  --blue:#1E5288;
+  --blue-soft:#e8eff8;
+  --high-bg:#fcedef;
+  --high:#AB0520;
+  --med-bg:#fff8ec;
+  --med:#C65809;
+  --green:#2D6A4F;
+  --green-bg:#edf7f1;
+  --orange:#C65809;
+  --red:#AB0520;
+  --shadow:0 1px 3px rgba(12,35,75,.07),0 1px 2px rgba(12,35,75,.05);
+  --shadow-md:0 4px 12px rgba(12,35,75,.1),0 2px 4px rgba(12,35,75,.05);
+  --radius:10px;
+  --radius-lg:14px;
+  --radius-xl:18px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  font-size:15px;
+  line-height:1.5;
+}
+.wrap{
+  max-width:1640px;
+  margin:0 auto;
+  padding:16px 20px 32px;
+}
+.top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:16px;
+  margin-bottom:16px;
+}
+h1{
+  margin:0;
+  font-size:26px;
+  line-height:1.2;
+  font-weight:600;
+  letter-spacing:-0.3px;
+  color:var(--text);
+}
+.subtitle{
+  margin-top:6px;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.5;
+  max-width:860px;
+}
+.top-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  flex-shrink:0;
+}
+.btn{
+  background:var(--panel);
+  border:1px solid var(--border);
+  color:var(--text);
+  padding:7px 13px;
+  border-radius:8px;
+  font-size:13.5px;
+  font-weight:500;
+  cursor:pointer;
+  font-family:inherit;
+  transition:background .12s,border-color .12s;
+}
+.btn:hover{background:#f5f5f3;border-color:var(--border-strong)}
+.btn.primary{
+  background:#0C234B;
+  color:#fff;
+  border-color:#0C234B;
+}
+.btn.primary:hover{background:#AB0520;border-color:#AB0520;}
+.layout{
+  display:grid;
+  grid-template-columns:300px 1fr;
+  gap:16px;
+  align-items:start;
+}
+.panel{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  box-shadow:var(--shadow);
+}
+.sidebar{
+  padding:14px;
+  position:sticky;
+  top:12px;
+}
+.section-label{
+  color:var(--muted);
+  font-size:11.5px;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  line-height:1.35;
+  margin:4px 2px 10px;
+}
+.patient-card{
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:12px;
+  margin:8px 0;
+  background:var(--bg);
+  cursor:pointer;
+  transition:background .12s,border-color .12s;
+}
+.patient-card:hover{
+  background:#f3f3f1;
+  border-color:var(--border-strong);
+}
+.patient-card.active{
+  background:#fcedef;
+  border:1.5px solid var(--accent-border);
+}
+.patient-name{
+  font-size:14.5px;
+  font-weight:600;
+  margin-bottom:3px;
+}
+.patient-meta{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.4;
+}
+.tag-row{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  margin-top:10px;
+}
+.pill{
+  padding:3px 9px;
+  border-radius:999px;
+  font-size:11.5px;
+  font-weight:500;
+  border:1px solid var(--border);
+  background:var(--bg);
+  color:var(--muted);
+}
+.pill.high{background:var(--high-bg); color:var(--high); border-color:#fecaca;}
+.pill.med{background:var(--med-bg); color:var(--med); border-color:var(--accent-border);}
+.workflow-box{
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  background:var(--bg);
+  padding:12px;
+  margin:10px 0 0;
+}
+.workflow-item{
+  display:flex;
+  gap:10px;
+  margin-bottom:12px;
+}
+.workflow-item:last-child{margin-bottom:0}
+.dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  flex:0 0 7px;
+  margin-top:7px;
+}
+.dot.red{background:var(--red)}
+.dot.orange{background:var(--orange)}
+.dot.green{background:var(--green)}
+.workflow-title{
+  font-size:13.5px;
+  font-weight:600;
+  margin-bottom:2px;
+}
+.workflow-desc{
+  color:var(--muted);
+  font-size:12.5px;
+  line-height:1.4;
+}
+.hero{
+  padding:18px 20px;
+}
+.hero-top{
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+  align-items:flex-start;
+}
+.person{
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+}
+.avatar{
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#AB0520,#0C234B);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:17px;
+  font-weight:600;
+  flex-shrink:0;
+}
+.hero-name{
+  font-size:22px;
+  line-height:1.2;
+  font-weight:600;
+  margin:0 0 4px;
+  letter-spacing:-0.3px;
+}
+.hero-meta{
+  color:var(--muted);
+  font-size:13.5px;
+  line-height:1.4;
+}
+.risk-badge{
+  padding:4px 12px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:600;
+  background:var(--high-bg);
+  color:var(--high);
+  border:1px solid #fecaca;
+  white-space:nowrap;
+}
+.metric-grid{
+  margin-top:14px;
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+  gap:10px;
+}
+.metric{
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:12px 14px 10px;
+  background:var(--bg);
+  transition:border-color .12s;
+}
+.metric:hover{border-color:var(--border-strong)}
+.metric-label{
+  font-size:12px;
+  font-weight:500;
+  color:var(--muted);
+  margin-bottom:6px;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+}
+.metric-value{
+  font-size:20px;
+  font-weight:600;
+  line-height:1;
+  color:var(--text);
+}
+.tabbar{
+  display:flex;
+  gap:4px;
+  margin-top:14px;
+  border-bottom:2px solid #AB0520;
+  padding-bottom:0;
+}
+.tab{
+  padding:7px 12px;
+  border-radius:6px 6px 0 0;
+  border:1px solid transparent;
+  border-bottom:none;
+  background:transparent;
+  font-weight:500;
+  font-size:13px;
+  color:var(--muted);
+  cursor:pointer;
+  font-family:inherit;
+  margin-bottom:-1px;
+  transition:color .12s;
+}
+.tab:hover{color:var(--text)}
+.tab.active{
+  background:var(--panel);
+  border-color:var(--border);
+  border-bottom-color:var(--panel);
+  color:#AB0520;
+  font-weight:600;
+}
+.view{display:none}
+.view.active{display:block}
+.grid2{
+  margin-top:14px;
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  gap:14px;
+  align-items:start;
+}
+.content-panel{
+  padding:16px 18px;
+}
+.header-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:10px;
+  margin-bottom:14px;
+}
+.header-row > div:first-child{
+  min-width:0;
+}
+.content-title{
+  font-size:18px;
+  font-weight:600;
+  line-height:1.2;
+  margin:0 0 4px;
+}
+.content-sub{
+  color:var(--muted);
+  font-size:13.5px;
+  line-height:1.4;
+}
+.count-pill{
+  padding:3px 9px;
+  border-radius:999px;
+  background:var(--bg);
+  color:var(--muted);
+  font-size:12px;
+  font-weight:500;
+  white-space:nowrap;
+  border:1px solid var(--border);
+}
+.columns2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+  align-items:start;
+}
+.block{
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:14px;
+  background:var(--bg);
+  height:100%;
+}
+.block-title{
+  font-size:15px;
+  font-weight:600;
+  margin-bottom:12px;
+}
+.item{
+  display:flex;
+  gap:10px;
+  margin-bottom:14px;
+}
+.item:last-child{margin-bottom:0}
+.item-text{
+  font-size:16px;
+  font-weight:600;
+  line-height:1.25;
+}
+.item-sub{
+  color:var(--muted);
+  font-size:13px;
+  margin-top:3px;
+  line-height:1.3;
+}
+.alert{
+  border:1px solid #fecaca;
+  background:var(--high-bg);
+  border-radius:var(--radius);
+  padding:14px 16px;
+  margin-bottom:12px;
+}
+.alert.warn{
+  border-color:var(--accent-border);
+  background:var(--med-bg);
+}
+.alert.good{
+  border-color:#bbf7d0;
+  background:var(--green-bg);
+}
+.alert-title{
+  font-size:16px;
+  font-weight:600;
+  line-height:1.25;
+  margin-bottom:5px;
+}
+.alert-sub{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.35;
+}
+.detail-grid{
+  margin-top:16px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+  align-items:start;
+}
+.detail-card{
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:16px;
+  background:var(--bg);
+}
+.detail-title{
+  font-size:19px;
+  font-weight:600;
+  margin:0 0 12px;
+}
+.list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.list-row{
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:14px 16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  background:var(--bg);
+}
+.list-name{
+  font-size:16px;
+  font-weight:600;
+}
+.list-desc{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:13px;
+}
+.status{
+  min-width:110px;
+  text-align:center;
+  padding:8px 12px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:600;
+  white-space:nowrap;
+  letter-spacing:.01em;
+}
+.status.good{background:var(--green-bg); color:var(--green)}
+.status.warn{background:var(--med-bg); color:#b45309}
+.status.bad{background:#f9e7e7; color:var(--red)}
+.chart-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));
+  gap:12px;
+  align-items:start;
+}
+.chart-card{
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:10px 10px 8px;
+  background:var(--bg);
+  transition:.16s ease;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
+}
+.chart-card:hover{
+  transform:translateY(-1px);
+  box-shadow:0 12px 24px rgba(0,0,0,.06);
+}
+.chart-title{
+  font-size:15px;
+  font-weight:600;
+  margin:0 0 3px;
+}
+.chart-meta{
+  color:var(--muted);
+  font-size:11px;
+  margin-bottom:8px;
+}
+.chart-card svg{
+  width:100%;
+  height:auto;
+  display:block;
+  margin-top:2px;
+}
+.legend-row{
+  margin-top:10px;
+  color:var(--muted);
+  font-size:12px;
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+}
+.legend-row span{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+}
+.swatch{
+  width:11px;
+  height:11px;
+  border-radius:999px;
+  display:inline-block;
+}
+.timeline{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+.event{
+  display:grid;
+  grid-template-columns:120px 1fr;
+  gap:16px;
+  align-items:start;
+}
+.event-date{
+  color:var(--muted);
+  font-size:13px;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+  padding-top:2px;
+}
+.event-card{
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  background:var(--bg);
+  padding:14px;
+}
+.source{
+  display:inline-block;
+  border-radius:999px;
+  padding:5px 9px;
+  font-size:11px;
+  font-weight:600;
+  margin-bottom:8px;
+}
+.source.hospital{background:#fff8e7;color:#16a34a}
+.source.fqhc{background:#edf8ef;color:#15803d}
+.source.chw{background:var(--med-bg);color:var(--med)}
+.source.wearable{background:#faf5ff;color:#6941c6}
+.event-title{
+  font-size:16px;
+  font-weight:600;
+  margin-bottom:4px;
+}
+.event-desc{
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.4;
+}
+.task-table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:14px;
+}
+.task-table th,.task-table td{
+  text-align:left;
+  padding:12px 10px;
+  border-bottom:1px solid var(--border);
+  vertical-align:top;
+}
+.task-table th{
+  color:var(--muted);
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+}
+.priority{
+  display:inline-block;
+  padding:5px 10px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:600;
+}
+.priority.high{background:var(--high-bg);color:var(--red)}
+.priority.medium{background:var(--med-bg);color:var(--orange)}
+.priority.low{background:var(--green-bg);color:var(--green)}
+.footer-note{
+  color:var(--muted);
+  font-size:12px;
+  margin-top:10px;
+}
+.snapshot{
+  white-space:pre-wrap;
+  line-height:1.55;
+  font-size:15px;
+}
+.modal-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.4);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  z-index:50;
+}
+.modal-backdrop.open{display:flex}
+.modal{
+  max-width:900px;
+  width:100%;
+  max-height:85vh;
+  overflow:auto;
+  background:#fff;
+  border-radius:var(--radius-lg);
+  border:1px solid var(--border);
+  box-shadow:0 24px 60px rgba(0,0,0,.16);
+}
+.modal-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:12px;
+  padding:20px 22px 12px 22px;
+  border-bottom:1px solid var(--border);
+}
+.modal-header h3{
+  margin:0;
+  font-size:28px;
+}
+.modal-body{
+  padding:20px 22px;
+}
+.modal-close{
+  border:1px solid var(--border);
+  background:#fff;
+  border-radius:10px;
+  padding:8px 12px;
+  font-weight:500;
+  cursor:pointer;
+}
+.toast{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  background:#172638;
+  color:#fff;
+  padding:12px 14px;
+  border-radius:12px;
+  box-shadow:var(--shadow);
+  font-size:14px;
+  opacity:0;
+  transform:translateY(8px);
+  transition:.2s;
+  pointer-events:none;
+  z-index:40;
+}
+.toast.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
+.view-toggle{
+  display:flex;
+  gap:8px;
+  margin-top:14px;
+}
+.mode-btn{
+  padding:10px 14px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:#fff;
+  font-weight:600;
+  font-size:13px;
+  color:var(--text);
+  cursor:pointer;
+}
+.mode-btn.active{
+  background:#fff8e7;
+  border-color:#fde68a;
+}
+.app-mode{display:none;}
+.app-mode.active{display:block;}
+.pop-layout{
+  display:grid;
+  grid-template-columns:300px 1fr;
+  gap:16px;
+  align-items:start;
+  margin-top:16px;
+}
+.filter-panel{
+  padding:16px;
+  position:sticky;
+  top:12px;
+}
+.filter-group{margin-bottom:18px;}
+.filter-title{
+  font-size:12px;
+  font-weight:600;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  margin-bottom:10px;
+}
+.filter-chip-row{display:flex; flex-wrap:wrap; gap:8px;}
+.filter-chip{
+  border:1px solid var(--border);
+  background:#fff;
+  border-radius:999px;
+  padding:8px 11px;
+  font-size:12px;
+  font-weight:600;
+  cursor:pointer;
+  color:var(--muted);
+}
+.filter-chip.active{background:#fff8e7;border-color:#fde68a;color:#1a6cf0;}
+.pop-summary-grid{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:12px;
+  margin-bottom:16px;
+}
+.pop-card{
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  padding:12px 14px 10px;
+  background:var(--bg);
+}
+.pop-card-label{font-size:13px;font-weight:600;color:var(--muted);margin-bottom:8px;}
+.pop-card-value{font-size:28px;font-weight:600;line-height:1;}
+.pop-card-sub{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.35;}
+.cohort-chip-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+.cohort-chip{
+  padding:8px 12px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  background:#fff;
+  font-weight:600;
+  font-size:12px;
+  cursor:pointer;
+  color:var(--text);
+}
+.cohort-chip.active{background:#fff8e7;border-color:#fde68a;color:#1a6cf0;}
+.registry-table{width:100%;border-collapse:collapse;font-size:14px;}
+.registry-table th,.registry-table td{
+  text-align:left;
+  padding:12px 10px;
+  border-bottom:1px solid var(--border);
+  vertical-align:top;
+}
+.registry-table th{
+  color:var(--muted);
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+}
+.registry-row-btn{
+  border:none;
+  background:transparent;
+  padding:0;
+  font:inherit;
+  color:#1a6cf0;
+  font-weight:600;
+  cursor:pointer;
+}
+.registry-sub{display:block;color:var(--muted);font-size:12px;margin-top:4px;}
+.mini-note{font-size:12px;color:var(--muted);margin-top:8px;}
+
+
+.series-label-row{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin:-2px 0 10px;
+}
+.series-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:600;
+  background:var(--bg);
+  border:1px solid var(--border);
+  color:var(--muted);
+}
+.series-dot{
+  width:10px;
+  height:10px;
+  border-radius:999px;
+  display:inline-block;
+}
+.med-adherence{
+  border:1px solid var(--border);
+  background:#fff;
+  border-radius:var(--radius);
+  padding:11px 12px;
+  margin-bottom:12px;
+}
+.med-adherence-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:6px;
+}
+.med-adherence-title{
+  font-size:12px;
+  font-weight:600;
+  color:var(--muted);
+}
+.adherence-pill{
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:600;
+}
+.adherence-pill.good{background:var(--green-bg);color:var(--green)}
+.adherence-pill.warn{background:var(--med-bg);color:#b45309}
+.adherence-pill.bad{background:var(--high-bg);color:var(--red)}
+.med-adherence-sub{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.35;
+}
+.referral-summary-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-bottom:14px;
+}
+.referral-summary-card{
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:14px;
+  background:var(--bg);
+}
+.referral-summary-card .big{
+  font-size:24px;
+  font-weight:600;
+  line-height:1;
+  margin-bottom:6px;
+}
+.referral-area-tabs{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-bottom:14px;
+}
+.referral-tab{
+  border:1px solid var(--border);
+  background:#fff;
+  color:var(--text);
+  border-radius:999px;
+  padding:8px 12px;
+  font-size:12px;
+  font-weight:600;
+  cursor:pointer;
+}
+.referral-tab.active{
+  background:#fff8e7;
+  border-color:#fde68a;
+  color:#1a6cf0;
+}
+.referral-status-chip{
+  display:inline-block;
+  margin-top:6px;
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:600;
+}
+.referral-status-chip.not-needed{background:var(--bg);color:var(--muted)}
+.referral-status-chip.referral-made{background:var(--med-bg);color:#b45309}
+.referral-status-chip.referral-completed{background:var(--green-bg);color:var(--green)}
+.trigger-box{
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  background:var(--bg);
+  padding:16px;
+}
+.trigger-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+.trigger-title{
+  font-size:18px;
+  font-weight:600;
+  margin:0 0 8px;
+}
+.trigger-subtitle{
+  color:var(--muted);
+  font-size:13px;
+  margin-bottom:12px;
+}
+.trigger-label{
+  color:var(--muted);
+  font-size:12px;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+  margin-bottom:6px;
+}
+.trigger-text{
+  font-size:14px;
+  line-height:1.45;
+  color:var(--text);
+}
+
+
+.home-referral-list{display:flex;flex-direction:column;gap:8px;}
+.home-referral-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--border);border-radius:12px;background:#fff;cursor:pointer;}
+.home-referral-item:hover{background:var(--bg);}
+.home-referral-copy{font-size:12px;line-height:1.25;}
+.home-referral-copy strong{display:block;font-size:13px;color:var(--text);margin-bottom:1px;}
+.home-referral-empty{border:1px dashed var(--border);border-radius:12px;padding:10px;background:var(--bg);color:var(--muted);font-size:12px;}
+.home-referral-panel .content-panel{padding:14px 14px 12px;}
+.home-referral-panel .header-row{margin-bottom:10px;}
+.home-referral-panel .content-title{font-size:20px;}
+.home-referral-panel .content-sub{font-size:13px;}
+.home-referral-panel .count-pill{font-size:12px;padding:6px 10px;}
+.home-referral-panel{align-self:start;}
+.home-referral-list{margin-top:2px;}
+.compact-home-grid .content-panel{height:100%;}
+.compact-home-grid{grid-template-columns:320px minmax(0,1fr);align-items:start;}
+.list-row.clickable{cursor:pointer;transition:.12s ease;}
+.list-row.clickable:hover{background:var(--bg);border-color:#cdd9ea;}
+.trigger-box{height:100%;}
+
+@media (max-width:1400px){
+  .metric-grid{grid-template-columns:repeat(2,1fr)}
+  .grid2,.detail-grid,.columns2,.chart-grid,.pop-summary-grid,.referral-summary-grid,.trigger-grid,.compact-home-grid{grid-template-columns:1fr 1fr}
+}
+@media (max-width:980px){
+  .layout{grid-template-columns:1fr}
+  .top{flex-direction:column}
+  .sidebar,.filter-panel{position:static}
+  .event{grid-template-columns:1fr}
+  .pop-layout,.pop-summary-grid,.referral-summary-grid,.trigger-grid{grid-template-columns:1fr}
+}
+
+
+
+
+.patient-facing-wrap{
+  display:grid;
+  grid-template-columns:300px 1fr;
+  gap:16px;
+  align-items:start;
+}
+.patient-facing-sidebar{padding:16px;position:sticky;top:12px;}
+.patient-facing-main{display:flex;flex-direction:column;gap:16px;}
+.patient-hero{padding:22px;}
+.patient-hero-title{font-size:34px;font-weight:600;line-height:1.02;margin:0 0 8px;}
+.patient-hero-sub{color:var(--muted);font-size:16px;line-height:1.45;max-width:900px;}
+.patient-pill-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;}
+.patient-big-pill{padding:8px 14px;border-radius:999px;background:var(--bg);color:var(--muted);font-size:13px;font-weight:600;}
+.patient-status-pill{background:var(--med-bg);color:#b45309;}
+.patient-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;}
+.patient-card-panel{padding:18px;}
+.patient-card-title{font-size:24px;font-weight:600;margin:0 0 6px;}
+.patient-card-sub{color:var(--muted);font-size:14px;line-height:1.4;margin-bottom:14px;}
+.patient-checklist,.patient-team-list,.patient-warning-list,.patient-edu-grid{display:flex;flex-direction:column;gap:10px;}
+.patient-check,.patient-team-item,.patient-warning,.patient-summary-item{border:1px solid var(--border);border-radius:var(--radius);background:#fff;padding:12px 14px;}
+.patient-check{display:flex;gap:12px;align-items:flex-start;}
+.patient-check-icon{width:24px;height:24px;border-radius:50%;background:#fff8e7;color:#16a34a;display:flex;align-items:center;justify-content:center;font-weight:600;flex:0 0 24px;margin-top:1px;}
+.patient-check-title,.patient-warning-title{font-size:16px;font-weight:600;line-height:1.25;}
+.patient-check-sub,.patient-warning-sub,.patient-team-doing,.patient-summary-sub{color:var(--muted);font-size:13px;line-height:1.4;margin-top:4px;}
+.patient-team-role{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:5px;}
+.patient-warning{background:var(--med-bg);border-color:var(--accent-border);}
+.patient-warning-title{color:#b45309;}
+.patient-summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.patient-summary-stat{border:1px solid var(--border);border-radius:var(--radius);background:var(--bg);padding:14px;}
+.patient-summary-label{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:8px;}
+.patient-summary-value{font-size:28px;font-weight:600;line-height:1;}
+.patient-summary-sub{margin-top:6px;}
+.patient-edu-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.patient-edu-card{border:1px solid var(--border);border-radius:var(--radius);background:var(--bg);padding:12px;}
+.patient-edu-media{height:180px;border-radius:10px;margin-bottom:10px;border:1px solid var(--border);background:linear-gradient(135deg,var(--bg),#eef3fb);display:flex;align-items:center;justify-content:center;padding:18px;text-align:center;}
+.patient-edu-media-inner{max-width:360px;}
+.patient-edu-kicker{font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.patient-edu-button{display:inline-flex;align-items:center;justify-content:center;margin-top:12px;padding:10px 14px;border-radius:10px;background:#1a6cf0;color:#fff;text-decoration:none;font-weight:600;font-size:14px;}
+.patient-edu-title{font-size:16px;font-weight:600;margin-bottom:4px;}
+.patient-edu-copy{color:var(--muted);font-size:13px;line-height:1.35;}
+@media (max-width:980px){
+  .patient-facing-wrap,.patient-grid,.patient-summary-grid,.patient-edu-grid{grid-template-columns:1fr;}
+  .patient-facing-sidebar{position:static;}
+}
+.lifestyle-grid {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+}
+.lifestyle-stat{
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:14px;
+  background:var(--bg);
+}
+.lifestyle-label{
+  font-size:13px;
+  font-weight:600;
+  color:var(--muted);
+  margin-bottom:10px;
+}
+.lifestyle-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+}
+
+.lifestyle-input{
+  min-width:90px;
+  padding:8px 12px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:var(--bg);
+  color:var(--text);
+  font-size:18px;
+  font-weight:600;
+  line-height:1;
+  display:inline-flex;
+  align-items:center;
+  justify-content:flex-start;
+}
+
+.lifestyle-status{
+  font-size:12px;
+  font-weight:600;
+  padding:6px 10px;
+  border-radius:999px;
+  white-space:nowrap;
+}
+.lifestyle-status.below{background:var(--bg);color:var(--muted);}
+.lifestyle-status.meeting{background:var(--green-bg);color:var(--green);}
+.lifestyle-status.above{background:#fff8e7;color:#1a6cf0;}
+.edu-section h3 {
+  cursor:pointer;
+  margin-top:10px;
+  margin-bottom:0;
+  font-size:17px;
+}
+.edu-content {
+  display:none;
+  margin-top:12px;
+}
+.edu-content iframe {
+  width:100%;
+  height:180px;
+  border-radius:8px;
+  margin-bottom:14px;
+  border:none;
+}
+.video-topic{
+  font-size:13px;
+  font-weight:600;
+  color:var(--muted);
+  margin-bottom:6px;
+}
+.edu-helper{
+  color:var(--muted);
+  font-size:13px;
+  margin-bottom:12px;
+}
+.video-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+}
+.video-card{
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:12px;
+  background:var(--bg);
+}
+.video-card iframe{
+  margin-bottom:0;
+}
+.video-reason{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.35;
+  margin-bottom:8px;
+}
+@media (max-width:980px){
+  .video-grid{grid-template-columns:1fr;}
+}
+
+
+.care-team-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+.care-team-card{
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:12px;
+  background:#fff;
+}
+.care-team-role{
+  font-size:12px;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+  color:var(--muted);
+  margin-bottom:6px;
+}
+.care-team-name{
+  font-size:16px;
+  font-weight:600;
+  color:var(--text);
+  margin-bottom:4px;
+}
+.care-team-meta{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.35;
+}
+.care-team-pill{
+  display:inline-block;
+  margin-top:8px;
+  padding:5px 9px;
+  border-radius:999px;
+  background:var(--bg);
+  color:var(--muted);
+  font-size:11px;
+  font-weight:600;
+}
+@media (max-width:980px){
+  .care-team-grid{grid-template-columns:1fr;}
+}
+
+
+
+.compact-home-grid{
+  margin-top:16px;
+}
+
+#view-home .grid2{
+  margin-top:16px;
+}
+
+#topProblemsList .list-row{
+  padding:10px 12px;
+  border-radius:12px;
+}
+
+#topProblemsList .list-name{
+  font-size:15px;
+}
+
+#topProblemsList .list-desc{
+  font-size:12px;
+}
+
+.block-title{
+  font-size:14px;
+}
+
+.hero .tag-row .pill{
+  padding:6px 10px;
+  font-size:10px;
+}
+
+.chart-card{
+  border-radius:12px;
+}
+
+.task-table th,.task-table td{
+  padding:10px 8px;
+}
+
+
+.trial-pill{
+  background:#eff6ff;
+  color:#1d4ed8;
+  border:1px solid #bfdbfe;
+}
+.trial-pill.enrolled{
+  background:var(--green-bg);
+  color:var(--green);
+  border:1px solid #bbf7d0;
+}
+.trial-pill.screening{
+  background:var(--med-bg);
+  color:#b45309;
+  border:1px solid var(--accent-border);
+}
+
+
+.trial-match-card{
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:12px 14px;
+  background:var(--bg);
+}
+.trial-match-title{
+  font-size:15px;
+  font-weight:600;
+  margin-bottom:4px;
+}
+.trial-match-sub{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.4;
+}
+.trial-match-action{
+  margin-top:8px;
+  font-size:12px;
+  font-weight:600;
+  color:var(--muted);
+}
+.trial-match-pill.enrolled{background:var(--green-bg);color:var(--green);border:1px solid #bbf7d0;}
+.trial-match-pill.screening{background:var(--med-bg);color:#b45309;border:1px solid var(--accent-border);}
+.trial-match-pill{
+  display:inline-block;
+  margin-top:8px;
+  padding:6px 10px;
+  border-radius:999px;
+  background:#eff6ff;
+  color:#1d4ed8;
+  border:1px solid #bfdbfe;
+  font-size:11px;
+  font-weight:600;
+}
+
+.clickable-pill{
+  cursor:pointer;
+  transition:.12s ease;
+}
+.clickable-pill:hover{
+  transform:translateY(-1px);
+  box-shadow:0 8px 18px rgba(0,0,0,.05);
+}
+.trial-note{
+  margin-top:10px;
+  padding:10px 12px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:var(--bg);
+  font-size:13px;
+  line-height:1.4;
+  color:var(--muted);
+}
+
+html, body { height: 100%; margin: 0; }
+.app-container { min-height: 100vh; display: flex; flex-direction: column; background:var(--panel); }
+
+
+/* Claude-style overrides */
+.columns2{gap:12px;}
+.block{border-radius:var(--radius);background:var(--bg);}
+.alert{border-radius:var(--radius);}
+.detail-card{border-radius:var(--radius);background:var(--bg);}
+.list-row{border-radius:var(--radius);background:var(--panel);}
+.chart-card{border-radius:var(--radius);background:var(--bg);}
+.event-card{border-radius:var(--radius);background:var(--panel);}
+.modal{border-radius:var(--radius-lg);}
+.modal-body{padding:18px 20px;}
+.modal-close{border-radius:8px;font-family:inherit;font-size:13px;}
+.toast{background:var(--text);border-radius:10px;font-size:13px;}
+.mode-btn{border-radius:8px;font-family:inherit;font-size:13px;font-weight:500;color:var(--muted);}
+.mode-btn.active{background:#0C234B;border-color:#0C234B;color:#fff;}
+.filter-chip{border-radius:999px;font-weight:500;font-size:12px;}
+.filter-chip.active{background:#fcedef;border-color:var(--accent-border);color:#AB0520;}
+.pop-card{border-radius:var(--radius);background:var(--bg);}
+.pop-card-value{font-size:24px;font-weight:600;}
+.cohort-chip{border-radius:999px;font-weight:500;font-size:12px;}
+.cohort-chip.active{background:#fcedef;border-color:var(--accent-border);color:#AB0520;}
+.registry-row-btn{color:#1E5288;}
+.referral-summary-card{border-radius:var(--radius);background:var(--bg);}
+.referral-tab.active{background:#fff8e7;border-color:var(--accent-border);color:#92400e;}
+.trigger-box{border-radius:var(--radius);background:var(--bg);}
+.patient-card-panel{padding:16px 18px;}
+.patient-card-title{font-size:20px;font-weight:600;}
+.patient-check{border-radius:var(--radius);}
+.patient-check-icon{background:#e8eff8;color:#1E5288;}
+.patient-warning{background:var(--med-bg);border-color:var(--accent-border);}
+.patient-warning-title{color:#92400e;}
+.patient-summary-stat{border-radius:var(--radius);background:var(--bg);}
+.patient-summary-value{font-size:24px;font-weight:600;}
+.patient-edu-card{border-radius:var(--radius);background:var(--bg);}
+.patient-edu-media{border-radius:8px;}
+.patient-edu-button{border-radius:8px;background:#0C234B;}
+.lifestyle-stat{border-radius:var(--radius);background:var(--bg);}
+.lifestyle-input{border-radius:8px;background:var(--panel);}
+.lifestyle-status.below{background:var(--bg);color:var(--muted);}
+.lifestyle-status.meeting{background:var(--green-bg);color:var(--green);}
+.lifestyle-status.above{background:#e8eff8;color:var(--blue);}
+.video-card{border-radius:var(--radius);background:var(--bg);}
+.care-team-card{border-radius:var(--radius);background:var(--panel);}
+.med-adherence{border-radius:var(--radius);}
+.adherence-pill.good{background:var(--green-bg);color:var(--green);}
+.adherence-pill.warn{background:var(--med-bg);color:var(--orange);}
+.adherence-pill.bad{background:var(--high-bg);color:var(--red);}
+.referral-area-tabs .referral-tab{border-radius:999px;}
+.referral-status-chip.not-needed{background:var(--bg);color:var(--muted);}
+.referral-status-chip.referral-made{background:var(--med-bg);color:var(--orange);}
+.referral-status-chip.referral-completed{background:var(--green-bg);color:var(--green);}
+.home-referral-item{border-radius:var(--radius);}
+.home-referral-item:hover{background:var(--bg);}
+.trial-match-card{border-radius:var(--radius);background:var(--bg);}
+.trial-note{border-radius:var(--radius);background:var(--bg);}
+.trial-pill{background:#e8eff8;color:#0C234B;border-color:#b8c4c8;}
+.trial-pill.enrolled{background:var(--green-bg);color:var(--green);border-color:#bbf7d0;}
+.trial-pill.screening{background:var(--med-bg);color:var(--orange);border-color:var(--accent-border);}
+.trial-match-pill{background:#e8eff8;color:#0C234B;border-color:#b8c4c8;}
+.trial-match-pill.enrolled{background:var(--green-bg);color:var(--green);border-color:#bbf7d0;}
+.trial-match-pill.screening{background:var(--med-bg);color:var(--orange);border-color:var(--accent-border);}
+.care-team-pill{background:var(--bg);color:var(--muted);}
+.patient-big-pill{background:var(--bg);color:var(--muted);}
+.patient-status-pill{background:var(--accent-soft);color:var(--accent);}
+.series-pill{background:var(--bg);border-color:var(--border);}
+.filter-title{color:var(--muted);}
+.pop-card-label{color:var(--muted);}
+.med-adherence-title{color:var(--muted);}
+.referral-tab{font-weight:500;}
+.trigger-label{color:var(--muted);}
+.trigger-text{color:var(--text);}
+.trigger-title{font-weight:600;}
+.home-referral-empty{border-color:var(--border);}
+.patient-team-role{color:var(--muted);}
+.patient-edu-kicker{color:var(--muted);}
+.section-label br{display:inline}
+
+
+
+/* Role-based login screen */
+.app-container.locked{display:none;}
+.login-shell{
+  min-height:100vh;
+  background:linear-gradient(135deg,#f5f5f5 0%,#ffffff 45%,#fcedef 100%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:28px;
+}
+.login-card{
+  width:min(980px,100%);
+  display:grid;
+  grid-template-columns:.95fr 1.05fr;
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:22px;
+  box-shadow:0 24px 70px rgba(12,35,75,.16);
+  overflow:hidden;
+}
+.login-brand{
+  background:#0C234B;
+  color:#fff;
+  padding:34px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  min-height:560px;
+}
+.login-logo{display:flex;align-items:center;gap:12px;margin-bottom:24px;}
+.login-a{color:#AB0520;font-size:34px;font-weight:800;line-height:1;}
+.login-org{font-size:14px;font-weight:600;letter-spacing:.04em;}
+.login-brand h2{font-size:34px;line-height:1.05;margin:0 0 14px;font-weight:650;letter-spacing:-.8px;}
+.login-brand p{color:#d7e2ef;font-size:15px;line-height:1.55;margin:0;max-width:360px;}
+.login-feature-list{display:flex;flex-direction:column;gap:12px;margin-top:28px;}
+.login-feature{border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:12px 14px;background:rgba(255,255,255,.06);}
+.login-feature strong{display:block;font-size:14px;margin-bottom:3px;}
+.login-feature span{font-size:12.5px;color:#d7e2ef;line-height:1.35;}
+.login-form-wrap{padding:34px;}
+.login-kicker{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;margin-bottom:8px;}
+.login-title{font-size:28px;font-weight:650;letter-spacing:-.4px;margin:0 0 6px;}
+.login-subtitle{color:var(--muted);font-size:14px;line-height:1.45;margin-bottom:22px;}
+.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px;}
+.role-card{border:1px solid var(--border);border-radius:14px;background:var(--bg);padding:14px;text-align:left;cursor:pointer;font-family:inherit;color:var(--text);}
+.role-card.active{border-color:#0C234B;background:#e8eff8;box-shadow:inset 0 0 0 1px #0C234B;}
+.role-icon{font-size:22px;margin-bottom:8px;}
+.role-name{font-weight:700;font-size:15px;margin-bottom:3px;}
+.role-copy{font-size:12.5px;color:var(--muted);line-height:1.35;}
+.login-field{margin-bottom:13px;}
+.login-field label{display:block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:7px;}
+.login-field input{width:100%;border:1px solid var(--border);border-radius:11px;padding:12px 13px;font:inherit;color:var(--text);background:#fff;}
+.login-field input:focus{outline:none;border-color:#0C234B;box-shadow:0 0 0 3px rgba(12,35,75,.10);}
+.demo-box{border:1px solid var(--border);border-radius:14px;background:var(--bg);padding:12px 14px;margin:16px 0;color:var(--muted);font-size:13px;line-height:1.4;}
+.demo-box strong{color:var(--text);}
+.login-submit{width:100%;border:none;border-radius:12px;background:#0C234B;color:white;padding:13px 16px;font:inherit;font-weight:700;cursor:pointer;}
+.login-submit:hover{background:#AB0520;}
+.login-error{display:none;margin-top:12px;border:1px solid #fecaca;background:#fcedef;color:#AB0520;border-radius:12px;padding:10px 12px;font-size:13px;}
+.login-error.show{display:block;}
+.logout-btn{background:rgba(255,255,255,.12)!important;color:#fff!important;border-color:rgba(255,255,255,.3)!important;}
+.user-chip{color:#fff;font-size:13px;margin-left:auto;opacity:.9;}
+@media(max-width:900px){.login-card{grid-template-columns:1fr}.login-brand{min-height:auto}.role-grid{grid-template-columns:1fr}}
+
+
+
+/* Collapsible dashboard panels */
+.collapsible-panel{overflow:hidden;}
+.collapsible-panel .header-row,
+.collapsible-panel .collapsible-title-row{
+  cursor:pointer;
+  user-select:none;
+}
+.collapsible-panel .header-row:hover .content-title,
+.collapsible-panel .collapsible-title-row:hover .patient-card-title,
+.collapsible-panel .collapsible-title-row:hover .detail-title{color:var(--accent);}
+.collapsible-toggle{
+  margin-left:8px;
+  border:1px solid var(--border);
+  background:var(--bg);
+  color:var(--muted);
+  border-radius:999px;
+  width:28px;
+  height:28px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-size:16px;
+  line-height:1;
+  cursor:pointer;
+  flex:0 0 auto;
+}
+.collapsible-toggle:hover{border-color:var(--border-strong);color:var(--text);background:#fff;}
+.collapsible-body{display:block;}
+.collapsible-panel.collapsed .collapsible-body{display:none;}
+.collapsible-panel.collapsed{padding-bottom:16px;}
+.collapsible-panel.collapsed .collapsible-toggle{transform:rotate(-90deg);}
+.collapsible-title-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:12px;
+  margin-bottom:12px;
+}
+.collapsible-title-row .patient-card-title,
+.collapsible-title-row .detail-title{margin:0;}
+
 </style>
 </head>
 <body>
+
+<div id="loginScreen" class="login-shell">
+  <div class="login-card">
+    <div class="login-brand">
+      <div>
+        <div class="login-logo">
+          <div class="login-a">A</div>
+          <div class="login-org">UArizona Health<br>Shared Care Coordination</div>
+        </div>
+        <h2>One dashboard, two entry points.</h2>
+        <p>Providers see the clinical coordination workspace. Patients see simple next steps, care-team updates, education, and warning signs.</p>
+        <div class="login-feature-list">
+          <div class="login-feature"><strong>Provider login</strong><span>Opens clinical view with care gaps, tasks, referrals, trends, trials, and population registry.</span></div>
+          <div class="login-feature"><strong>Patient login</strong><span>Opens patient-friendly view only, with plain language and no internal clinical queue.</span></div>
+          <div class="login-feature"><strong>Demo mode</strong><span>Use any email and password, or click one of the sample accounts below.</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="login-form-wrap">
+      <div class="login-kicker">Demo access</div>
+      <h1 class="login-title">Sign in</h1>
+      <div class="login-subtitle">Choose the role you want to preview. This is a front-end prototype, so the login is simulated.</div>
+
+      <div class="role-grid">
+        <button type="button" class="role-card active" id="providerRole" onclick="setLoginRole('provider')">
+          <div class="role-icon">🩺</div>
+          <div class="role-name">Provider</div>
+          <div class="role-copy">Clinical dashboard, population view, referrals, quality indicators.</div>
+        </button>
+        <button type="button" class="role-card" id="patientRole" onclick="setLoginRole('patient')">
+          <div class="role-icon">👤</div>
+          <div class="role-name">Patient</div>
+          <div class="role-copy">Simple weekly care plan, team updates, education, warning signs.</div>
+        </button>
+      </div>
+
+      <form onsubmit="return handleLogin(event)">
+        <div class="login-field">
+          <label for="loginEmail">Email</label>
+          <input id="loginEmail" type="email" value="provider@demo.org" autocomplete="username">
+        </div>
+        <div class="login-field">
+          <label for="loginPassword">Password</label>
+          <input id="loginPassword" type="password" value="demo123" autocomplete="current-password">
+        </div>
+        <div class="demo-box">
+          <strong>Sample accounts:</strong><br>
+          Provider: provider@demo.org / demo123<br>
+          Patient: patient@demo.org / demo123
+        </div>
+        <button class="login-submit" type="submit">Log in to dashboard</button>
+        <div class="login-error" id="loginError">Enter any email and password to continue in demo mode.</div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="app-container locked" id="appContainer">
+<div style="background:#0C234B;padding:10px 20px;display:flex;align-items:center;gap:12px;">
+  <div style="color:#AB0520;font-size:22px;font-weight:700;letter-spacing:-0.5px;font-family:'Inter',sans-serif;">A</div>
+  <div style="color:#ffffff;font-size:13.5px;font-weight:500;letter-spacing:.02em;font-family:'Inter',sans-serif;">UArizona Health | Shared Care Coordination</div>
+  <div class="user-chip" id="signedInChip">Not signed in</div>
+  <button class="btn logout-btn" onclick="logoutDemo()">Log out</button>
+</div>
 <div class="wrap">
-<div class="topbar">
-  <div>
-    <h1>Shared Care Coordination Dashboard</h1>
-    <div class="subtitle">Prototype interface for sharing quality data and comprehensive care plans across community health workers, FQHCs, and hospitals.</div>
-  </div>
-  <div class="top-actions">
-    <button class="btn" id="grantBtn">Grant view</button>
-    <button class="btn" id="exportBtn">Export summary</button>
-    <button class="btn primary" id="snapshotBtn">Patient action snapshot</button>
-  </div>
-</div>
-
-<div class="grid">
-  <div class="panel sidebar">
-    <div class="section-title">Patients in care coordination queue</div>
-    <div class="patient-list" id="patientList"></div>
-    <div class="section-title">Shared workflow focus</div>
-    <div class="care-box">
-      <ul class="clean">
-        <li><span class="dot red"></span><div><strong>Cross-setting visibility</strong><span class="owner">One plan shared by CHW, FQHC, and hospital teams</span></div></li>
-        <li><span class="dot amber"></span><div><strong>Care gaps after discharge</strong><span class="owner">Missed follow-up, medication barriers, incomplete outreach</span></div></li>
-        <li><span class="dot green"></span><div><strong>Quality signal tracking</strong><span class="owner">Follow-up completed, meds reconciled, activity recovering</span></div></li>
-      </ul>
+  <div class="top">
+    <div>
+      <h1>Shared Care Coordination Dashboard</h1>
+      <div class="subtitle">Prototype interface for sharing quality data and comprehensive care plans across community health workers, FQHCs, and hospitals. Health maintenance quality indicators and chronic disease quality indicators are layered onto a transitions-of-care workflow rather than replacing it.</div>
+    </div>
+    <div class="top-actions">
+      <button class="btn" id="grantViewBtn">Grant view</button>
+      <button class="btn" id="exportBtn">Export summary</button>
+      <button class="btn primary" id="topSnapshotBtn">Patient action snapshot</button>
     </div>
   </div>
 
-  <div class="main">
-    <div class="panel hero">
-      <div class="hero-top">
-        <div class="patient-heading">
-          <div class="avatar" id="avatar">MR</div>
+  <div class="view-toggle">
+    <button class="mode-btn active" id="patientModeBtn" onclick="setMode('patient')">Clinical View</button>
+    <button class="mode-btn" id="patientFacingModeBtn" onclick="setMode('patientFacing')">Patient View</button>
+    <button class="mode-btn" id="populationModeBtn" onclick="setMode('population')">Population Health View</button>
+  </div>
+
+  <div id="patientMode" class="app-mode active">
+  <div class="layout">
+    <div class="panel sidebar">
+      <div class="section-label">Patients in care coordination<br>queue</div>
+      <div id="patientList"></div>
+
+      <div class="section-label" style="margin-top:20px;">Shared workflow focus</div>
+      <div class="workflow-box">
+        <div class="workflow-item">
+          <div class="dot red"></div>
           <div>
-            <div class="hero-name" id="heroName"></div>
-            <div class="hero-sub" id="heroSub"></div>
-            <div class="chip-row" id="heroChips"></div>
+            <div class="workflow-title">Transitions of care follow-up</div>
+            <div class="workflow-desc">Identify recent discharges without timely outpatient follow-up and coordinate next contact.</div>
           </div>
         </div>
-        <div id="riskBadge"></div>
-      </div>
-      <div class="stats" id="stats"></div>
-    </div>
-
-    <div class="two-col">
-      <div class="panel">
-        <div class="panel-h"><h2>Shared care plan</h2><span class="pill">3 teams aligned</span></div>
-        <div class="panel-sub">Single source of truth for current goals, responsibilities, and barriers.</div>
-        <div class="body-pad">
-          <div class="care-grid">
-            <div class="care-box"><h3>Active goals</h3><ul class="clean" id="goals"></ul></div>
-            <div class="care-box"><h3>Current barriers</h3><ul class="clean" id="barriers"></ul></div>
-            <div class="care-box"><h3>Assigned actions</h3><ul class="clean" id="actions"></ul></div>
-            <div class="care-box"><h3>Medication and follow-up</h3><ul class="clean" id="meds"></ul></div>
+        <div class="workflow-item">
+          <div class="dot orange"></div>
+          <div>
+            <div class="workflow-title">Closed-loop communication</div>
+            <div class="workflow-desc">Track whether the hospital, outpatient team, and community workers are acting on the same plan.</div>
+          </div>
+        </div>
+        <div class="workflow-item">
+          <div class="dot green"></div>
+          <div>
+            <div class="workflow-title">Rapid care-gap review</div>
+            <div class="workflow-desc">Surface screenings, chronic disease tasks, and social barriers in one place before outreach.</div>
           </div>
         </div>
       </div>
-
-      <div class="panel">
-        <div class="panel-h"><h2>Alerts and care gaps</h2><span class="pill" id="gapCount"></span></div>
-        <div class="panel-sub">Signals that should change what the team does next.</div>
-        <div class="alert-list" id="alerts"></div>
-      </div>
     </div>
 
-    <div class="two-col">
-      <div class="panel">
-        <div class="panel-h"><h2>Cross-system timeline</h2><span class="pill">Hospital + FQHC + CHW + wearable</span></div>
-        <div class="panel-sub">Chronological view of what happened and where it happened.</div>
-        <div class="timeline" id="timeline"></div>
+    <div class="main">
+      <div class="panel hero">
+        <div class="hero-top">
+          <div class="person">
+            <div class="avatar" id="avatar">MR</div>
+            <div>
+              <div class="hero-name" id="heroName">Maria Reyes</div>
+              <div class="hero-meta" id="heroMeta"></div>
+              <div class="tag-row" id="heroTags"></div>
+            </div>
+          </div>
+          <div class="risk-badge" id="heroRisk">HIGH RISK</div>
+        </div>
+
+        <div class="metric-grid">
+          <div class="metric clickable" onclick="openExplain('risk')">
+            <div class="metric-label">Risk</div>
+            <div class="metric-value" id="riskLevelMetric">High risk</div>
+            
+          </div>
+          <div class="metric">
+            <div class="metric-label">Open care gaps</div>
+            <div class="metric-value" id="gapsMetric">4</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Shared tasks</div>
+            <div class="metric-value" id="tasksMetric">5</div>
+          </div>
+          <div class="metric clickable" onclick="openExplain('trend')">
+            <div class="metric-label">Trend</div>
+            <div class="metric-value" id="trendMetric">Worsening</div>
+            
+          </div>
+        </div>
+
+        <div class="tabbar">
+          <button class="tab active" onclick="showTab('home', this)">Home</button>
+          <button class="tab" onclick="showTab('preventive', this)">Health maintenance</button>
+          <button class="tab" onclick="showTab('chronic', this)">Chronic</button>
+          <button class="tab" onclick="showTab('timeline', this)">Timeline</button>
+          <button class="tab" onclick="showTab('snapshot', this)">Action snapshot</button>
+          <button class="tab" onclick="showTab('referrals', this)">Referrals</button>
+          <button class="tab" onclick="showTab('education', this)">Lifestyle & education</button>
+        </div>
       </div>
 
-      <div class="panel">
-        <div class="panel-h"><h2>Wearable trends</h2><span class="pill" id="wearableSummary"></span></div>
-        <div class="panel-sub">Daily signals that can support early outreach after discharge.</div>
-        <div class="chart-wrap"><div class="chart-grid" id="charts"></div><div class="legend"><span><i class="swatch" style="background:#2559d6"></i>current trajectory</span><span><i class="swatch" style="background:#cfd8e6"></i>target / baseline</span></div></div>
+      <div id="view-home" class="view active">
+        <div id="grantNote" class="panel content-panel" style="display:none; margin-top:16px;">
+          <div class="header-row">
+            <div>
+              <div class="content-title">Grant summary view</div>
+              <div class="content-sub">This prototype is designed to support cross-setting care coordination by combining transitions-of-care signals, preventive care gaps, chronic disease quality indicators, and wearable recovery trends in a single workflow.</div>
+            </div>
+            <div class="count-pill">Prototype scope</div>
+          </div>
+          <div class="content-sub">
+            Core functions shown here include patient-level risk stratification, shared task visibility, preventive care review, chronic disease quality monitoring, cross-system timeline visibility, and wearables-informed outreach prioritization.
+          </div>
+        </div>
+
+        <div class="panel content-panel" style="margin-top:16px;">
+          <div class="header-row">
+            <div>
+              <div class="content-title">Care Team</div>
+              <div class="content-sub">Providers and support staff involved in the shared care plan.</div>
+            </div>
+            <div class="count-pill" id="careTeamCount">4 team members</div>
+          </div>
+          <div class="care-team-grid" id="careTeamGrid"></div>
+        </div>
+
+        <div class="panel content-panel" style="margin-top:16px;">
+          <div class="header-row">
+            <div>
+              <div class="content-title">Top problems</div>
+              <div class="content-sub">Highest priority issues to address first.</div>
+            </div>
+          </div>
+          <div class="list" id="topProblemsList"></div>
+        </div>
+
+        <div style="display:none;">
+          <div id="trialMatchesCount">0 possible matches</div>
+          <div id="trialMatchesList"></div>
+        </div>
+
+        <div class="grid2">
+          <div class="panel content-panel">
+            <div class="header-row">
+              <div>
+                <div class="content-title">Shared care plan</div>
+                <div class="content-sub">Single source of truth for current goals, responsibilities, and barriers.</div>
+              </div>
+              <div class="count-pill" id="alignedTeams">3 teams aligned</div>
+            </div>
+            <div class="columns2">
+              <div class="block">
+                <div class="block-title">Active goals</div>
+                <div id="goalsList"></div>
+              </div>
+              <div class="block">
+                <div class="block-title">Current barriers</div>
+                <div id="barriersList"></div>
+              </div>
+              <div class="block">
+                <div class="block-title">Assigned actions</div>
+                <div id="actionsList"></div>
+              </div>
+              <div class="block">
+                <div class="block-title">Medications</div>
+                <div id="medAdherence"></div>
+                <div id="medsList"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel content-panel">
+            <div class="header-row">
+              <div>
+                <div class="content-title">Alerts and care gaps</div>
+                <div class="content-sub">Signals that should change what the team does next.</div>
+              </div>
+              <div class="count-pill" id="prioritySignals">3 priority signals</div>
+            </div>
+            <div id="alertsList"></div>
+          </div>
+        </div>
+<div class="grid2 compact-home-grid">
+          <div class="panel content-panel home-referral-panel">
+            <div class="header-row">
+              <div>
+                <div class="content-title">Referral summary</div>
+                <div class="content-sub">Open referrals that have not yet been closed.</div>
+              </div>
+              <div class="count-pill" id="openReferralCount">0 open referrals</div>
+            </div>
+            <div id="homeReferralSummary"></div>
+          </div>
+
+          <div class="panel content-panel">
+            <div class="header-row">
+              <div>
+                <div class="content-title">Clinical and recovery trends</div>
+                <div class="content-sub">Condition-specific trends and recovery signals shown only when clinically relevant.</div>
+              </div>
+              <div class="count-pill" id="wearableSummaryPill">7-day trend</div>
+            </div>
+            <div class="chart-grid" id="chartGrid"></div>
+            <div class="legend-row">
+              <span><i class="swatch" style="background:#2559d6"></i>current trajectory</span>
+              <span><i class="swatch" style="background:#cfd8e6"></i>target / baseline</span>
+              <span id="wearableNarrative"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid2">
+          <div class="panel content-panel">
+            <div class="header-row">
+              <div>
+                <div class="content-title">Who needs to do what next</div>
+                <div class="content-sub">Operational queue for the next 24 to 72 hours.</div>
+              </div>
+              <div class="count-pill" id="handoffCount">5 tasks</div>
+            </div>
+            <table class="task-table">
+              <thead>
+                <tr><th>Owner</th><th>Task</th><th>Reason</th><th>Due</th><th>Priority</th></tr>
+              </thead>
+              <tbody id="taskTable"></tbody>
+            </table>
+            <div class="footer-note">Prototype only. Uses synthetic patient records designed to demonstrate shared care planning across community and hospital settings.</div>
+          </div>
+        </div>
       </div>
+
+      <div id="view-preventive" class="view">
+        <div class="detail-grid">
+          <div class="detail-card">
+            <div class="detail-title">Health Maintenance Quality Indicators</div>
+            <div id="preventiveList" class="list"></div>
+          </div>
+          <div class="detail-card">
+            <div class="detail-title">Health maintenance summary</div>
+            <div class="content-sub" id="preventiveSummary"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="view-chronic" class="view">
+        <div class="detail-grid">
+          <div class="detail-card">
+            <div class="detail-title">Chronic disease quality indicators</div>
+            <div id="chronicList" class="list"></div>
+          </div>
+          <div class="detail-card">
+            <div class="detail-title">Shared next steps</div>
+            <div class="content-sub" id="chronicSummary"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="view-timeline" class="view">
+        <div class="panel content-panel" style="margin-top:16px;">
+          <div class="header-row">
+            <div>
+              <div class="content-title">Cross-system timeline</div>
+              <div class="content-sub">Chronological view of what happened and where it happened.</div>
+            </div>
+            <div class="count-pill">Hospital + FQHC + CHW + wearable</div>
+          </div>
+          <div class="timeline" id="timelineList"></div>
+        </div>
+      </div>
+
+      <div id="view-snapshot" class="view">
+        <div class="detail-grid">
+          <div class="detail-card">
+            <div class="detail-title">Patient action snapshot</div>
+            <div class="content-sub snapshot" id="snapshotText"></div>
+          </div>
+          <div class="detail-card">
+            <div class="detail-title">Trend quick view</div>
+            <div class="content-sub" id="snapshotWearable"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="view-referrals" class="view">
+        <div class="panel content-panel" style="margin-top:16px;">
+          <div class="header-row">
+            <div>
+              <div class="content-title">Referral section</div>
+              <div class="content-sub">Select a sub area to see status and trigger response.</div>
+            </div>
+            <div class="count-pill" id="referralSelectedArea">Primary care</div>
+          </div>
+          <div class="referral-summary-grid" id="referralSummary"></div>
+          <div class="referral-area-tabs" id="referralTabs"></div>
+          <div class="trigger-box" id="referralDetail"></div>
+        </div>
+
+      </div>
+
+      <div id="view-education" class="view">
+        <div class="panel content-panel" style="margin-top:16px;">
+          <div class="header-row">
+            <div>
+              <div class="content-title">Lifestyle Summary</div>
+              <div class="content-sub">Patient-reported activity and behaviors over the past 7 days.</div>
+            </div>
+            <div class="count-pill">Weekly inputs</div>
+          </div>
+
+          
+<div class="lifestyle-grid">
+  <div class="lifestyle-stat">
+    <div class="lifestyle-label">Fruits &amp; Vegetables (servings)</div>
+    <div class="lifestyle-row">
+      <div class="lifestyle-input" id="fv"></div>
+      <span id="fvStatus" class="lifestyle-status"></span>
     </div>
+  </div>
 
-    <div class="panel">
-      <div class="panel-h"><h2>Who needs to do what next</h2><span class="pill">Actionable care coordination queue</span></div>
-      <div class="panel-sub">This is the part that helps the team move from fragmented data to next-step decisions.</div>
-      <div class="body-pad">
-        <table class="task-table"><thead><tr><th>Owner</th><th>Task</th><th>Reason</th><th>Due</th><th>Priority</th></tr></thead><tbody id="taskTable"></tbody></table>
-        <div class="footer-note">Prototype only. Uses synthetic patient records designed to demonstrate shared care planning across community and hospital settings.</div>
-      </div>
+  <div class="lifestyle-stat">
+    <div class="lifestyle-label">Home Cooked Meals</div>
+    <div class="lifestyle-row">
+      <div class="lifestyle-input" id="home"></div>
+      <span id="homeStatus" class="lifestyle-status"></span>
+    </div>
+  </div>
+
+  <div class="lifestyle-stat">
+    <div class="lifestyle-label">Sugary Drinks</div>
+    <div class="lifestyle-row">
+      <div class="lifestyle-input" id="sugar"></div>
+      <span id="sugarStatus" class="lifestyle-status"></span>
+    </div>
+  </div>
+
+  <div class="lifestyle-stat">
+    <div class="lifestyle-label">Fast/Processed Food Servings</div>
+    <div class="lifestyle-row">
+      <div class="lifestyle-input" id="fast"></div>
+      <span id="fastStatus" class="lifestyle-status"></span>
+    </div>
+  </div>
+
+  <div class="lifestyle-stat">
+    <div class="lifestyle-label">Cardio Minutes</div>
+    <div class="lifestyle-row">
+      <div class="lifestyle-input" id="cardio"></div>
+      <span id="cardioStatus" class="lifestyle-status"></span>
+    </div>
+  </div>
+
+  <div class="lifestyle-stat">
+    <div class="lifestyle-label">Strength Training Minutes</div>
+    <div class="lifestyle-row">
+      <div class="lifestyle-input" id="strength"></div>
+      <span id="strengthStatus" class="lifestyle-status"></span>
+    </div>
+  </div>
+
+  <div class="lifestyle-stat">
+    <div class="lifestyle-label">Brain Games Minutes</div>
+    <div class="lifestyle-row">
+      <div class="lifestyle-input" id="brain"></div>
+      <span id="brainStatus" class="lifestyle-status"></span>
+    </div>
+  </div>
+
+  <div class="lifestyle-stat">
+    <div class="lifestyle-label">Stress Reduction Minutes</div>
+    <div class="lifestyle-row">
+      <div class="lifestyle-input" id="stress"></div>
+      <span id="stressStatus" class="lifestyle-status"></span>
     </div>
   </div>
 </div>
+
+<div id="lifestyleSummaryText" class="content-sub" style="margin-top:12px;"></div>
+
+        </div>
+
+        <div class="panel content-panel" style="margin-top:16px;">
+          <div class="header-row">
+            <div>
+              <div class="content-title">Educational Library</div>
+              <div class="content-sub">Patient-facing education across healthy lifestyle and chronic disease self management.</div>
+            </div>
+            <div class="count-pill">Curated resources</div>
+          </div>
+
+          <div class="edu-section">
+            <h3 onclick="toggleEdu('lifestyleEdu')">Healthy Lifestyle</h3>
+            <div id="lifestyleEdu" class="edu-content" style="display:block;">
+              <div class="edu-helper">These official resources change based on the selected patient\'s risks and current problems.</div>
+              <div id="lifestyleEduList" class="video-grid"></div>
+            </div>
+          </div>
+
+          <div class="edu-section">
+            <h3 onclick="toggleEdu('chronicEdu')">Chronic Disease Self Management</h3>
+            <div id="chronicEdu" class="edu-content" style="display:block;">
+              <div class="edu-helper">Condition-specific resources are filtered to the problems this patient actually has.</div>
+              <div id="chronicEduList" class="video-grid"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      </div>
+
+    </div>
+  </div>
+  </div>
+
+  
+
+  <div id="patientFacingMode" class="app-mode">
+    <div class="patient-facing-wrap">
+      <div class="panel patient-facing-sidebar">
+        <div class="section-label">Patients in care coordination<br>queue</div>
+        <div id="patientFacingList"></div>
+
+        <div class="section-label" style="margin-top:20px;">What patients should see</div>
+        <div class="workflow-box">
+          <div class="workflow-item">
+            <div class="dot green"></div>
+            <div>
+              <div class="workflow-title">What you need to do</div>
+              <div class="workflow-desc">Simple next steps in everyday language.</div>
+            </div>
+          </div>
+          <div class="workflow-item">
+            <div class="dot orange"></div>
+            <div>
+              <div class="workflow-title">What your care team is doing</div>
+              <div class="workflow-desc">Shared tasks translated into patient-friendly updates.</div>
+            </div>
+          </div>
+          <div class="workflow-item">
+            <div class="dot red"></div>
+            <div>
+              <div class="workflow-title">When to ask for help</div>
+              <div class="workflow-desc">Warning signs that should trigger outreach.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="patient-facing-main">
+        <div class="panel patient-hero">
+          <div class="hero-top">
+            <div class="person">
+              <div class="avatar" id="patientFacingAvatar">MR</div>
+              <div>
+                <h2 class="patient-hero-title" id="patientFacingHeadline">Your care plan for this week</h2>
+                <div class="patient-hero-sub" id="patientFacingSubtitle">Simple next steps, care-team updates, and warning signs.</div>
+                <div class="patient-pill-row">
+                  <span class="patient-big-pill patient-status-pill" id="patientFacingStatusPill">Needs attention</span>
+                  <span class="patient-big-pill" id="patientFacingVisitPill">Visit still needed</span>
+                  <span class="patient-big-pill" id="patientFacingSupportPill">Care team helping now</span>
+                  <span class="patient-big-pill" id="patientFacingTrialPill">Not in a clinical trial</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="patient-summary-grid">
+          <div class="patient-summary-stat">
+            <div class="patient-summary-label">Open items</div>
+            <div class="patient-summary-value" id="patientFacingGaps">0</div>
+            <div class="patient-summary-sub">Things still to take care of</div>
+          </div>
+          <div class="patient-summary-stat">
+            <div class="patient-summary-label">Care team members</div>
+            <div class="patient-summary-value" id="patientFacingTeamCount">0</div>
+            <div class="patient-summary-sub">People actively helping with your plan</div>
+          </div>
+          <div class="patient-summary-stat">
+            <div class="patient-summary-label">Main focus</div>
+            <div class="patient-summary-value" id="patientFacingFocus">Recovery</div>
+            <div class="patient-summary-sub">Most important thing to work on now</div>
+          </div>
+        </div>
+
+        <div class="patient-grid">
+          <div class="panel patient-card-panel">
+            <div class="patient-card-title">What you need to do</div>
+            <div class="patient-card-sub">Only the next steps that matter right now.</div>
+            <div class="patient-checklist" id="patientActionsList"></div>
+          </div>
+
+          <div class="panel patient-card-panel">
+            <div class="patient-card-title">What your care team is doing</div>
+            <div class="patient-card-sub">What your care team is doing to help you.</div>
+            <div class="patient-team-list" id="patientTeamActions"></div>
+          </div>
+        </div>
+
+        <div class="panel patient-card-panel">
+          <div class="patient-card-title">Your care team</div>
+          <div class="patient-card-sub">People helping you with your care right now.</div>
+          <div class="care-team-grid" id="patientFacingCareTeam"></div>
+        </div>
+
+        <div class="patient-grid">
+          <div class="panel patient-card-panel">
+            <div class="patient-card-title">When to ask for help</div>
+            <div class="patient-card-sub">Warning signs to call about sooner rather than later.</div>
+            <div class="patient-warning-list" id="patientWarningsList"></div>
+          </div>
+
+          <div class="panel patient-card-panel">
+            <div class="patient-card-title">Quick summary</div>
+            <div class="patient-card-sub">Simple reminders instead of clinical labels.</div>
+            <div class="patient-checklist" id="patientSimpleSummary"></div>
+          </div>
+        </div>
+
+        <div class="panel patient-card-panel">
+          <div class="patient-card-title">Learn more</div>
+          <div class="patient-card-sub">Short videos and education for the current situation.</div>
+          <div class="patient-edu-grid" id="patientEducationGrid">
+<div class="patient-edu-card" style="border:2px solid #f5d7a1; background:#fffaf0;">
+  <div class="patient-edu-media">
+    <div class="patient-edu-media-inner">
+      <div class="patient-edu-kicker">Important in hot weather</div>
+      <div class="patient-edu-title">Heat illness prevention</div>
+      <div class="patient-edu-copy">
+        High temperatures can worsen dehydration, fatigue, and recovery.
+      </div>
+    </div>
+  </div>
+  <a href="https://www.cdc.gov/disasters/extremeheat/index.html" target="_blank" class="patient-edu-button">
+    Open CDC resource
+  </a>
+</div>
+</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="populationMode" class="app-mode">
+    <div class="pop-layout">
+      <div class="panel filter-panel">
+        <div class="section-label">Population filters</div>
+
+        <div class="filter-group">
+          <div class="filter-title">Preset cohorts</div>
+          <div class="filter-chip-row" id="cohortFilters"></div>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-title">Risk</div>
+          <div class="filter-chip-row" id="riskFilters"></div>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-title">Focus area</div>
+          <div class="filter-chip-row" id="focusFilters"></div>
+        </div>
+
+        <div class="mini-note">This first population layer is a triage queue. Clicking a patient sends the user back to the detailed patient coordination view.</div>
+      </div>
+
+      <div>
+        <div class="pop-summary-grid" id="populationSummary"></div>
+
+        <div class="panel content-panel">
+          <div class="header-row">
+            <div>
+              <div class="content-title">Population outreach registry</div>
+              <div class="content-sub">Start with a cohort, narrow the queue, then open the detailed patient dashboard to act.</div>
+            </div>
+            <div class="count-pill" id="populationCountPill">0 patients</div>
+          </div>
+
+          <div class="cohort-chip-row" id="quickCohorts"></div>
+
+          <table class="registry-table">
+            <thead>
+              <tr>
+                <th>Patient</th>
+                <th>Risk</th>
+                <th>Primary issue</th>
+                <th>Key care gaps</th>
+                <th>Latest A1c</th>
+                <th>Latest LDL</th>
+                <th>Latest BP</th>
+                <th>Clinical trial</th>
+                <th>Possible trial match</th>
+                <th>Next action</th>
+              </tr>
+            </thead>
+            <tbody id="populationTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -148,132 +2124,2018 @@ ul.clean{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;g
 </div>
 
 <script>
-const patients=[{initials:"MR",name:"Maria Reyes",age:58,sex:"F",community:"Rural Pinal County",insurance:"AHCCCS",conditions:["Heart failure","Type 2 diabetes","Hypertension"],risk:"high",lastDischarge:"Discharged 4 days ago",stats:[["Risk level","High"],["Open care gaps","4"],["Shared tasks","5"],["Wearable trend","Declining"]],goals:[["Avoid 30-day readmission","Hospital"],["Complete PCP follow-up within 7 days","FQHC"],["Daily weight and symptom check","CHW"],["Improve med adherence after discharge","Shared"]],barriers:[["Transportation barrier for clinic visit","CHW documented"],["Unclear diuretic instructions after discharge","Hospital discharge review"],["Low daily step count since discharge","Wearable feed"],["Missed blood pressure log uploads","Remote monitoring"]],actions:[["Confirm medication reconciliation by phone","FQHC nurse today"],["Home visit for education on weight gain and edema","CHW within 24h"],["Review discharge plan with cardiology office","Hospital care manager"],["Escalate if weight increases >2 lb overnight","Shared protocol"]],meds:[["Furosemide 40 mg daily, refill not yet picked up","Barrier"],["Metformin 1000 mg twice daily","Active"],["Cardiology follow-up scheduled for Apr 4 at 10:00 AM","Upcoming"],["FQHC appointment still needed this week","Open gap"]],alerts:[["red","No completed primary care follow-up after discharge","Patient has not yet seen outpatient team 4 days after discharge."],["amber","Weight up 2.6 lb over 3 days","Could represent early fluid retention after hospitalization."],["amber","Activity down 38% from baseline","Wearable trend suggests poor recovery trajectory."],["green","CHW outreach request already accepted","Community follow-up pathway is active."]],timeline:[["Mar 27","hospital","Hospital discharge","Discharged after CHF exacerbation. Lasix adjusted. Follow-up requested within 7 days."],["Mar 28","wearable","Remote monitoring sync","Step count 2,900. Resting heart rate increased from baseline."],["Mar 29","chw","Community health worker call","Patient reports confusion about medication timing and concern about travel to clinic."],["Mar 30","fqhc","FQHC scheduling attempt","Unable to confirm transportation for clinic visit this week."],["Mar 31","wearable","Weight trend alert","Weight increased from 172.4 lb to 175.0 lb over 72 hours."]],tasks:[["CHW","Home visit with weight and edema check","Recent weight gain and transportation barriers","Today","High"],["FQHC","Complete med reconciliation call","Discharge instructions unclear","Today","High"],["Hospital","Fax updated discharge summary and med list","Need shared plan aligned across settings","Today","Medium"],["FQHC","Schedule PCP follow-up within 48 hours","No post-discharge visit documented","48h","High"],["Shared","Reassess risk after next wearable upload","Declining recovery trend","Tomorrow","Medium"]],wearable:{summary:"HR up, activity down",charts:[["Daily steps","Last 7 days","steps",6500,[6200,5900,5300,4700,4200,3900,3600]],["Resting heart rate","Last 7 days","bpm",71,[71,72,73,74,75,77,78]],["Sleep duration","Last 7 days","hours",7.0,[6.9,6.8,6.7,6.3,6.1,6.2,5.9]],["Daily weight","Last 4 days","lb",172.0,[172.4,173.1,174.2,175.0]]]}}
-,{initials:"JL",name:"James Lee",age:44,sex:"M",community:"South Phoenix",insurance:"Uninsured",conditions:["COPD","Tobacco use disorder"],risk:"medium",lastDischarge:"ED discharge 6 days ago",stats:[["Risk level","Medium"],["Open care gaps","2"],["Shared tasks","3"],["Wearable trend","Stable"]],goals:[["Complete smoking cessation counseling","FQHC"],["Monitor exertional symptoms after ED visit","CHW"],["Confirm inhaler access and teaching","Hospital"]],barriers:[["Cost concern for controller inhaler","Patient reported"],["No established primary care before ED visit","Hospital record"]],actions:[["CHW to review pharmacy assistance options","Within 48h"],["FQHC new patient visit confirmed","This week"],["Hospital ED summary shared with FQHC","Complete"]],meds:[["Albuterol inhaler picked up","Complete"],["Controller inhaler pending affordability support","Open gap"],["FQHC appointment Apr 3 at 2:30 PM","Upcoming"]],alerts:[["amber","Controller inhaler not yet obtained","Cost barrier may limit symptom improvement."],["green","FQHC visit scheduled","First longitudinal follow-up now on calendar."]],timeline:[["Mar 25","hospital","ED discharge","Treated for COPD flare. No hypoxia at discharge."],["Mar 27","chw","Phone outreach","Patient interested in tobacco cessation support."],["Mar 29","fqhc","New patient registration","Visit successfully scheduled."],["Mar 30","wearable","Activity review","Daily steps trending back toward baseline."]],tasks:[["CHW","Review inhaler affordability resources","Medication access barrier remains","48h","High"],["FQHC","Complete new patient intake","Needs continuity after ED discharge","This week","Medium"],["Shared","Document tobacco cessation plan","Quality metric and longitudinal goal","This week","Low"]],wearable:{summary:"Recovering gradually",charts:[["Daily steps","Last 7 days","steps",5200,[2800,3400,3900,4300,4700,5000,5100]],["Resting heart rate","Last 7 days","bpm",76,[82,81,80,79,78,77,77]],["Sleep duration","Last 7 days","hours",6.8,[5.8,6.1,6.3,6.4,6.5,6.7,6.8]],["Pulse oximetry","Last 7 days","%",95,[93,93,94,94,95,95,95]]]}}
-,{initials:"AK",name:"Aaliyah Khan",age:29,sex:"F",community:"Rural Maricopa fringe",insurance:"Medicaid",conditions:["Postpartum hypertension"],risk:"medium",lastDischarge:"Postpartum discharge 8 days ago",stats:[["Risk level","Medium"],["Open care gaps","1"],["Shared tasks","2"],["Wearable trend","Needs BP review"]],goals:[["Maintain home BP monitoring","Shared"],["Prevent postpartum readmission","Hospital"],["Ensure transportation for next OB visit","CHW"]],barriers:[["Intermittent cuff syncing issue","Remote monitoring"]],actions:[["CHW to check device setup in person","Within 72h"],["Hospital nurse to review BP log threshold","Today"]],meds:[["Nifedipine ER 30 mg daily","Active"],["OB follow-up completed","Complete"],["Next BP review scheduled in 3 days","Upcoming"]],alerts:[["amber","Two elevated home BP readings","Needs clinician review but patient otherwise stable."],["green","OB follow-up completed on time","Transition to outpatient care successful."]],timeline:[["Mar 23","hospital","Postpartum discharge","Home BP monitoring plan started."],["Mar 26","wearable","BP device upload","Two readings above threshold overnight."],["Mar 29","fqhc","Primary care review","General recovery going well."],["Mar 31","chw","Text outreach","Patient requested help reconnecting cuff app."]],tasks:[["Hospital","Review uploaded BP values","Two elevated readings logged","Today","High"],["CHW","Troubleshoot home device sync","Missing seamless home monitoring","72h","Medium"]],wearable:{summary:"BP needs review",charts:[["Systolic BP","Last 7 days","mmHg",132,[136,134,138,142,144,138,137]],["Sleep duration","Last 7 days","hours",6.5,[5.6,5.9,5.3,5.8,5.7,6.0,5.8]],["Daily steps","Last 7 days","steps",4200,[2500,2900,3100,3300,3600,3800,4100]],["Resting heart rate","Last 7 days","bpm",74,[78,77,77,76,76,75,75]]]}}];
+const patients = [
+  {
+    name:"Maria Reyes",
+    clinicalTrial:{status:"Enrolled", label:"Enrolled", study:"Heart Failure Recovery Study", description:"Home monitoring and recovery support study for adults after heart failure hospitalization.", site:"Banner Heart Institute", coordinator:"Alicia Gomez, RN"},
+    possibleTrialMatches:[{name:"Diabetes Transition Support Study", reason:"Type 2 diabetes with recent hospitalization and active outpatient follow-up.", action:"Ask research coordinator to review inclusion criteria.", plain:"A research study focused on diabetes recovery support after hospital discharge."}],
+    initials:"MR",
+    meta:"58 y/o F · Rural Pinal County · AHCCCS · Discharged 4 days ago",
+    shortMeta:"58 y/o F · Rural Pinal County",
+    shortLine:"Discharged 4 days ago",
+    risk:"High",
+    riskLabel:"HIGH RISK",
+    conditions:["Heart failure","Type 2 diabetes","Hypertension"],
+    openGaps:4,
+    sharedTasks:5,
+    trend:"Declining",
+    teamsAligned:3,
+    prioritySignals:3,
+    wearableNarrative:"Step count is down and weight is drifting up after discharge.",
+    goals:[
+      ["Avoid 30-day readmission","Hospital"],
+      ["Complete PCP follow-up within 7 days","FQHC"],
+      ["Daily weight and symptom check","CHW"],
+      ["Improve med adherence after discharge","Shared"]
+    ],
+    barriers:[
+      ["Transportation barrier for clinic visit","CHW documented"],
+      ["Unclear diuretic instructions after discharge","Hospital discharge review"],
+      ["Low daily step count since discharge","Trend status"],
+      ["Missed blood pressure log uploads","Remote monitoring"]
+    ],
+    actions:[
+      ["Confirm medication reconciliation by phone","FQHC nurse today"],
+      ["Home visit for education on weight gain and edema","CHW within 24h"],
+      ["Review discharge plan with cardiology office","Hospital care manager"],
+      ["Escalate if weight increases >2 lb overnight","Shared protocol"]
+    ],
+    meds:[
+      ["Furosemide 40 mg daily, refill not yet picked up","Barrier"],
+      ["Metformin 1000 mg twice daily","Active"],
+      ["Cardiology follow-up scheduled for Apr 4 at 10:00 AM","Upcoming"],
+      ["FQHC appointment still needed this week","Open gap"]
+    ],
+    alerts:[
+      {tone:"bad", title:"No completed primary care follow-up after discharge", sub:"Patient has not yet seen outpatient team 4 days after discharge."},
+      {tone:"warn", title:"Weight up 2.6 lb over 3 days", sub:"Could represent early fluid retention after hospitalization."},
+      {tone:"warn", title:"Activity down 38% from baseline", sub:"Trend status suggests poor recovery trajectory."},
+      {tone:"good", title:"CHW outreach request already accepted", sub:"Community follow-up pathway is active."}
+    ],
+    preventive:[
+      ["Colorectal cancer screening","Age 58 with no documented screening in interval.","bad","Overdue"],
+      ["Breast cancer screening","Last mammogram more than 2 years ago.","warn","Due"],
+      ["Diabetic retinal exam","No recent retinal screening documented.","bad","Due"],
+      ["Influenza vaccine","Not received this season.","bad","Due"],
+      ["Pneumococcal vaccine","Indicated with chronic cardiometabolic disease, status unclear.","warn","Unknown"],
+      ["COVID-19 booster","No recent booster documented.","warn","Due"]
+    ],
+    chronic:[
+      ["Diabetes","A1c 9.2 percent with monitoring overdue.","bad","Above goal"],
+      ["Hypertension","Recent documented BP remains above goal.","warn","Above goal"],
+      ["CHF","Weight up 2.6 lb over 3 days after discharge.","bad","Concerning"],
+      ["COPD/Asthma","No active obstructive lung disease documented.","good","Not active"],
+      ["Mental Health","Depression screening not documented this year.","warn","Due"],
+      ["Obesity","BMI elevated with no recent lifestyle counseling note.","warn","Open gap"],
+      ["Substance Use","No recent screening documented.","warn","Due"]
+    ],
+    preventiveSummary:"Focus the post-discharge primary care visit on overdue screening and adult immunization capture so maintenance work is closed during a visit that already needs to happen.",
+    chronicSummary:"The highest-risk quality indicators are uncontrolled diabetes, hypertension, and CHF destabilization after discharge. Mental health, obesity, and substance use screening should be completed during the same follow-up workflow.",
+    timeline:[
+      ["Mar 27","hospital","Hospital discharge","Discharged after CHF exacerbation. Lasix adjusted. Follow-up requested within 7 days."],
+      ["Mar 28","wearable","Remote monitoring sync","Step count 2,900. Resting heart rate increased from baseline."],
+      ["Mar 29","chw","Community health worker call","Patient reports confusion about medication timing and concern about travel to clinic."],
+      ["Mar 30","fqhc","FQHC scheduling attempt","Unable to confirm transportation for clinic visit this week."],
+      ["Mar 31","wearable","Weight trend alert","Weight increased from 172.4 lb to 175.0 lb over 72 hours."]
+    ],
+    tasks:[
+      ["CHW","Home visit with weight and edema check","Recent weight gain and transportation barriers","Today","High"],
+      ["FQHC","Complete med reconciliation call","Discharge instructions unclear","Today","High"],
+      ["Hospital","Fax updated discharge summary and med list","Need shared plan aligned across settings","Today","Medium"],
+      ["FQHC","Schedule PCP follow-up within 48 hours","No post-discharge visit documented","48h","High"],
+      ["Shared","Reassess risk after next wearable upload","Declining recovery trend","Tomorrow","Medium"]
+    ],
+    trendCharts:[
+      ["HbA1c","Last 6 months","%",7.0,[8.8,8.5,8.2,8.9,9.0,9.2],["Oct","Nov","Dec","Jan","Feb","Mar"]],
+      ["LDL","Last 6 months","mg/dL",100,[130,125,140,135,138,142],["Oct","Nov","Dec","Jan","Feb","Mar"]],
+      ["Blood Pressure","Last 7 days","mmHg",120,{systolic:[128,130,132,135,138,140,142],diastolic:[82,84,85,88,90,92,94],dates:["3/25","3/26","3/27","3/28","3/29","3/30","3/31"]}],
+      ["Daily weight","Last 4 days","lb",172.0,[172.4,173.1,174.2,175.0],["3/28","3/29","3/30","3/31"]],
+      ["Daily steps","Last 7 days","steps",6500,[6200,5900,5300,4700,4200,3900,3600],["3/25","3/26","3/27","3/28","3/29","3/30","3/31"]]
+    ]
+  },
+  {
+    name:"James Lee",
+    clinicalTrial:{status:"None", label:"Not in trial", study:"", description:"", site:"", coordinator:""},
+    possibleTrialMatches:[{name:"COPD Recovery Coaching Study", reason:"Recent COPD exacerbation, adult age, and ongoing outpatient follow-up.", action:"Offer research screening through pulmonary clinic.", plain:"A study looking at recovery and breathing support after a flare."}],
+    initials:"JL",
+    meta:"44 y/o M · South Phoenix · Uninsured · ED discharge 6 days ago",
+    shortMeta:"44 y/o M · South Phoenix",
+    shortLine:"ED discharge 6 days ago",
+    risk:"Medium",
+    riskLabel:"MEDIUM RISK",
+    conditions:["COPD","Tobacco use disorder","Hypertension"],
+    openGaps:3,
+    sharedTasks:4,
+    trend:"Recovering",
+    teamsAligned:2,
+    prioritySignals:2,
+    wearableNarrative:"Activity is recovering slowly but medication access still threatens stability.",
+    goals:[
+      ["Prevent return ED visit","ED team"],
+      ["Resume controller inhaler adherence","FQHC"],
+      ["Smoking cessation contact","CHW"]
+    ],
+    barriers:[
+      ["Medication affordability concern","Patient reported"],
+      ["Missed outreach call","CHW documented"],
+      ["Continues smoking daily","Risk behavior"]
+    ],
+    actions:[
+      ["Review pharmacy assistance options","CHW within 48h"],
+      ["Confirm new patient visit","FQHC this week"],
+      ["Share ED discharge summary with PCP","Hospital record routing"]
+    ],
+    meds:[
+      ["Albuterol inhaler picked up","Complete"],
+      ["Controller inhaler pending affordability support","Open gap"],
+      ["FQHC appointment Apr 3 at 2:30 PM","Upcoming"]
+    ],
+    alerts:[
+      {tone:"warn", title:"No inhaler refill confirmed", sub:"Potential medication access gap after ED visit."},
+      {tone:"warn", title:"Smoking cessation counseling still open", sub:"Opportunity for rapid outreach and referral."},
+      {tone:"good", title:"FQHC visit scheduled", sub:"First longitudinal follow-up is now on the calendar."}
+    ],
+    preventive:[
+      ["Colorectal cancer screening","Age-appropriate screening history is unclear.","warn","Review"],
+      ["HIV screening","Previously completed.","good","Done"],
+      ["Influenza vaccine","No recent documentation found.","warn","Unknown"],
+      ["Tdap","Booster not documented.","bad","Due"],
+      ["COVID-19 vaccine","Status unclear in record.","warn","Unknown"]
+    ],
+    chronic:[
+      ["Diabetes","No diabetes diagnosis or active glycemic indicator.","good","Not active"],
+      ["Hypertension","Borderline recent BP remains above ideal range.","warn","Above goal"],
+      ["CHF","No evidence of heart failure in current record.","good","Not active"],
+      ["COPD/Asthma","Recent COPD exacerbation with controller inhaler access gap.","bad","Uncontrolled"],
+      ["Mental Health","Depression screening not recently documented.","warn","Due"],
+      ["Obesity","BMI elevated without recent counseling note.","warn","Open gap"],
+      ["Substance Use","Active tobacco use without a fully closed cessation plan.","bad","Open gap"]
+    ],
+    preventiveSummary:"Health maintenance work here is mostly vaccine and documentation cleanup while the patient establishes primary care. Keep it lightweight and finish it during the intake process.",
+    chronicSummary:"The most meaningful chronic disease gap is poor COPD control due to inhaler affordability. Hypertension, mental health screening, obesity counseling, and substance use planning should be clearly documented in the same workflow.",
+    timeline:[
+      ["Mar 25","hospital","ED discharge","Treated for COPD flare. No hypoxia at discharge."],
+      ["Mar 27","chw","Phone outreach","Patient interested in tobacco cessation support."],
+      ["Mar 29","fqhc","New patient registration","Visit successfully scheduled."],
+      ["Mar 30","wearable","Activity review","Daily steps trending back toward baseline."]
+    ],
+    tasks:[
+      ["CHW","Review inhaler affordability resources","Medication access barrier remains","48h","High"],
+      ["FQHC","Complete new patient intake","Needs continuity after ED discharge","This week","Medium"],
+      ["Shared","Document tobacco cessation plan","Quality metric and longitudinal goal","This week","Low"]
+    ],
+    trendCharts:[
+      ["Blood Pressure","Last 7 days","mmHg",120,{systolic:[154,152,150,149,148,148,146],diastolic:[96,95,94,93,92,91,90],dates:["3/24","3/25","3/26","3/27","3/28","3/29","3/30"]}],
+      ["Pulse oximetry","Last 7 days","%",95,[93,93,94,94,95,95,95],["3/24","3/25","3/26","3/27","3/28","3/29","3/30"]],
+      ["Peak Flow","Last 7 days","L/min",400,[420,410,390,370,360,350,340],["3/24","3/25","3/26","3/27","3/28","3/29","3/30"]],
+      ["Resting heart rate","Last 7 days","bpm",76,[82,81,80,79,78,77,77],["3/24","3/25","3/26","3/27","3/28","3/29","3/30"]],
+      ["Daily steps","Last 7 days","steps",5200,[2800,3400,3900,4300,4700,5000,5100],["3/24","3/25","3/26","3/27","3/28","3/29","3/30"]]
+    ]
+  },
+  {
+    name:"Aaliyah Khan",
+    clinicalTrial:{status:"Screening", label:"Screening", study:"Postpartum Blood Pressure Monitoring Study", description:"Remote blood pressure monitoring study for patients recovering after delivery.", site:"University Women\'s Health Research Program", coordinator:"Monica Chen, MPH"},
+    possibleTrialMatches:[{name:"Postpartum Mood and Recovery Study", reason:"Recent postpartum discharge with behavioral health follow-up needs.", action:"Discuss optional screening after blood-pressure study review.", plain:"A study about recovery and emotional wellness after childbirth."}],
+    initials:"AK",
+    meta:"29 y/o F · Rural Maricopa fringe · Medicaid · Postpartum discharge 8 days ago",
+    shortMeta:"29 y/o F · Rural Maricopa fringe",
+    shortLine:"Postpartum discharge 8 days ago",
+    risk:"Medium",
+    riskLabel:"MEDIUM RISK",
+    conditions:["Postpartum hypertension","Behavioral health follow-up"],
+    openGaps:4,
+    sharedTasks:4,
+    trend:"Improving",
+    teamsAligned:3,
+    prioritySignals:2,
+    wearableNarrative:"Movement is improving, but postpartum BP follow-up still needs active closure.",
+    goals:[
+      ["Maintain home BP monitoring","Shared"],
+      ["Prevent postpartum readmission","Hospital"],
+      ["Ensure transportation for next OB visit","CHW"]
+    ],
+    barriers:[
+      ["Limited childcare for appointments","Social barrier"],
+      ["Rural travel distance","Access barrier"],
+      ["No home cuff confirmation yet","Equipment gap"]
+    ],
+    actions:[
+      ["CHW to check device setup in person","Within 72h"],
+      ["Hospital nurse to review BP log threshold","Today"],
+      ["Confirm postpartum mood screening","FQHC follow-up"]
+    ],
+    meds:[
+      ["Nifedipine ER 30 mg daily","Active"],
+      ["OB follow-up completed","Complete"],
+      ["Next BP review scheduled in 3 days","Upcoming"]
+    ],
+    alerts:[
+      {tone:"warn", title:"Postpartum blood pressure follow-up not documented", sub:"Potential safety risk if hypertension worsens at home."},
+      {tone:"warn", title:"Postpartum depression screening still due", sub:"Behavioral health follow-up has not yet been documented."},
+      {tone:"good", title:"Wearable activity trend improving", sub:"Engagement appears better since discharge."}
+    ],
+    preventive:[
+      ["Postpartum depression screening","EPDS or equivalent screening not completed.","bad","Due"],
+      ["Cervical cancer screening","Screening interval is unclear.","warn","Review"],
+      ["Influenza vaccine","Seasonal status not documented.","warn","Unknown"],
+      ["Tdap","Postpartum vaccine status not documented.","bad","Due"]
+    ],
+    chronic:[
+      ["Diabetes","No diabetes diagnosis or glycemic quality issue documented.","good","Not active"],
+      ["Hypertension","Postpartum BP follow-up remains incompletely closed.","bad","Needs action"],
+      ["CHF","No heart failure diagnosis or active indicator.","good","Not active"],
+      ["COPD/Asthma","No active obstructive lung disease documented.","good","Not active"],
+      ["Mental Health","Postpartum depression screening still due.","bad","Due"],
+      ["Obesity","Weight and nutrition counseling not recently documented.","warn","Open gap"],
+      ["Substance Use","Screening status unclear in postpartum follow-up.","warn","Due"]
+    ],
+    preventiveSummary:"Bundle postpartum depression screening, cervical screening review, and vaccine review into postpartum follow-up so maintenance care is captured without requiring separate visits.",
+    chronicSummary:"The highest-yield chronic disease gap is postpartum hypertension follow-up, but the dashboard should also make mental health, obesity counseling, and substance use screening visible rather than optional.",
+    timeline:[
+      ["Mar 23","hospital","Postpartum discharge","Home BP monitoring plan started."],
+      ["Mar 26","wearable","BP device upload","Two readings above threshold overnight."],
+      ["Mar 29","fqhc","Primary care review","General recovery going well."],
+      ["Mar 31","chw","Text outreach","Patient requested help reconnecting cuff app."]
+    ],
+    tasks:[
+      ["Hospital","Review uploaded BP values","Two elevated readings logged","Today","High"],
+      ["CHW","Troubleshoot home device sync","Missing seamless home monitoring","72h","Medium"],
+      ["FQHC","Complete postpartum mood screening","Behavioral health follow-up still open","This week","High"],
+      ["Shared","Confirm transportation plan","Rural access remains a barrier","This week","Low"]
+    ],
+    trendCharts:[
+      ["Blood Pressure","Last 7 days","mmHg",120,{systolic:[136,134,138,142,144,138,137],diastolic:[84,82,85,88,90,87,86],dates:["3/25","3/26","3/27","3/28","3/29","3/30","3/31"],primaryLabel:"Systolic",secondaryLabel:"Diastolic"}],
+      ["Mental Health (PHQ-9 / GAD-7)","Last 6 weeks","score",5,{systolic:[8,7,9,10,8,6],diastolic:[6,6,7,8,7,5],dates:["W1","W2","W3","W4","W5","W6"],primaryLabel:"PHQ-9",secondaryLabel:"GAD-7"}],
+      {type:"timeline",title:"Prenatal Visit Adherence",subtitle:"Expected visits across pregnancy + postpartum",labels:["M1","M2","M3","M4","M5","M6","M7","M8","M9","PP"],completed:[1,1,0,1,1,0,1,1,1,0]},
+      ["Sleep duration","Last 7 days","hours",6.5,[5.6,5.9,5.3,5.8,5.7,6.0,5.8],["3/25","3/26","3/27","3/28","3/29","3/30","3/31"]],
+      ["Daily steps","Last 7 days","steps",4200,[2500,2900,3100,3300,3600,3800,4100],["3/25","3/26","3/27","3/28","3/29","3/30","3/31"]],
+      ["Resting heart rate","Last 7 days","bpm",74,[78,77,77,76,76,75,75],["3/25","3/26","3/27","3/28","3/29","3/30","3/31"]]
+    ]
+  }  ,
+  {
+    name:"Daniel Brooks",
+    clinicalTrial:{status:"Enrolled", label:"Enrolled", study:"Behavioral Health Digital Support Study", description:"Study testing digital check-ins and support between behavioral health visits.", site:"Phoenix Community Mental Health Network", coordinator:"Priya Shah, LCSW"},
+    possibleTrialMatches:[{name:"Sleep and Mood Monitoring Study", reason:"Mood symptoms with worsening sleep trend over the last several weeks.", action:"Behavioral health research team can review overlap with current enrollment.", plain:"A study looking at sleep and mood patterns over time."}],
+    initials:"DB",
+    meta:"36 y/o M · Urban Phoenix · Medicaid · Behavioral health follow-up",
+    shortMeta:"36 y/o M · Urban Phoenix",
+    shortLine:"Recent PHQ-9 worsening",
+    risk:"Medium",
+    riskLabel:"MEDIUM RISK",
+    conditions:["Major depressive disorder","Generalized anxiety disorder"],
+    openGaps:3,
+    sharedTasks:3,
+    trend:"Worsening",
+    teamsAligned:2,
+    prioritySignals:3,
+    wearableNarrative:"Mood scores are worsening alongside declining sleep and activity.",
+    goals:[
+      ["Reduce PHQ-9 below 5","Behavioral health"],
+      ["Stabilize anxiety symptoms","Behavioral health"],
+      ["Re-engage in therapy","CHW"]
+    ],
+    barriers:[
+      ["Missed last therapy appointment","Behavioral health"],
+      ["Poor sleep reported","Patient reported"],
+      ["Transportation barrier for counseling visits","CHW documented"]
+    ],
+    actions:[
+      ["Reschedule therapy within 7 days","CHW"],
+      ["Review antidepressant adherence and dosing","Provider"],
+      ["Initiate weekly mood check-ins","CHW"]
+    ],
+    meds:[
+      ["Sertraline 50 mg daily","Active"],
+      ["No recent dose adjustment documented","Review needed"],
+      ["Therapy appointment missed last week","Open gap"]
+    ],
+    alerts:[
+      {tone:"bad", title:"PHQ-9 increasing over the last 4 weeks", sub:"Depression symptoms are worsening despite an active medication plan."},
+      {tone:"warn", title:"Missed therapy follow-up", sub:"Behavioral health continuity has been disrupted."},
+      {tone:"warn", title:"Sleep duration decreasing", sub:"May be worsening both mood and anxiety symptoms."}
+    ],
+    preventive:[
+      ["Depression screening","Ongoing PHQ-9 tracking active.","warn","Active"],
+      ["Substance use screening","No recent screening documented.","warn","Due"],
+      ["Influenza vaccine","Seasonal status unclear.","warn","Unknown"]
+    ],
+    chronic:[
+      ["Mental Health","PHQ-9 rising and GAD-7 elevated.","bad","Uncontrolled"],
+      ["Substance Use","Screening not recently completed.","warn","Due"],
+      ["Obesity","Reduced activity may be worsening overall health.","warn","Open gap"]
+    ],
+    preventiveSummary:"The near-term priority is maintaining engagement with behavioral health care while closing routine screening gaps during follow-up.",
+    chronicSummary:"The primary issue is worsening depression and anxiety with a missed therapy visit. Medication review and rapid re-engagement are the highest-yield next steps.",
+    timeline:[
+      ["Mar 10","fqhc","Behavioral health visit","Initial PHQ-9 score 8 and GAD-7 score 6 documented."],
+      ["Mar 17","wearable","Sleep trend","Average sleep fell below 6 hours per night."],
+      ["Mar 24","fqhc","Missed therapy visit","No-show documented in counseling workflow."],
+      ["Mar 31","wearable","Mood trend alert","PHQ-9 increased to 12 and GAD-7 to 9."]
+    ],
+    tasks:[
+      ["CHW","Reschedule therapy appointment","Missed follow-up needs rapid closure","3 days","High"],
+      ["Provider","Review antidepressant dosing","Mood symptoms worsening","This week","High"],
+      ["CHW","Complete weekly mood check-in","Sustain engagement between visits","Ongoing","Medium"]
+    ],
+    trendCharts:[
+      ["Mental Health (PHQ-9 / GAD-7)","Last 6 weeks","score",5,{systolic:[8,9,10,11,12,12],diastolic:[6,7,8,8,9,9],dates:["W1","W2","W3","W4","W5","W6"],primaryLabel:"PHQ-9",secondaryLabel:"GAD-7"}],
+      ["Sleep duration","Last 7 days","hours",7,[6.5,6.2,6.0,5.8,5.6,5.5,5.3],["3/25","3/26","3/27","3/28","3/29","3/30","3/31"]],
+      ["Daily steps","Last 7 days","steps",6000,[5800,5400,5000,4700,4300,4100,3900],["3/25","3/26","3/27","3/28","3/29","3/30","3/31"]]
+    ]
+  }
 
-let current=0;
-const riskBadge=l=>`<span class="risk ${l}">${l.toUpperCase()} RISK</span>`;
-const listHtml=(arr,d='')=>arr.map(i=>`<li><span class="dot ${d}"></span><div><strong>${i[0]}</strong><span class="owner">${i[1]}</span></div></li>`).join('');
-const alertHtml=arr=>arr.map(a=>`<div class="alert ${a[0]}"><div class="alert-title">${a[1]}</div><div class="alert-desc">${a[2]}</div></div>`).join('');
-const timelineHtml=arr=>arr.map(e=>`<div class="event"><div class="event-date">${e[0]}</div><div class="event-card"><span class="source ${e[1]}">${e[1].toUpperCase()}</span><div class="event-title">${e[2]}</div><div class="event-desc">${e[3]}</div></div></div>`).join('');
-const taskHtml=arr=>arr.map(t=>`<tr><td><strong>${t[0]}</strong></td><td>${t[1]}</td><td>${t[2]}</td><td>${t[3]}</td><td><span class="pill priority-${t[4].toLowerCase()}">${t[4]}</span></td></tr>`).join('');
+];
 
-function lineChartSVG(values,baseline,color){
-  const w=360,h=160,pad=18,min=Math.min(...values,baseline),max=Math.max(...values,baseline),range=(max-min)||1;
-  const x=i=>pad+(i*((w-pad*2)/((values.length-1)||1)));
-  const y=v=>h-pad-((v-min)/range)*(h-pad*2);
-  const line=values.map((v,i)=>`${i===0?'M':'L'} ${x(i)} ${y(v)}`).join(' ');
-  const baseY=y(baseline);
-  const area=`M ${x(0)} ${h-pad} `+values.map((v,i)=>`L ${x(i)} ${y(v)}`).join(' ')+` L ${x(values.length-1)} ${h-pad} Z`;
-  const points=values.map((v,i)=>`<circle cx="${x(i)}" cy="${y(v)}" r="3.5" fill="${color}" />`).join('');
-  const labels=values.map((_,i)=>`<text x="${x(i)}" y="${h-3}" text-anchor="middle" font-size="10" fill="#72849a">D${i+1}</text>`).join('');
-  return `<svg viewBox="0 0 ${w} ${h}"><line x1="${pad}" y1="${baseY}" x2="${w-pad}" y2="${baseY}" stroke="#cfd8e6" stroke-width="2" stroke-dasharray="5 5"></line><path d="${area}" fill="${color}" opacity="0.10"></path><path d="${line}" fill="none" stroke="${color}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>${points}${labels}</svg>`;
+const referralAreas = [
+  ["primaryCare","Primary care"],
+  ["specialtyCare","Specialty care"],
+  ["mentalHealthCare","Mental health care"],
+  ["substanceUseCare","Substance use care"],
+  ["sdohCare","SDOH care"],
+  ["lifestyleCare","Lifestyle care"]
+];
+
+const careSupport = {
+  "Maria Reyes": {
+    missedMedDays: 2,
+    meds: [
+      ["Furosemide 40 mg daily","Refill not yet picked up"],
+      ["Metformin 1000 mg twice daily","Active"],
+      ["Lisinopril 20 mg daily","Active"]
+    ],
+    referrals: {
+      primaryCare:{status:"Referral made", trigger:"Recent hospital discharge with no completed primary care follow-up within 7 days.", response:"Primary care follow-up should be scheduled within 48 hours to complete medication reconciliation, review weight gain, and close preventive gaps."},
+      specialtyCare:{status:"Referral made", trigger:"Heart failure exacerbation with weight gain after discharge.", response:"Cardiology follow-up has already been requested because fluid status and diuretic response remain unstable."},
+      mentalHealthCare:{status:"Not needed", trigger:"No active depression or anxiety score currently driving a separate behavioral health referral.", response:"Continue annual screening and monitor for new symptoms during primary care follow-up."},
+      substanceUseCare:{status:"Not needed", trigger:"No current substance use diagnosis or acute trigger documented.", response:"Complete routine screening during follow-up and escalate only if screening is positive."},
+      sdohCare:{status:"Referral made", trigger:"Transportation barrier is preventing timely clinic follow-up.", response:"Community health worker outreach and transportation support were triggered to reduce missed visits."},
+      lifestyleCare:{status:"Referral completed", trigger:"Diabetes, hypertension, and heart failure all benefit from nutrition and activity support.", response:"Lifestyle counseling was completed during prior care management outreach; reinforce sodium restriction and home activity plan."}
+    }
+  },
+  "James Lee": {
+    missedMedDays: 3,
+    meds: [
+      ["Albuterol inhaler","Picked up"],
+      ["Controller inhaler","Access barrier remains"],
+      ["Amlodipine 5 mg daily","Active"]
+    ],
+    referrals: {
+      primaryCare:{status:"Referral made", trigger:"ED discharge occurred without an established follow-up relationship.", response:"Primary care referral was placed to establish continuity and close vaccine and blood pressure gaps."},
+      specialtyCare:{status:"Referral completed", trigger:"COPD exacerbation prompted pulmonary review.", response:"Specialty respiratory recommendations were returned to the outpatient team and added to the care plan."},
+      mentalHealthCare:{status:"Not needed", trigger:"No current mental health trigger has been documented.", response:"Continue routine screening during intake and future follow-up visits."},
+      substanceUseCare:{status:"Referral made", trigger:"Active tobacco use disorder remains open after ED discharge.", response:"Substance use care referral was placed for tobacco cessation support and medication counseling."},
+      sdohCare:{status:"Referral made", trigger:"Medication affordability is blocking controller inhaler use.", response:"SDOH support was triggered for pharmacy assistance and insurance navigation."},
+      lifestyleCare:{status:"Referral made", trigger:"COPD recovery and hypertension would benefit from structured coaching.", response:"Lifestyle care referral was placed for smoking reduction support, activity pacing, and blood pressure counseling."}
+    }
+  },
+  "Aaliyah Khan": {
+    missedMedDays: 1,
+    meds: [
+      ["Nifedipine ER 30 mg daily","Active"],
+      ["Prenatal vitamin continuation","Recommended postpartum"],
+      ["Home BP cuff","Sync troubleshooting still needed"]
+    ],
+    referrals: {
+      primaryCare:{status:"Referral completed", trigger:"Postpartum transition requires PCP linkage after discharge.", response:"Primary care follow-up was completed and general recovery was reviewed."},
+      specialtyCare:{status:"Referral made", trigger:"Postpartum hypertension requires obstetric follow-up and blood pressure review.", response:"OB referral remains active for postpartum blood pressure management and postpartum check completion."},
+      mentalHealthCare:{status:"Referral made", trigger:"Postpartum depression screening remains due and behavioral health follow-up is open.", response:"Mental health referral was triggered so PHQ-9, GAD-7, and postpartum mood screening can be completed promptly."},
+      substanceUseCare:{status:"Not needed", trigger:"No active substance use diagnosis has been documented in the postpartum workflow.", response:"Maintain routine screening and escalate only if screening becomes positive."},
+      sdohCare:{status:"Referral made", trigger:"Childcare and rural transportation barriers may delay follow-up.", response:"SDOH care was triggered for transportation planning and support with visit attendance."},
+      lifestyleCare:{status:"Referral made", trigger:"Postpartum recovery and hypertension benefit from nutrition and activity counseling.", response:"Lifestyle care referral was placed to support gradual activity, sleep recovery, and healthy postpartum blood pressure habits."}
+    }
+  },
+  "Daniel Brooks": {
+    missedMedDays: 2,
+    meds: [
+      ["Sertraline 50 mg daily","Active"],
+      ["Hydroxyzine PRN","Used intermittently"],
+      ["Sleep routine plan","Not consistently followed"]
+    ],
+    referrals: {
+      primaryCare:{status:"Referral made", trigger:"Behavioral health symptoms are worsening and PCP follow-up is needed for medication review.", response:"Primary care referral was placed to review adherence, side effects, and the broader care plan."},
+      specialtyCare:{status:"Not needed", trigger:"No additional specialty medical referral is currently driving care escalation.", response:"Reassess if new neurologic, endocrine, or sleep-related concerns emerge."},
+      mentalHealthCare:{status:"Referral made", trigger:"PHQ-9 and GAD-7 are both worsening with a missed therapy visit.", response:"Behavioral health referral was triggered for counseling re-engagement and closer symptom monitoring."},
+      substanceUseCare:{status:"Not needed", trigger:"No active substance use trigger is currently documented.", response:"Continue routine substance use screening during follow-up visits."},
+      sdohCare:{status:"Referral made", trigger:"Transportation barrier is contributing to missed therapy attendance.", response:"SDOH outreach was triggered to support transportation and appointment completion."},
+      lifestyleCare:{status:"Referral made", trigger:"Reduced sleep and physical activity are worsening mood symptoms.", response:"Lifestyle care referral was triggered for sleep hygiene coaching and gradual activity re-engagement."}
+    }
+  }
+};
+
+
+const careTeams = {
+  "Maria Reyes": [
+    {role:"Primary care physician", name:"Dr. Elena Smith", meta:"FQHC medical home · leads outpatient follow-up", tag:"PCP"},
+    {role:"Cardiologist", name:"Dr. Ravi Patel", meta:"Banner cardiology · heart failure management", tag:"Specialty"},
+    {role:"Community health worker", name:"Maria Lopez", meta:"Transportation, home check-ins, education reinforcement", tag:"Community"},
+    {role:"Care coordinator", name:"Jasmine Brooks, RN", meta:"Hospital transition-of-care team", tag:"Hospital"}
+  ],
+  "James Lee": [
+    {role:"Primary care physician", name:"Dr. Aaron Kim", meta:"FQHC intake and longitudinal care", tag:"PCP"},
+    {role:"Pulmonary specialist", name:"Dr. Leila Hassan", meta:"Consulted after COPD exacerbation", tag:"Specialty"},
+    {role:"Community health worker", name:"Terrence Hall", meta:"Medication access and tobacco cessation outreach", tag:"Community"},
+    {role:"Care coordinator", name:"Natalie Green", meta:"ED follow-up and referral tracking", tag:"Hospital"}
+  ],
+  "Aaliyah Khan": [
+    {role:"Primary care physician", name:"Dr. Priya Desai", meta:"Primary care follow-up after postpartum discharge", tag:"PCP"},
+    {role:"OB specialist", name:"Dr. Monica Alvarez", meta:"Postpartum hypertension follow-up", tag:"Specialty"},
+    {role:"Community health worker", name:"Sara Gutierrez", meta:"Device setup, transportation, childcare barriers", tag:"Community"},
+    {role:"Care coordinator", name:"Tiffany Reed, RN", meta:"Postpartum transition support", tag:"Hospital"}
+  ],
+  "Daniel Brooks": [
+    {role:"Primary care physician", name:"Dr. Kevin Moore", meta:"Medication review and overall medical coordination", tag:"PCP"},
+    {role:"Behavioral health therapist", name:"Dr. Laila Nguyen", meta:"Therapy continuity and symptom monitoring", tag:"Behavioral health"},
+    {role:"Community health worker", name:"Andre Coleman", meta:"Transportation support and weekly check-ins", tag:"Community"},
+    {role:"Care coordinator", name:"Melissa Ford", meta:"Behavioral health follow-up coordination", tag:"Care management"}
+  ]
+};
+
+const patientFacingContent = {
+  "Maria Reyes": {
+    headline:"Maria Reyes care plan",
+    subtitle:"The main goals this week are preventing readmission, getting follow-up scheduled, and watching for fluid buildup.",
+    status:"Needs attention",
+    visit:"Follow-up still needed",
+    support:"Care team helping now",
+    focus:"Recovery",
+    actions:[["Take medications exactly as directed","Especially the water pill and diabetes medicines."],["Check your weight every morning","Call if it keeps going up or jumps suddenly."],["Complete your follow-up visit this week","Your primary care visit still needs to happen."],["Tell the team about swelling or shortness of breath","These can be early warning signs."]],
+    team:[["Primary care clinic","Scheduling a follow-up visit and reviewing medications."],["Cardiology","Following the heart failure plan after discharge."],["Community health worker","Helping with transportation and home check-ins."],["Care coordinator","Making sure the hospital and clinic are working from the same plan."]],
+    warnings:[["Weight keeps increasing","That can mean fluid is building up."],["More shortness of breath or swelling","Call your care team the same day."],["You feel confused about your medicines","Ask before skipping or changing doses."]],
+    summary:[["Biggest focus","Avoid another hospital stay by staying on the discharge plan."],["Visit status","A follow-up visit is still needed."],["Why the team is concerned","Recent weight gain and no completed follow-up yet."]],
+    education:[["Heart failure home care","Simple video on daily weights, swelling, and when to call for help.","https://www.youtube.com/results?search_query=heart+failure+home+care+patient+education"],["Heat illness prevention","Arizona heat can worsen recovery and dehydration.","https://www.youtube.com/results?search_query=heat+illness+prevention+patient+education"]]
+  },
+  "James Lee": {
+    headline:"James Lee care plan",
+    subtitle:"The main goals this week are breathing better, getting the right inhalers, and reducing another emergency visit.",
+    status:"Needs attention",
+    visit:"Visit scheduled",
+    support:"Care team helping now",
+    focus:"Breathing",
+    actions:[["Use your inhalers exactly as prescribed","Take the controller inhaler every day once you receive it."],["Go to your scheduled clinic visit","This is the main follow-up after your ED visit."],["Ask for help if medication cost is a problem","The team can help with affordability resources."],["Cut down smoking and use cessation support","This will help prevent another flare."]],
+    team:[["Primary care clinic","Completing your new patient intake and long-term plan."],["Pulmonary specialist","Helping after the recent COPD flare."],["Community health worker","Looking for inhaler cost support and tobacco cessation help."],["Care coordinator","Tracking the ED follow-up plan."]],
+    warnings:[["Breathing gets worse","Seek help right away if it becomes hard to catch your breath."],["You cannot get your inhalers","Tell the team before you run out."],["You need your rescue inhaler more often","That can mean your breathing is getting less controlled."]],
+    summary:[["Biggest focus","Avoid another emergency visit by staying on the breathing plan."],["Visit status","Clinic follow-up is already on the calendar."],["Why the team is concerned","Medication access and smoking are still active barriers."]],
+    education:[["COPD action plan","Daily steps to stay stable and know when to call.","https://www.youtube.com/embed/Rrj1K4uN6Ow"],["Heat illness prevention","Hot weather can worsen breathing problems and dehydration.","https://www.youtube.com/results?search_query=heat+illness+prevention+patient+education"]]
+  },
+  "Aaliyah Khan": {
+    headline:"Aaliyah Khan care plan",
+    subtitle:"The main goals this week are checking blood pressure, watching mood changes, and making postpartum recovery easier at home.",
+    status:"Needs attention",
+    visit:"Blood pressure review pending",
+    support:"Care team helping now",
+    focus:"Postpartum recovery",
+    actions:[["Check your blood pressure as directed","Keep logging values so the team can review them."],["Finish your postpartum mood screening","This helps the team support both mental and physical recovery."],["Ask for help with childcare or transportation barriers","The team can help remove those obstacles."],["Tell the team if headaches or vision changes start","Those can be warning signs with high blood pressure."]],
+    team:[["Primary care clinic","Following your recovery and helping with postpartum care."],["OB specialist","Reviewing postpartum hypertension follow-up."],["Community health worker","Helping with device setup, transport, and childcare barriers."],["Care coordinator","Making sure home monitoring and follow-up stay connected."]],
+    warnings:[["Headache, vision changes, or severe swelling","These can be urgent warning signs."],["Blood pressure readings stay high","Call the team rather than waiting."],["Mood feels much lower or more anxious","Tell someone early so support can be added."]],
+    summary:[["Biggest focus","Stay safe at home while blood pressure follow-up is still active."],["Visit status","Postpartum blood pressure review is still being closed."],["Why the team is concerned","Home monitoring and mood screening are still incomplete."]],
+    education:[["Postpartum blood pressure care","What to watch for after delivery and when to call.","https://www.youtube.com/embed/1w2vM0M2nq8"],["Heat illness prevention","Heat can make dehydration and recovery harder after delivery.","https://www.youtube.com/results?search_query=heat+illness+prevention+patient+education"]]
+  },
+  "Daniel Brooks": {
+    headline:"Daniel Brooks care plan",
+    subtitle:"The main goals this week are restarting therapy, improving sleep, and getting mood symptoms moving in the right direction.",
+    status:"Needs attention",
+    visit:"Therapy needs rescheduling",
+    support:"Care team helping now",
+    focus:"Mental health",
+    actions:[["Reschedule therapy this week","This is the most important next step right now."],["Take medications as prescribed","Do not stop or change the dose on your own."],["Work on sleep routine this week","Small changes in sleep can help mood and anxiety."],["Tell the team if symptoms are getting worse","Especially if you feel unsafe or unable to cope."]],
+    team:[["Primary care clinic","Reviewing medication and overall follow-up."],["Behavioral health therapist","Working to restart therapy and symptom monitoring."],["Community health worker","Helping with transportation and weekly check-ins."],["Care coordinator","Following the behavioral health plan after the missed visit."]],
+    warnings:[["Mood drops further","Tell the team early rather than waiting."],["Sleep keeps getting worse","That can worsen both mood and anxiety."],["You feel unsafe","Get urgent help right away."]],
+    summary:[["Biggest focus","Reconnect to therapy and stabilize mood."],["Visit status","The missed therapy visit still needs to be closed."],["Why the team is concerned","Mood scores are rising and sleep is getting worse."]],
+    education:[["Depression self-management","Simple tools that support treatment between visits.","https://www.youtube.com/embed/z-IR48Mb3W0"],["Heat illness prevention","Heat can worsen fatigue, dehydration, and medication side effects.","https://www.youtube.com/results?search_query=heat+illness+prevention+patient+education"]]
+  }
+};
+
+let selectedReferralArea = "primaryCare";
+
+
+
+function renderTopProblems(patient){
+  const el = document.getElementById("topProblemsList");
+  if(!el) return;
+
+  let probs = [];
+
+  if(patient.name === "Maria Reyes"){
+    probs = [
+      ["CHF worsening","Weight gain + symptoms","Action needed"],
+      ["Missed follow-up","No PCP visit post discharge","Action needed"],
+      ["Diabetes control","A1c elevated","Follow-up"]
+    ];
+  } else if(patient.name === "James Lee"){
+    probs = [
+      ["COPD risk","Recent exacerbation","Action needed"],
+      ["Smoking","Active tobacco use","Follow-up"]
+    ];
+  } else if(patient.name === "Aaliyah Khan"){
+    probs = [
+      ["Postpartum HTN","BP still elevated","Action needed"],
+      ["Mental health","Screening incomplete","Follow-up"]
+    ];
+  } else if(patient.name === "Daniel Brooks"){
+    probs = [
+      ["Depression worsening","PHQ-9 trend rising","Action needed"],
+      ["Missed therapy","Continuity gap","Action needed"],
+      ["Sleep decline","Less than goal","Follow-up"]
+    ];
+  }
+
+  el.innerHTML = probs.map((p,i)=>`
+    <div class="list-row">
+      <div>
+        <div class="list-name">${i+1}. ${p[0]}</div>
+        <div class="list-desc">${p[1]}</div>
+      </div>
+      <span class="status ${p[2]=="Action needed"?"bad":"warn"}">${p[2]}</span>
+    </div>
+  `).join("");
 }
-function chartsHtml(w){
-  const colors=["#2559d6","#11865b","#6941c6","#b36b00"];
-  return w.charts.map((c,i)=>`<div class="mini-chart"><h3>${c[0]}</h3><div class="chart-meta">${c[1]} · baseline ${c[3]} ${c[2]}</div>${lineChartSVG(c[4],c[3],colors[i%colors.length])}</div>`).join('');
+
+function renderCareTeam(patient){
+  const grid = document.getElementById('careTeamGrid');
+  const count = document.getElementById('careTeamCount');
+  if(!grid || !patient) return;
+  const team = careTeams[patient.name] || [];
+  if(count){
+    count.textContent = `${team.length} team member${team.length===1?'':'s'}`;
+  }
+  grid.innerHTML = team.map(member => `
+    <div class="care-team-card">
+      <div class="care-team-role">${member.role}</div>
+      <div class="care-team-name">${member.name}</div>
+      <div class="care-team-meta">${member.meta}</div>
+      <span class="care-team-pill">${member.tag}</span>
+    </div>
+  `).join('');
 }
-function patientCards(){
-  const wrap=document.getElementById('patientList');
-  wrap.innerHTML=patients.map((p,i)=>`<div class="patient-card ${i===current?'active':''}" data-index="${i}"><div class="patient-name">${p.name}</div><div class="meta">${p.age} y/o ${p.sex} · ${p.community}</div><div class="meta">${p.lastDischarge}</div><div class="chip-row"><span class="risk ${p.risk}">${p.risk.toUpperCase()}</span><span class="chip">${p.conditions[0]}</span></div></div>`).join('');
-  wrap.querySelectorAll('.patient-card').forEach(el=>el.onclick=()=>{current=+el.dataset.index;render();});
+
+function getSupport(p){
+  return careSupport[p.name] || {missedMedDays:0, meds:p.meds || [], referrals:{}};
 }
-function render(){
-  const p=patients[current];
-  patientCards();
-  document.getElementById('avatar').textContent=p.initials;
-  document.getElementById('heroName').textContent=p.name;
-  document.getElementById('heroSub').textContent=`${p.age} y/o ${p.sex} · ${p.community} · ${p.insurance} · ${p.lastDischarge}`;
-  document.getElementById('heroChips').innerHTML=p.conditions.map(c=>`<span class="chip">${c}</span>`).join('');
-  document.getElementById('riskBadge').innerHTML=riskBadge(p.risk);
-  document.getElementById('stats').innerHTML=p.stats.map(s=>`<div class="stat"><div class="stat-label">${s[0]}</div><div class="stat-value">${s[1]}</div></div>`).join('');
-  document.getElementById('goals').innerHTML=listHtml(p.goals,'green');
-  document.getElementById('barriers').innerHTML=listHtml(p.barriers,'amber');
-  document.getElementById('actions').innerHTML=listHtml(p.actions,'red');
-  document.getElementById('meds').innerHTML=listHtml(p.meds);
-  document.getElementById('alerts').innerHTML=alertHtml(p.alerts);
-  document.getElementById('gapCount').textContent=`${p.alerts.filter(a=>a[0]!=='green').length} priority signals`;
-  document.getElementById('timeline').innerHTML=timelineHtml(p.timeline);
-  document.getElementById('taskTable').innerHTML=taskHtml(p.tasks);
-  document.getElementById('wearableSummary').textContent=p.wearable.summary;
-  document.getElementById('charts').innerHTML=chartsHtml(p.wearable);
+
+function adherenceTone(days){
+  if(days >= 4) return "bad";
+  if(days >= 2) return "warn";
+  return "good";
 }
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg;
-  t.classList.add('show');
-  clearTimeout(window.toastTimer);
-  window.toastTimer=setTimeout(()=>t.classList.remove('show'),2200);
+
+function adherenceText(days){
+  if(days >= 4) return "Poor adherence";
+  if(days >= 2) return "Moderate risk";
+  return "Good adherence";
 }
-function openModal(title,subtitle,bodyHtml){
-  document.getElementById('modalTitle').textContent=title;
-  document.getElementById('modalSubtitle').textContent=subtitle || '';
-  document.getElementById('modalBody').innerHTML=bodyHtml;
-  document.getElementById('modal').classList.add('open');
+
+function statusClass(status){
+  return status.toLowerCase().replace(/\s+/g,'-');
 }
-function closeModal(){ document.getElementById('modal').classList.remove('open'); }
+
+function renderMedAdherence(days){
+  const tone = adherenceTone(days);
+  return `
+    <div class="med-adherence">
+      <div class="med-adherence-top">
+        <div class="med-adherence-title">Medication adherence</div>
+        <span class="adherence-pill ${tone}">${adherenceText(days)}</span>
+      </div>
+      <div class="med-adherence-sub">Missed medication days over the past week: <strong>${days}</strong></div>
+    </div>
+  `;
+}
+
+function renderReferralSummary(referrals){
+  const values = Object.values(referrals || {});
+  const count = status => values.filter(v => (v?.status || '') === status).length;
+  return [
+    ["Not needed", count("Not needed")],
+    ["Referral made", count("Referral made")],
+    ["Referral completed", count("Referral completed")]
+  ].map(([label,value]) => `
+    <div class="referral-summary-card">
+      <div class="big">${value}</div>
+      <div class="metric-label">${label}</div>
+    </div>
+  `).join('');
+}
+
+function renderReferralTabs(referrals){
+  return referralAreas.map(([key,label]) => {
+    const item = referrals[key] || {status:"Not needed", trigger:"No trigger documented.", response:"No response needed."};
+    return `
+      <button class="referral-tab ${selectedReferralArea===key?'active':''}" onclick="setReferralArea('${key}')">
+        ${label}
+        <span class="referral-status-chip ${statusClass(item.status)}">${item.status}</span>
+      </button>
+    `;
+  }).join('');
+}
+
+function renderReferralDetail(referrals, key){
+  const item = referrals[key] || {status:"Not needed", trigger:"No trigger documented.", response:"No response needed."};
+  const label = referralAreas.find(([k]) => k===key)?.[1] || key;
+  return `
+    <div class="trigger-title">${label}</div>
+    <div class="trigger-subtitle">Click on each sub area to review the trigger response.</div>
+    <span class="referral-status-chip ${statusClass(item.status)}">${item.status}</span>
+    <div class="trigger-grid" style="margin-top:14px;">
+      <div>
+        <div class="trigger-label">Trigger</div>
+        <div class="trigger-text">${item.trigger}</div>
+      </div>
+      <div>
+        <div class="trigger-label">Trigger response</div>
+        <div class="trigger-text">${item.response}</div>
+      </div>
+    </div>
+  `;
+}
+
+function getOpenReferralItems(referrals){
+  return referralAreas.map(([key,label]) => ({key,label,item:referrals[key]})).filter(entry => entry.item && entry.item.status === "Referral made");
+}
+
+function renderHomeReferralSummary(referrals){
+  const openItems = getOpenReferralItems(referrals);
+  document.getElementById('openReferralCount').textContent = `${openItems.length} open referral${openItems.length===1?'':'s'}`;
+  if(!openItems.length){
+    return `<div class="home-referral-empty">No open referrals. All current referral needs are either not needed or already completed.</div>`;
+  }
+  return `<div class="home-referral-list">${openItems.map(({key,label,item}) => `
+    <div class="home-referral-item" onclick="openReferralFromHome('${key}')">
+      <div class="home-referral-copy">
+        <strong>${label}</strong>
+        ${item.response}
+      </div>
+      <span class="referral-status-chip ${statusClass(item.status)}">${item.status}</span>
+    </div>
+  `).join('')}</div>`;
+}
+
+function openReferralFromHome(key){
+  selectedReferralArea = key;
+  const referralsTab = Array.from(document.querySelectorAll('.tab')).find(btn => btn.textContent.trim() === 'Referrals');
+  if(referralsTab){
+    showTab('referrals', referralsTab);
+  } else {
+    renderReferralSection();
+  }
+}
+
+function getPreventiveHistory(item, patientName){
+  const title = item[0];
+  const status = item[3];
+  const notes = {
+    "Colorectal cancer screening": {last:"No completed screening documented", due:"Now overdue", past:"No FIT or colonoscopy result found in the tracked interval."},
+    "Breast cancer screening": {last:"Mammogram documented 26 months ago", due:"Repeat due now", past:"Prior outside imaging noted but no current interval completion logged."},
+    "Diabetic retinal exam": {last:"Last retinal exam >12 months ago", due:"Annual exam overdue", past:"No documented ophthalmology closure in the current quality year."},
+    "Influenza vaccine": {last:"Not given this season", due:"Current season due", past:"No administered flu vaccine documented in the vaccine history feed."},
+    "Pneumococcal vaccine": {last:"Status unclear", due:"Review needed", past:"Chart suggests indication is met, but completion was not closed in the registry."},
+    "COVID-19 booster": {last:"No recent booster documented", due:"Booster due", past:"No updated booster was captured in the recent immunization history."},
+    "Postpartum depression screening": {last:"No completed postpartum screen documented", due:"Immediate follow-up needed", past:"Mood screen remains open during postpartum follow-up workflow."},
+    "Cervical cancer screening": {last:"Screening interval not verified", due:"Review prior result", past:"No recent Pap/HPV result has been linked into the quality measure."},
+    "Tdap": {last:"No recent Tdap documented", due:"Due", past:"Completion not found in vaccine history."},
+    "Depression screening": {last:"Ongoing tracking active", due:"Continue monitoring", past:"Behavioral health workflow is following serial PHQ-9 results."},
+    "Substance use screening": {last:"No recent screening documented", due:"Due now", past:"Annual screening gap remains open in the registry."},
+    "HIV screening": {last:"Previously completed", due:"Not currently due", past:"Prior screening result satisfies current interval requirements."}
+  };
+  return notes[title] || {last:`No prior closure detail stored for ${title.toLowerCase()}.`, due:status, past:`Open the metric history feed to review prior completions and due dates for ${patientName}.`};
+}
+
+function openPreventiveMetric(index){
+  const p = patients[selected];
+  const item = p.preventive[index];
+  const history = getPreventiveHistory(item, p.name);
+  openModal(item[0], `${p.name} · health maintenance quality indicator`, `
+    <div class="trigger-grid">
+      <div>
+        <div class="trigger-label">Current status</div>
+        <div class="trigger-text"><span class="status ${item[2]}">${item[3]}</span></div>
+      </div>
+      <div>
+        <div class="trigger-label">Reason</div>
+        <div class="trigger-text">${item[1]}</div>
+      </div>
+      <div>
+        <div class="trigger-label">Last documented data</div>
+        <div class="trigger-text">${history.last}</div>
+      </div>
+      <div>
+        <div class="trigger-label">Past data / next due</div>
+        <div class="trigger-text">${history.past}<br><br><strong>${history.due}</strong></div>
+      </div>
+    </div>
+  `);
+}
+
+function setReferralArea(key){
+  selectedReferralArea = key;
+  renderReferralSection();
+}
+
+function renderReferralSection(){
+  const p = patients[selected];
+  const support = getSupport(p);
+  const referrals = support.referrals || {};
+  document.getElementById('referralSelectedArea').textContent = referralAreas.find(([k]) => k===selectedReferralArea)?.[1] || 'Referrals';
+  document.getElementById('referralSummary').innerHTML = renderReferralSummary(referrals);
+  document.getElementById('referralTabs').innerHTML = renderReferralTabs(referrals);
+  document.getElementById('referralDetail').innerHTML = renderReferralDetail(referrals, selectedReferralArea);
+}
+
+
+const populationConfig = {
+  mode:"all",
+  risk:"all",
+  focus:"all"
+};
+
+const presetCohorts = [
+  ["all","All active patients"],
+  ["postdischarge","Post-discharge follow-up gaps"],
+  ["chronic","Uncontrolled chronic disease"],
+  ["maternal","Maternal child health"],
+  ["substance","Substance use outreach"]
+];
+
+const focusAreas = [
+  ["all","All focus areas"],
+  ["diabetes","Diabetes"],
+  ["hypertension","Hypertension"],
+  ["maternal","Maternal"],
+  ["substance","Substance use"],
+  ["mental","Mental health"],
+  ["preventive","Preventive gaps"]
+];
+
+const riskAreas = [
+  ["all","All risk levels"],
+  ["High","High"],
+  ["Medium","Medium"]
+];
+
+const populationPatients = [
+  {
+    patientIndex:0,
+    issue:"CHF post-discharge instability",
+    gaps:["PCP follow-up overdue","Retinal exam due"],
+    a1c:"9.2%",
+    ldl:"142",
+    bp:"142/94",
+    tags:["postdischarge","chronic","diabetes","hypertension","preventive"],
+    nextAction:"Home visit today"
+  },
+  {
+    patientIndex:1,
+    issue:"COPD exacerbation with active tobacco use",
+    gaps:["Controller inhaler access","Tobacco cessation plan open"],
+    a1c:"—",
+    ldl:"—",
+    bp:"148/92",
+    tags:["postdischarge","substance","hypertension","preventive"],
+    nextAction:"Medication access outreach"
+  },
+  {
+    patientIndex:2,
+    issue:"Postpartum hypertension follow-up",
+    gaps:["Mood screening due","Home cuff sync not closed"],
+    a1c:"—",
+    ldl:"—",
+    bp:"137/86",
+    tags:["maternal","hypertension","preventive","mental"],
+    nextAction:"Review BP uploads"
+  },
+  {
+    patientIndex:3,
+    issue:"Worsening depression and anxiety",
+    gaps:["Missed therapy visit","PHQ-9 increasing"],
+    a1c:"—",
+    ldl:"—",
+    bp:"—",
+    tags:["chronic","mental","preventive"],
+    nextAction:"Reschedule therapy"
+  }
+];
+
+let appMode = "patient";
+
+let selected = 0;
+
+function pillClass(risk){
+  return risk === "High" ? "high" : "med";
+}
+function renderPatientList(){
+  const host = document.getElementById("patientList");
+  host.innerHTML = patients.map((p, i) => `
+    <div class="patient-card ${i===selected?'active':''}" onclick="selectPatient(${i})">
+      <div class="patient-name">${p.name}</div>
+      <div class="patient-meta">${p.shortMeta}<br>${p.shortLine}</div>
+      <div class="tag-row">
+        <span class="pill ${pillClass(p.risk)}">${p.risk.toUpperCase()}</span>
+        ${p.conditions.slice(0,1).map(c => `<span class="pill">${c}</span>`).join("")}
+      </div>
+    </div>
+  `).join("");
+}
+function renderBulletItems(items, dotClass){
+  return items.map(item => `
+    <div class="item">
+      <div class="dot ${dotClass}"></div>
+      <div>
+        <div class="item-text">${item[0]}</div>
+        <div class="item-sub">${item[1]}</div>
+      </div>
+    </div>
+  `).join("");
+}
+function renderAlerts(alerts){
+  return alerts.map(a => `
+    <div class="alert ${a.tone === 'bad' ? '' : a.tone}">
+      <div class="alert-title">${a.title}</div>
+      <div class="alert-sub">${a.sub}</div>
+    </div>
+  `).join("");
+}
+function simplifyStatusLabel(tone, label){
+  const raw = String(label || '').toLowerCase();
+  if (tone === 'bad') return 'Needs action';
+  if (tone === 'warn') return raw.includes('unknown') ? 'Review' : 'Monitor';
+  if (tone === 'good') return 'OK';
+  return label || '';
+}
+function renderStatusList(items, type="standard"){
+  return items.map((item, idx) => {
+    const pillLabel = simplifyStatusLabel(item[2], item[3]);
+    return `
+    <div class="list-row ${type === 'preventive' ? 'clickable' : ''}" ${type === 'preventive' ? `onclick="openPreventiveMetric(${idx})"` : ''}>
+      <div>
+        <div class="list-name">${item[0]}</div>
+        <div class="list-desc">${item[1]}</div>
+      </div>
+      <div class="status ${item[2]}">${pillLabel}</div>
+    </div>
+  `}).join("");
+}
+function renderTimeline(items){
+  return items.map(e => `
+    <div class="event">
+      <div class="event-date">${e[0]}</div>
+      <div class="event-card">
+        <span class="source ${e[1]}">${e[1].toUpperCase()}</span>
+        <div class="event-title">${e[2]}</div>
+        <div class="event-desc">${e[3]}</div>
+      </div>
+    </div>
+  `).join("");
+}
+function renderTaskRows(tasks){
+  return tasks.map(t => `
+    <tr>
+      <td><strong>${t[0]}</strong></td>
+      <td>${t[1]}</td>
+      <td>${t[2]}</td>
+      <td>${t[3]}</td>
+      <td><span class="priority ${t[4].toLowerCase()}">${t[4]}</span></td>
+    </tr>
+  `).join("");
+}
+function lineChartSVG(values, baseline, color, dates=null, secondary=null){
+  const w = 320, h = 145, pad = 30;
+
+  const allVals = secondary ? values.concat(secondary) : values;
+  const min = Math.min(...allVals, baseline);
+  const max = Math.max(...allVals, baseline);
+  const range = Math.max(1, max - min);
+
+  const x = i => pad + (i * ((w - pad * 2) / Math.max(1, values.length - 1)));
+  const y = v => h - pad - ((v - min) / range) * (h - pad * 2);
+
+  const makeLine = (arr) =>
+    arr.map((v, i) => `${i===0 ? 'M' : 'L'} ${x(i)} ${y(v)}`).join(' ');
+
+  const mainLine = makeLine(values);
+  const secondaryLine = secondary ? makeLine(secondary) : null;
+  const baseY = y(baseline);
+
+  const yTicks = [min, Math.round((min + max) / 2), max];
+  const yAxis = yTicks.map(v => `
+    <text x="${pad - 8}" y="${y(v)+3}" font-size="10" text-anchor="end" fill="#62768f">${v}</text>
+    <line x1="${pad}" y1="${y(v)}" x2="${w-pad}" y2="${y(v)}" stroke="#eef2f8"/>
+  `).join('');
+
+  const xAxis = dates ? dates.map((d, i) => `
+    <text x="${x(i)}" y="${h-5}" font-size="10" text-anchor="middle" fill="#62768f">${d}</text>
+  `).join('') : '';
+
+  const mainPoints = values.map((v, i) => `
+    <circle cx="${x(i)}" cy="${y(v)}" r="3.2" fill="${color}" />
+    <text x="${x(i)}" y="${y(v)-8}" font-size="10" text-anchor="middle" fill="#1f2d3d">${v}</text>
+  `).join('');
+
+  const secondaryPoints = secondary ? secondary.map((v, i) => `
+    <circle cx="${x(i)}" cy="${y(v)}" r="3" fill="#b8341d" />
+    <text x="${x(i)}" y="${y(v)-8}" font-size="10" text-anchor="middle" fill="#b8341d">${v}</text>
+  `).join('') : '';
+
+  return `
+    <svg viewBox="0 0 ${w} ${h}">
+      <line x1="${pad}" y1="${pad}" x2="${pad}" y2="${h-pad}" stroke="#cfd8e6"/>
+      <line x1="${pad}" y1="${h-pad}" x2="${w-pad}" y2="${h-pad}" stroke="#cfd8e6"/>
+      ${yAxis}
+      <line x1="${pad}" y1="${baseY}" x2="${w-pad}" y2="${baseY}" stroke="#cfd8e6" stroke-dasharray="5 5"></line>
+      <path d="${mainLine}" fill="none" stroke="${color}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+      ${secondaryLine ? `<path d="${secondaryLine}" fill="none" stroke="#b8341d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>` : ""}
+      ${mainPoints}
+      ${secondaryPoints}
+      ${xAxis}
+    </svg>
+  `;
+}
+function timelineChartSVG(labels, completed){
+  const w = 320, h = 105, pad = 24;
+  const step = (w - pad*2) / Math.max(1, (labels.length - 1));
+  return `
+    <svg viewBox="0 0 ${w} ${h}">
+      <line x1="${pad}" y1="${h/2}" x2="${w-pad}" y2="${h/2}" stroke="#cfd8e6" stroke-width="2"/>
+      ${labels.map((label, i) => {
+        const x = pad + i * step;
+        const done = !!completed[i];
+        return `
+          <circle cx="${x}" cy="${h/2}" r="6" fill="${done ? '#178b57' : '#fff'}" stroke="${done ? '#178b57' : '#b8341d'}" stroke-width="2"/>
+          <text x="${x}" y="${h/2 + 20}" font-size="10" text-anchor="middle" fill="#62768f">${label}</text>
+        `;
+      }).join('')}
+    </svg>
+  `;
+}
+
+function renderCharts(charts, clickable=true){
+  const colors = ["#2559d6","#178b57","#6941c6","#bc7a00", "#0f766e", "#7c3aed"];
+
+  return charts.map((c, i) => {
+    const cardAttrs = clickable ? ` onclick="openChartModal(${i})" style="cursor:pointer;"` : '';
+
+    if(c && typeof c === "object" && !Array.isArray(c) && c.type === "timeline") {
+      const completedCount = c.completed.filter(Boolean).length;
+      return `
+        <div class="chart-card"${cardAttrs}>
+          <div class="chart-title">${c.title}</div>
+          <div class="chart-meta">${c.subtitle}</div>
+          ${timelineChartSVG(c.labels, c.completed)}
+          <div class="legend-row">
+            <span><i class="swatch" style="background:#178b57"></i>Completed</span>
+            <span><i class="swatch" style="background:#fff;border:2px solid #b8341d"></i>Missed</span>
+            <span>${completedCount}/${c.labels.length} milestones completed</span>
+          </div>
+        </div>
+      `;
+    }
+
+    const series = c[4];
+    const isDualLine = series && !Array.isArray(series) && typeof series === "object" && Array.isArray(series.systolic);
+
+    if(isDualLine){
+      return `
+        <div class="chart-card"${cardAttrs}>
+          <div class="chart-title">${c[0]}</div>
+          <div class="chart-meta">${c[1]} · baseline ${c[3]} ${c[2]}</div>
+          <div class="series-label-row">
+            <span class="series-pill"><i class="series-dot" style="background:#2559d6"></i>${series.primaryLabel || (c[0].toLowerCase().includes('blood pressure') ? 'Systolic' : 'Primary')}</span>
+            <span class="series-pill"><i class="series-dot" style="background:#b8341d"></i>${series.secondaryLabel || (c[0].toLowerCase().includes('blood pressure') ? 'Diastolic' : 'Secondary')}</span>
+          </div>
+          ${lineChartSVG(series.systolic, c[3], "#2559d6", series.dates || null, series.diastolic || null)}
+          <div class="legend-row">
+            <span><i class="swatch" style="background:#2559d6"></i>${series.primaryLabel || (c[0].toLowerCase().includes('blood pressure') ? 'Systolic' : 'Primary')}</span>
+            <span><i class="swatch" style="background:#b8341d"></i>${series.secondaryLabel || (c[0].toLowerCase().includes('blood pressure') ? 'Diastolic' : 'Secondary')}</span>
+          </div>
+        </div>
+      `;
+    }
+    return `
+      <div class="chart-card"${cardAttrs}>
+        <div class="chart-title">${c[0]}</div>
+        <div class="chart-meta">${c[1]} · baseline ${c[3]} ${c[2]}</div>
+        ${lineChartSVG(series, c[3], colors[i % colors.length], c[5] || null)}
+      </div>
+    `;
+  }).join("");
+}
+
 function snapshotText(p){
+  const activeAlerts = p.alerts.filter(a => a.tone !== "good");
   return `${p.name}
 Risk: ${p.risk.toUpperCase()}
-Community: ${p.community}
-Insurance: ${p.insurance}
+Community: ${p.shortMeta.split('·')[1].trim()}
 Conditions: ${p.conditions.join(', ')}
 
 Top priorities:
 ${p.tasks.map((t,i)=>`${i+1}. ${t[0]}: ${t[1]} (${t[3]}, ${t[4]} priority)`).join('\n')}
 
 Active gaps:
-${p.alerts.filter(a=>a[0]!=='green').map((a,i)=>`${i+1}. ${a[1]} - ${a[2]}`).join('\n')}
-`;
+${activeAlerts.map((a,i)=>`${i+1}. ${a.title} - ${a.sub}`).join('\n')}`;
 }
-function downloadFile(filename,text,type='text/plain'){
-  const blob=new Blob([text],{type});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');
-  a.href=url; a.download=filename;
-  document.body.appendChild(a); a.click(); a.remove();
-  setTimeout(()=>URL.revokeObjectURL(url),500);
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(window.toastTimer);
+  window.toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
 }
-function bindButtons(){
-  document.getElementById('grantBtn').onclick=()=>{
-    openModal('Grant view','Prototype framing for Rural Health Transformation grant discussion',`
-      <div class="snapshot"><strong>Core use case</strong>
-Shared care coordination across CHW, FQHC, and hospital settings with one longitudinal care plan.
 
-<strong>What this interface demonstrates</strong>
-• shared patient-level visibility after discharge
-• clear assignment of next-step responsibilities
-• quality and care-gap monitoring across settings
-• wearable or remote monitoring signals that support early outreach
-
-<strong>Primary users</strong>
-• community health workers
-• FQHC care teams
-• hospital transitional care teams
-
-<strong>Decisions supported</strong>
-• who needs outreach today
-• whether follow-up actually happened
-• what barriers are blocking care
-• where recovery data suggests rising risk</div>`);
-  };
-  document.getElementById('snapshotBtn').onclick=()=>{
-    const p=patients[current];
-    const text=snapshotText(p);
-    openModal('Patient action snapshot',`${p.name} · concise coordination summary`,`<div class="snapshot">${text.replace(/\n/g,'<br>')}</div>`);
-  };
-  document.getElementById('exportBtn').onclick=()=>{
-    const p=patients[current];
-    downloadFile(`${p.name.toLowerCase().replace(/[^a-z0-9]+/g,'-')}-summary.txt`, snapshotText(p));
-    showToast('Summary exported');
-  };
-  document.getElementById('closeModal').onclick=closeModal;
-  document.getElementById('modal').onclick=(e)=>{ if(e.target.id==='modal') closeModal(); };
-  document.addEventListener('keydown',(e)=>{ if(e.key==='Escape') closeModal(); });
+function formatRiskLabel(risk){
+  return risk === "High" ? "High risk" : risk === "Medium" ? "Moderate risk" : "Lower risk";
 }
-render();
-bindButtons();
+function formatTrendLabel(trend){
+  return trend === "Declining" ? "Worsening" : trend === "Improving" ? "Improving" : trend;
+}
+function riskWhyText(p){
+  const reasons = [];
+  if(/discharge/i.test(p.meta) || /discharge/i.test(p.shortLine || '')) reasons.push('recent discharge and active transition-of-care needs');
+  if(p.conditions?.length) reasons.push(p.conditions.slice(0,3).join(', ').toLowerCase());
+  if(p.openGaps) reasons.push(`${p.openGaps} open care gap${p.openGaps===1?'':'s'}`);
+  const badAlerts = (p.alerts||[]).filter(a => a.tone === 'bad' || a.tone === 'warn').slice(0,2).map(a => a.title.toLowerCase());
+  reasons.push(...badAlerts);
+  return reasons.slice(0,3).join(' • ');
+}
+function trendWhyText(p){
+  const points = [];
+  const badAlerts = (p.alerts||[]).filter(a => a.tone === 'bad' || a.tone === 'warn').map(a => a.title);
+  points.push(...badAlerts.slice(0,2));
+  if(p.wearableNarrative) points.push(p.wearableNarrative);
+  return points.slice(0,2).join(' • ');
+}
+function openExplain(type){
+  const p = patients[selected];
+  if(type === 'risk'){
+    const items = [];
+    if(/discharge/i.test(p.meta) || /discharge/i.test(p.shortLine || '')) items.push('Recent discharge or recent high-risk transition of care');
+    if(p.conditions?.length) items.push('Active conditions: ' + p.conditions.join(', '));
+    items.push(`${p.openGaps} open care gap${p.openGaps===1?'':'s'} and ${p.sharedTasks} active shared task${p.sharedTasks===1?'':'s'}`);
+    items.push(...(p.alerts||[]).filter(a => a.tone === 'bad' || a.tone === 'warn').slice(0,3).map(a => `${a.title} — ${a.sub}`));
+    const next = (p.tasks||[]).slice(0,2).map(t => `${t[0]}: ${t[1]}`);
+    openModal('Why this risk level?', `${p.name} · risk drivers`, `
+      <div class="list">${items.map(x => `<div class="list-row"><div><div class="list-name">${x}</div></div></div>`).join('')}</div>
+      <div style="height:12px"></div>
+      <div class="block-title">Suggested next actions</div>
+      <div class="list">${next.map(x => `<div class="list-row"><div><div class="list-name">${x}</div></div></div>`).join('')}</div>
+    `);
+    return;
+  }
+  if(type === 'trend'){
+    const items = [];
+    items.push(...(p.alerts||[]).filter(a => a.tone === 'bad' || a.tone === 'warn').slice(0,3).map(a => `${a.title} — ${a.sub}`));
+    if(p.wearableNarrative) items.push(p.wearableNarrative);
+    const trendCharts = (p.trendCharts||[]).slice(0,2).map(ch => Array.isArray(ch) ? ch[0] : ch.title);
+    if(trendCharts.length) items.push('Most relevant trend views: ' + trendCharts.join(', '));
+    openModal('Why this trend status?', `${p.name} · trend explanation`, `
+      <div class="list">${items.map(x => `<div class="list-row"><div><div class="list-name">${x}</div></div></div>`).join('')}</div>
+    `);
+  }
+}
+
+function openModal(title, subtitle, bodyHtml){
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalSubtitle').textContent = subtitle || '';
+  document.getElementById('modalBody').innerHTML = bodyHtml;
+  document.getElementById('modal').classList.add('open');
+}
+function openChartModal(index){
+  const p = patients[selected];
+  const chart = p.trendCharts[index];
+  if(!chart) return;
+  const title = Array.isArray(chart) ? chart[0] : chart.title;
+  const subtitle = Array.isArray(chart) ? chart[1] : chart.subtitle;
+  openModal(title, subtitle, `<div style="padding:8px 4px 0;">${renderCharts([chart], false)}</div>`);
+}
+function closeModal(){
+  document.getElementById('modal').classList.remove('open');
+}
+function exportSummary(){
+  const p = patients[selected];
+  const text = [
+    "Shared Care Coordination Dashboard Summary",
+    "",
+    "Patient: " + p.name,
+    "Risk: " + p.risk,
+    "Open care gaps: " + p.openGaps,
+    "Shared tasks: " + p.sharedTasks,
+    "Trend status: " + p.trend,
+    "",
+    "Conditions: " + p.conditions.join(", "),
+    "",
+    "Active goals:",
+    ...p.goals.map(g => "- " + g[0] + " (" + g[1] + ")"),
+    "",
+    "Current barriers:",
+    ...p.barriers.map(b => "- " + b[0] + " (" + b[1] + ")"),
+    "",
+    "Alerts and care gaps:",
+    ...p.alerts.map(a => "- " + a.title + ": " + a.sub),
+    "",
+    "Preventive care:",
+    ...p.preventive.map(x => "- " + x[0] + " [" + x[3] + "]"),
+    "",
+    "Chronic disease quality indicators:",
+    ...p.chronic.map(x => "- " + x[0] + " [" + x[3] + "]"),
+    "",
+    "Team handoff cues:",
+    ...p.tasks.map(t => "- " + t[0] + ": " + t[1] + " / " + t[2] + " / " + t[3] + " / " + t[4])
+  ].join("\n");
+
+  const blob = new Blob([text], {type: "text/plain;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = p.name.toLowerCase().replace(/\s+/g, "_") + "_care_summary.txt";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+  showToast("Summary exported");
+}
+function renderPatientFacingList(){
+  const host = document.getElementById("patientFacingList");
+  if(!host) return;
+  host.innerHTML = patients.map((p, i) => `
+    <div class="patient-card ${i===selected?'active':''}" onclick="selectPatient(${i})">
+      <div class="patient-name">${p.name}</div>
+      <div class="patient-meta">${p.shortMeta}<br>${p.shortLine}</div>
+      <div class="tag-row">
+        <span class="pill ${pillClass(p.risk)}">${formatRiskLabel(p.risk)}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderPatientFacingView(){
+  const p = patients[selected];
+  const content = patientFacingContent[p.name] || {
+    headline: p.name + ' care plan',
+    subtitle: 'Here is what to do and what to watch for this week.',
+    status: 'Needs attention',
+    visit: 'Follow-up may be needed',
+    support: 'Care team helping now',
+    focus: 'Recovery',
+    actions: [],
+    team: [],
+    warnings: [],
+    summary: []
+  };
+  const team = careTeams[p.name] || [];
+  const education = getOfficialPatientEducation(p);
+
+  const setText = (id, value) => {
+    const el = document.getElementById(id);
+    if(el) el.textContent = value;
+  };
+  const setHTML = (id, value) => {
+    const el = document.getElementById(id);
+    if(el) el.innerHTML = value;
+  };
+
+  setText('patientFacingAvatar', p.initials);
+  setText('patientFacingHeadline', content.headline);
+  setText('patientFacingSubtitle', content.subtitle);
+  setText('patientFacingStatusPill', content.status);
+  setText('patientFacingVisitPill', content.visit);
+  setText('patientFacingSupportPill', content.support);
+  setText('patientFacingGaps', String(p.openGaps));
+  setText('patientFacingTeamCount', String(team.length));
+  setText('patientFacingFocus', content.focus);
+
+  const trialPill = document.getElementById('patientFacingTrialPill');
+  if(trialPill){
+    trialPill.textContent = p.clinicalTrial && p.clinicalTrial.status !== 'None'
+      ? `Clinical trial: ${formatTrialText(p.clinicalTrial)}`
+      : 'Not in a clinical trial';
+    trialPill.className = `patient-big-pill trial-pill clickable-pill ${formatTrialClass(p.clinicalTrial?.status)}`;
+    trialPill.onclick = () => openTrialModal();
+  }
+  setText('patientFacingTrialNote', formatTrialDetail(p.clinicalTrial));
+  setHTML('patientFacingTrialMatches', (p.possibleTrialMatches || []).length ? (p.possibleTrialMatches || []).map(m => `
+    <div class="patient-check">
+      <div class="patient-check-icon">i</div>
+      <div>
+        <div class="patient-check-title">${m.name}</div>
+        <div class="patient-check-sub">${m.plain}</div>
+      </div>
+    </div>`).join('') : `
+    <div class="patient-summary-item">
+      <div class="patient-check-title">No research studies listed right now</div>
+      <div class="patient-summary-sub">Your care team can tell you if any studies become relevant later.</div>
+    </div>`);
+
+  setHTML('patientActionsList', (content.actions || []).map(item => `
+    <div class="patient-check">
+      <div class="patient-check-icon">✓</div>
+      <div>
+        <div class="patient-check-title">${item[0]}</div>
+        <div class="patient-check-sub">${item[1]}</div>
+      </div>
+    </div>`).join(''));
+
+  setHTML('patientTeamActions', (content.team || []).map(item => `
+    <div class="patient-team-item">
+      <div class="patient-team-role">${item[0]}</div>
+      <div class="patient-team-doing">${item[1]}</div>
+    </div>`).join(''));
+
+  setHTML('patientFacingCareTeam', team.map(member => `
+    <div class="care-team-card">
+      <div class="care-team-role">${member.role}</div>
+      <div class="care-team-name">${member.name}</div>
+      <div class="care-team-meta">${member.meta}</div>
+      <span class="care-team-pill">${member.tag}</span>
+    </div>`).join(''));
+
+  setHTML('patientWarningsList', (content.warnings || []).map(item => `
+    <div class="patient-warning">
+      <div class="patient-warning-title">${item[0]}</div>
+      <div class="patient-warning-sub">${item[1]}</div>
+    </div>`).join(''));
+
+  setHTML('patientSimpleSummary', (content.summary || []).map(item => `
+    <div class="patient-summary-item">
+      <div class="patient-check-title">${item[0]}</div>
+      <div class="patient-summary-sub">${item[1]}</div>
+    </div>`).join(''));
+
+  setHTML('patientEducationGrid', education.map(item => `
+    <div class="patient-edu-card" ${item.title === 'Heat illness prevention' ? 'style="border:2px solid #f5d7a1; background:#fffaf0;"' : ''}>
+      <div class="patient-edu-media">
+        <div class="patient-edu-media-inner">
+          <div class="patient-edu-kicker">${item.kicker}</div>
+          <div class="patient-edu-title">${item.title}</div>
+          <div class="patient-edu-copy">${item.copy}</div>
+          <a class="patient-edu-button" href="${item.url}" target="_blank" rel="noopener noreferrer">Open resource</a>
+        </div>
+      </div>
+      <div class="patient-edu-title">${item.title}</div>
+      <div class="patient-edu-copy">${item.copy}</div>
+    </div>`).join(''));
+
+  renderPatientFacingList();
+}
+
+function setMode(mode){
+  appMode = mode;
+  document.getElementById("patientMode").classList.toggle("active", mode === "patient");
+  document.getElementById("patientFacingMode").classList.toggle("active", mode === "patientFacing");
+  document.getElementById("populationMode").classList.toggle("active", mode === "population");
+  document.getElementById("patientModeBtn").classList.toggle("active", mode === "patient");
+  document.getElementById("patientFacingModeBtn").classList.toggle("active", mode === "patientFacing");
+  document.getElementById("populationModeBtn").classList.toggle("active", mode === "population");
+  if(mode === "patientFacing") renderPatientFacingView();
+}
+
+function renderFilterChips(hostId, items, selectedValue, clickHandler){
+  document.getElementById(hostId).innerHTML = items.map(([value,label]) => `
+    <button class="filter-chip ${selectedValue===value?'active':''}" onclick="${clickHandler}('${value}')">${label}</button>
+  `).join('');
+}
+
+function setPopulationCohort(value){
+  populationConfig.mode = value;
+  renderPopulationView();
+}
+function setPopulationRisk(value){
+  populationConfig.risk = value;
+  renderPopulationView();
+}
+function setPopulationFocus(value){
+  populationConfig.focus = value;
+  renderPopulationView();
+}
+
+function getPopulationRows(){
+  return populationPatients.filter(row => {
+    const patient = patients[row.patientIndex];
+    const cohortMatch = populationConfig.mode === 'all' || row.tags.includes(populationConfig.mode);
+    const riskMatch = populationConfig.risk === 'all' || patient.risk === populationConfig.risk;
+    const focusMatch = populationConfig.focus === 'all' || row.tags.includes(populationConfig.focus);
+    return cohortMatch && riskMatch && focusMatch;
+  });
+}
+
+function openPatientFromPopulation(i){
+  selectPatient(i);
+  setMode('patient');
+  showToast('Opened patient view');
+}
+
+function renderPopulationSummary(rows){
+  const high = rows.filter(r => patients[r.patientIndex].risk === 'High').length;
+  const followup = rows.filter(r => r.tags.includes('postdischarge')).length;
+  const uncontrolled = rows.filter(r => r.tags.includes('chronic') || r.tags.includes('hypertension')).length;
+  const preventive = rows.filter(r => r.tags.includes('preventive')).length;
+  const maternal = rows.filter(r => r.tags.includes('maternal')).length;
+  const substance = rows.filter(r => r.tags.includes('substance')).length;
+  const trial = rows.filter(r => {
+    const t = patients[r.patientIndex].clinicalTrial;
+    return t && t.status && t.status !== 'None';
+  }).length;
+  const trialMatches = rows.filter(r => {
+    const m = patients[r.patientIndex].possibleTrialMatches || [];
+    return m.length > 0;
+  }).length;
+
+  document.getElementById('populationSummary').innerHTML = [
+    ['Patients in queue', rows.length, 'Filtered outreach cohort'],
+    ['High risk', high, 'Needs earlier intervention'],
+    ['Post-discharge gaps', followup, 'No closed follow-up yet'],
+    ['Chronic instability', uncontrolled, 'A1c, BP, CHF, COPD issues'],
+    ['Preventive gaps', preventive, 'Screening or immunization work'],
+    ['Clinical trial', trial, 'Enrolled or screening'],
+    ['Possible trial match', trialMatches, 'Patients worth coordinator review'],
+    ['Maternal / substance', `${maternal} / ${substance}`, 'Targeted populations']
+  ].map(card => `
+    <div class="pop-card">
+      <div class="pop-card-label">${card[0]}</div>
+      <div class="pop-card-value">${card[1]}</div>
+      <div class="pop-card-sub">${card[2]}</div>
+    </div>
+  `).join('');
+}
+
+function renderPopulationTable(rows){
+  document.getElementById('populationCountPill').textContent = `${rows.length} patient${rows.length===1?'':'s'}`;
+  document.getElementById('populationTable').innerHTML = rows.map(row => {
+    const p = patients[row.patientIndex];
+    return `
+      <tr>
+        <td>
+          <button class="registry-row-btn" onclick="openPatientFromPopulation(${row.patientIndex})">${p.name}</button>
+          <span class="registry-sub">${p.shortMeta}</span>
+        </td>
+        <td><span class="pill ${pillClass(p.risk)}">${p.risk.toUpperCase()}</span></td>
+        <td>${row.issue}</td>
+        <td>${row.gaps.join('<br>')}</td>
+        <td>${row.a1c}</td>
+        <td>${row.ldl}</td>
+        <td>${row.bp}</td>
+        <td><span class="pill trial-pill clickable-pill ${formatTrialClass(p.clinicalTrial?.status)}" onclick="openTrialModal(${row.patientIndex})">${formatTrialText(p.clinicalTrial)}</span></td>
+        <td>${(p.possibleTrialMatches||[]).length ? '<span class="trial-match-pill">Possible match</span>' : '<span class="status good">None</span>'}</td>
+        <td>${row.nextAction}</td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function renderPopulationView(){
+  renderFilterChips('cohortFilters', presetCohorts, populationConfig.mode, 'setPopulationCohort');
+  renderFilterChips('riskFilters', riskAreas, populationConfig.risk, 'setPopulationRisk');
+  renderFilterChips('focusFilters', focusAreas, populationConfig.focus, 'setPopulationFocus');
+
+  document.getElementById('quickCohorts').innerHTML = presetCohorts.map(([value,label]) => `
+    <button class="cohort-chip ${populationConfig.mode===value?'active':''}" onclick="setPopulationCohort('${value}')">${label}</button>
+  `).join('');
+
+  const rows = getPopulationRows();
+  renderPopulationSummary(rows);
+  renderPopulationTable(rows);
+}
+
+
+
+function getOfficialPatientEducation(p){
+  const cards = [
+    {
+      title:'Heat illness prevention',
+      copy:'High temperatures can worsen dehydration, fatigue, and recovery.',
+      url:'https://www.cdc.gov/disasters/extremeheat/index.html',
+      kicker:'Important in hot weather'
+    }
+  ];
+  const text = ((p.conditions||[]).join(' | ') + ' | ' + (p.chronic||[]).map(x => x[0]).join(' | ')).toLowerCase();
+  if(/heart failure|chf/.test(text)){
+    cards.push({
+      title:'Heart failure home care',
+      copy:'Learn when weight gain, swelling, or shortness of breath should trigger a call.',
+      url:'https://www.heart.org/en/health-topics/heart-failure/warning-signs-of-heart-failure',
+      kicker:'Heart care'
+    });
+  }
+  if(/diabetes/.test(text)){
+    cards.push({
+      title:'Managing diabetes',
+      copy:'Simple NIH guidance on checking sugars, medicines, food, and follow-up.',
+      url:'https://www.niddk.nih.gov/health-information/diabetes/overview/managing-diabetes',
+      kicker:'Diabetes'
+    });
+  }
+  if(/hypertension|blood pressure/.test(text)){
+    cards.push({
+      title:'Understanding blood pressure',
+      copy:'CDC guidance on blood pressure, home checks, and why follow-up matters.',
+      url:'https://www.cdc.gov/high-blood-pressure/about/index.html',
+      kicker:'Blood pressure'
+    });
+  }
+  if(/copd|asthma|pulmonary/.test(text)){
+    cards.push({
+      title:'Living with COPD',
+      copy:'Tips on breathing symptoms, medicines, and when to get help.',
+      url:'https://www.nhlbi.nih.gov/health/copd/living-with',
+      kicker:'Breathing'
+    });
+  }
+  if(/mental health|depress|anxiety|behavioral health/.test(text)){
+    cards.push({
+      title:'Caring for your mental health',
+      copy:'Practical NIH information on symptoms, treatment, and getting support.',
+      url:'https://www.nimh.nih.gov/health/topics/caring-for-your-mental-health',
+      kicker:'Mental health'
+    });
+  }
+  return cards.slice(0,3);
+}
+
+function openTrialModal(index){
+  const p = patients[typeof index === 'number' ? index : selected];
+  const trial = p.clinicalTrial;
+  const matches = p.possibleTrialMatches || [];
+  const title = 'Clinical trial status';
+  let subtitle = p.name;
+  let body = '';
+
+  const matchesHtml = matches.length ? `
+    <div style="margin-top:16px;">
+      <div class="detail-title" style="margin-bottom:10px;">Possible trial matches</div>
+      <div class="list">
+        ${matches.map(m => `
+          <div class="list-row">
+            <div>
+              <div class="list-name">${m.name}</div>
+              <div class="list-desc">${m.reason}</div>
+              <div class="trial-match-action">Next step: ${m.action}</div>
+            </div>
+            <span class="trial-match-pill">Needs review</span>
+          </div>`).join('')}
+      </div>
+    </div>` : '';
+
+  if(!trial || !trial.status || trial.status === 'None'){
+    body = `
+      <div class="list">
+        <div class="list-row">
+          <div>
+            <div class="list-name">Not currently in a clinical trial</div>
+            <div class="list-desc">No active research-study participation is listed for this patient.</div>
+          </div>
+        </div>
+      </div>
+      ${matchesHtml}`;
+  } else if(trial.status === 'Screening'){
+    body = `
+      <div class="list">
+        <div class="list-row">
+          <div>
+            <div class="list-name">Screening in progress</div>
+            <div class="list-desc">${trial.study || 'Research study'} is being reviewed for possible participation.</div>
+          </div>
+          <span class="trial-match-pill screening">Screening</span>
+        </div>
+        <div class="list-row">
+          <div>
+            <div class="list-name">Study details</div>
+            <div class="list-desc">${trial.description || 'Study details not listed.'}</div>
+          </div>
+        </div>
+        <div class="list-row">
+          <div>
+            <div class="list-name">Site</div>
+            <div class="list-desc">${trial.site || 'Site not listed'}</div>
+          </div>
+        </div>
+        <div class="list-row">
+          <div>
+            <div class="list-name">Coordinator</div>
+            <div class="list-desc">${trial.coordinator || 'Coordinator not listed'}</div>
+          </div>
+        </div>
+      </div>
+      ${matchesHtml}`;
+  } else {
+    body = `
+      <div class="list">
+        <div class="list-row">
+          <div>
+            <div class="list-name">Currently enrolled</div>
+            <div class="list-desc">${trial.study || 'Research study'}.</div>
+          </div>
+          <span class="trial-match-pill enrolled">Enrolled</span>
+        </div>
+        <div class="list-row">
+          <div>
+            <div class="list-name">Study details</div>
+            <div class="list-desc">${trial.description || 'Study details not listed.'}</div>
+          </div>
+        </div>
+        <div class="list-row">
+          <div>
+            <div class="list-name">Site</div>
+            <div class="list-desc">${trial.site || 'Site not listed'}</div>
+          </div>
+        </div>
+        <div class="list-row">
+          <div>
+            <div class="list-name">Coordinator</div>
+            <div class="list-desc">${trial.coordinator || 'Coordinator not listed'}</div>
+          </div>
+        </div>
+      </div>
+      ${matchesHtml}`;
+  }
+  openModal(title, subtitle, body);
+}
+
+
+function formatTrialClass(status){
+  const value = (status || '').toLowerCase();
+  if(value === 'enrolled') return 'enrolled';
+  if(value === 'screening') return 'screening';
+  return '';
+}
+function formatTrialText(trial){
+  if(!trial || !trial.status || trial.status === 'None') return 'Not in trial';
+  return trial.label || trial.status;
+}
+function formatTrialDetail(trial){
+  if(!trial || !trial.status || trial.status === 'None') return 'Not currently involved in a clinical trial.';
+  if(trial.status === 'Screening') return `Currently being evaluated for ${trial.study}.`;
+  return `Currently participating in ${trial.study}.`;
+}
+
+function selectPatient(i){
+  selected = i;
+  const p = patients[i];
+  document.getElementById("avatar").textContent = p.initials;
+  document.getElementById("heroName").textContent = p.name;
+  document.getElementById("heroMeta").textContent = p.meta;
+  document.getElementById("heroTags").innerHTML =
+    p.conditions.map(c => `<span class="pill">${c}</span>`).join("") +
+    ` <span class="pill trial-pill clickable-pill ${formatTrialClass(p.clinicalTrial?.status)}" onclick="openTrialModal()">Clinical trial: ${formatTrialText(p.clinicalTrial)}</span>`;
+  document.getElementById("heroRisk").textContent = p.riskLabel;
+  document.getElementById("heroRisk").style.background = p.risk === "High" ? "#fbe9e7" : "#fff2dd";
+  document.getElementById("heroRisk").style.color = p.risk === "High" ? "#c7371b" : "#b36b00";
+  document.getElementById("riskLevelMetric").textContent = formatRiskLabel(p.risk);
+  document.getElementById("gapsMetric").textContent = p.openGaps;
+  document.getElementById("tasksMetric").textContent = p.sharedTasks;
+  document.getElementById("trendMetric").textContent = formatTrendLabel(p.trend);
+  document.getElementById("alignedTeams").textContent = p.teamsAligned + " teams aligned";
+  document.getElementById("prioritySignals").textContent = p.prioritySignals + " priority signals";
+  document.getElementById("goalsList").innerHTML = renderBulletItems(p.goals, "green");
+  document.getElementById("barriersList").innerHTML = renderBulletItems(p.barriers, "orange");
+  document.getElementById("actionsList").innerHTML = renderBulletItems(p.actions, "red");
+  const support = getSupport(p);
+  document.getElementById("medAdherence").innerHTML = renderMedAdherence(support.missedMedDays);
+  document.getElementById("medsList").innerHTML = renderBulletItems(support.meds, "green");
+  document.getElementById("alertsList").innerHTML = renderAlerts(p.alerts);
+  document.getElementById("preventiveList").innerHTML = renderStatusList(p.preventive, 'preventive');
+  document.getElementById("chronicList").innerHTML = renderStatusList(p.chronic);
+  document.getElementById("preventiveSummary").textContent = p.preventiveSummary;
+  document.getElementById("chronicSummary").textContent = p.chronicSummary;
+  document.getElementById("timelineList").innerHTML = renderTimeline(p.timeline);
+  document.getElementById("taskTable").innerHTML = renderTaskRows(p.tasks);
+  document.getElementById("wearableSummaryPill").textContent = "7-day trend";
+  document.getElementById("wearableNarrative").textContent = p.wearableNarrative;
+  document.getElementById('homeReferralSummary').innerHTML = renderHomeReferralSummary(getSupport(p).referrals || {});
+  document.getElementById("chartGrid").innerHTML = renderCharts(p.trendCharts);
+  document.getElementById("handoffCount").textContent = p.tasks.length + " tasks";
+  document.getElementById("snapshotText").textContent = snapshotText(p);
+  document.getElementById("snapshotWearable").textContent = "Trend status is " + p.trend.toLowerCase() + ". " + p.wearableNarrative;
+  renderReferralSection();
+  renderEducationLibrary(p);
+  loadDummyLifestyleData(p);
+  renderTopProblems(p);
+  renderCareTeam(p);
+  renderPatientList();
+  renderPatientFacingView();
+}
+function showTab(name, btn){
+  document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+  document.getElementById("view-" + name).classList.add("active");
+  btn.classList.add("active");
+}
+document.getElementById("grantViewBtn").onclick = () => {
+  document.getElementById("grantNote").style.display = document.getElementById("grantNote").style.display === "none" ? "block" : "none";
+  document.querySelector('.tab.active')?.classList.remove('active');
+  document.querySelector('.tabbar .tab').classList.add('active');
+  document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+  document.getElementById("view-home").classList.add("active");
+};
+document.getElementById("exportBtn").onclick = exportSummary;
+document.getElementById("topSnapshotBtn").onclick = () => {
+  const p = patients[selected];
+  openModal("Patient action snapshot", `${p.name} · concise coordination summary`, `<div class="snapshot">${snapshotText(p).replace(/\n/g,'<br>')}</div>`);
+};
+document.getElementById("closeModal").onclick = closeModal;
+document.getElementById("modal").onclick = (e) => { if(e.target.id === "modal") closeModal(); };
+document.addEventListener("keydown", (e) => { if(e.key === "Escape") closeModal(); });
+
+renderPopulationView();
+
+const patientLifestyleData = {
+  "Maria Reyes": {fv:14, home:6, sugar:6, fast:5, cardio:45, strength:20, brain:25, stress:30},
+  "James Lee": {fv:11, home:5, sugar:4, fast:6, cardio:60, strength:15, brain:20, stress:25},
+  "Aaliyah Khan": {fv:16, home:8, sugar:3, fast:3, cardio:70, strength:25, brain:30, stress:55},
+  "Daniel Brooks": {fv:12, home:7, sugar:2, fast:4, cardio:80, strength:30, brain:60, stress:75}
+};
+
+
+const educationCatalog = {
+  lifestyle: {
+    intro: {
+      topic:"Healthy Lifestyle Intro",
+      source:"NHLBI / NIH",
+      url:"https://www.nhlbi.nih.gov/health/heart-healthy-living",
+      icon:"🫀",
+      reason:"General heart-healthy living basics for patients starting behavior change."
+    },
+    nutrition: {
+      topic:"Nutrition",
+      source:"NHLBI / NIH",
+      url:"https://www.nhlbi.nih.gov/health/dash-eating-plan",
+      icon:"🥗",
+      reason:"Useful for blood pressure, diabetes, heart failure, and weight-related risk."
+    },
+    education: {
+      topic:"Education",
+      source:"CDC",
+      url:"https://www.cdc.gov/diabetes/living-with/index.html",
+      icon:"📘",
+      reason:"Simple self-management teaching for daily routines, checkups, and symptom monitoring."
+    },
+    exercise: {
+      topic:"Exercise",
+      source:"Move Your Way / HHS",
+      url:"https://odphp.health.gov/moveyourway",
+      icon:"🏃",
+      reason:"Practical activity guidance that supports weekly cardio and strength goals."
+    },
+    stress: {
+      topic:"Stress Reduction",
+      source:"MedlinePlus / NIH",
+      url:"https://medlineplus.gov/ency/patientinstructions/000874.htm",
+      icon:"🧘",
+      reason:"Helpful when stress may worsen blood pressure, symptoms, or adherence."
+    },
+    brain: {
+      topic:"Brain Games",
+      source:"NIA / NIH",
+      url:"https://www.nia.nih.gov/health/brain-health/cognitive-health-and-older-adults",
+      icon:"🧠",
+      reason:"Supports cognitive health and gives a brain-health resource instead of a generic game embed."
+    },
+    toxins: {
+      topic:"Avoiding Environmental Toxins",
+      source:"ATSDR / CDC",
+      url:"https://www.atsdr.cdc.gov/index.html",
+      icon:"🌿",
+      reason:"Useful when lung disease, smoking, or environmental exposure risk is part of the picture."
+    }
+  },
+  chronic: {
+    obesity: {
+      topic:"Obesity",
+      source:"MedlinePlus / NIH",
+      url:"https://medlineplus.gov/obesity.html",
+      icon:"⚖️",
+      reason:"Relevant when weight is worsening overall disease control."
+    },
+    mental: {
+      topic:"Mental and Emotional Health",
+      source:"NIMH / NIH",
+      url:"https://www.nimh.nih.gov/health/topics/caring-for-your-mental-health",
+      icon:"💙",
+      reason:"Useful when mood, anxiety, or postpartum mental health needs are active."
+    },
+    diabetes: {
+      topic:"Diabetes",
+      source:"CDC",
+      url:"https://www.cdc.gov/diabetes/diabetes-tv/diabetes-kickstart.html",
+      icon:"🩸",
+      reason:"Prioritized because glycemic control is an active issue."
+    },
+    htn: {
+      topic:"Hypertension",
+      source:"NHLBI / NIH",
+      url:"https://www.nhlbi.nih.gov/education/high-blood-pressure",
+      icon:"🩺",
+      reason:"Prioritized because blood pressure is above goal or requires monitoring."
+    },
+    chf: {
+      topic:"CHF",
+      source:"NHLBI / NIH",
+      url:"https://www.nhlbi.nih.gov/health/heart-failure/living-with",
+      icon:"❤️",
+      reason:"Helpful when fluid status, symptoms, and daily weight matter."
+    },
+    pulmonary: {
+      topic:"Pulmonary Disease",
+      source:"NHLBI / NIH",
+      url:"https://www.nhlbi.nih.gov/health/copd/living-with",
+      icon:"🫁",
+      reason:"Relevant for COPD, asthma, or breathing-related recovery."
+    },
+    meds: {
+      topic:"Medication Adherence",
+      source:"MedlinePlus / NIH",
+      url:"https://medlineplus.gov/ency/patientinstructions/000883.htm",
+      icon:"💊",
+      reason:"Included when the patient has refill, pickup, or adherence barriers."
+    },
+    sdoh: {
+      topic:"Social Determinants of Health",
+      source:"CDC",
+      url:"https://www.cdc.gov/about/priorities/why-is-addressing-sdoh-important.html",
+      icon:"🚗",
+      reason:"Useful when transportation, affordability, childcare, or other access barriers are present."
+    }
+  }
+};
+
+
+function renderVideoCard(item){
+  return `
+    <a class="video-link" href="${item.url}" target="_blank" rel="noopener noreferrer">
+      <div class="video-card">
+        <div class="video-thumb" aria-hidden="true">${item.icon}</div>
+        <div class="video-card-title">${item.topic}</div>
+      </div>
+    </a>
+  `;
+}
+
+
+function dedupeVideos(items){
+  const seen = new Set();
+  return items.filter(item => {
+    const key = item.topic;
+    if(seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+function getPatientEducation(p){
+  const lifestyle = [educationCatalog.lifestyle.intro, educationCatalog.lifestyle.nutrition, educationCatalog.lifestyle.exercise];
+  const chronic = [];
+  const conditionText = (p.conditions || []).join(' | ').toLowerCase();
+  const barrierText = (p.barriers || []).flat().join(' | ').toLowerCase();
+  const medText = (getSupport(p).meds || []).flat().join(' | ').toLowerCase();
+  const chronicNames = (p.chronic || []).map(row => `${row[0]} ${row[3]}`.toLowerCase()).join(' | ');
+
+  if(/diabetes/.test(conditionText) || /diabetes/.test(chronicNames)) {
+    chronic.push(educationCatalog.chronic.diabetes, educationCatalog.chronic.meds);
+    lifestyle.push(educationCatalog.lifestyle.nutrition);
+  }
+  if(/hypertension/.test(conditionText) || /hypertension/.test(chronicNames)) {
+    chronic.push(educationCatalog.chronic.htn);
+    lifestyle.push(educationCatalog.lifestyle.stress);
+  }
+  if(/heart failure|chf/.test(conditionText) || /chf/.test(chronicNames)) {
+    chronic.push(educationCatalog.chronic.chf, educationCatalog.chronic.meds);
+    lifestyle.push(educationCatalog.lifestyle.exercise);
+  }
+  if(/copd|asthma|pulmonary/.test(conditionText) || /copd|asthma/.test(chronicNames)) {
+    chronic.push(educationCatalog.chronic.pulmonary);
+    lifestyle.push(educationCatalog.lifestyle.toxins);
+  }
+  if(/depress|anxiety|behavioral health|mental/.test(conditionText) || /mental health/.test(chronicNames)) {
+    chronic.push(educationCatalog.chronic.mental);
+    lifestyle.push(educationCatalog.lifestyle.stress, educationCatalog.lifestyle.brain);
+  }
+  if(/postpartum/.test(conditionText)) {
+    chronic.push(educationCatalog.chronic.mental, educationCatalog.chronic.htn);
+    lifestyle.push(educationCatalog.lifestyle.stress);
+  }
+  if(/obesity/.test(chronicNames)) {
+    chronic.push(educationCatalog.chronic.obesity);
+  }
+  if(/transportation|affordability|childcare|rural/.test(barrierText)) {
+    chronic.push(educationCatalog.chronic.sdoh);
+  }
+  if(/refill|pending|open gap|not yet picked up|access barrier/.test(medText)) {
+    chronic.push(educationCatalog.chronic.meds);
+  }
+
+  return {
+    lifestyle: dedupeVideos(lifestyle).slice(0,6),
+    chronic: dedupeVideos(chronic).slice(0,6)
+  };
+}
+
+function loadDummyLifestyleData(p){
+  const data = patientLifestyleData[p.name] || {fv:10, home:5, sugar:3, fast:3, cardio:75, strength:30, brain:20, stress:30};
+  Object.entries({fv:'fv', home:'home', sugar:'sugar', fast:'fast', cardio:'cardio', strength:'strength', brain:'brain', stress:'stress'}).forEach(([key,id]) => {
+    const el = document.getElementById(id);
+    if(el) el.value = data[key];
+  });
+  updateLifestyle();
+}
+
+function renderEducationLibrary(p){
+  const groups = getPatientEducation(p);
+  const lifestyleEl = document.getElementById('lifestyleEduList');
+  const chronicEl = document.getElementById('chronicEduList');
+  if(lifestyleEl) lifestyleEl.innerHTML = groups.lifestyle.map(renderVideoCard).join('');
+  if(chronicEl) chronicEl.innerHTML = groups.chronic.map(renderVideoCard).join('');
+}
+
+
+let loginRole = "provider";
+function setLoginRole(role){
+  loginRole = role;
+  document.getElementById("providerRole").classList.toggle("active", role === "provider");
+  document.getElementById("patientRole").classList.toggle("active", role === "patient");
+  const email = document.getElementById("loginEmail");
+  if(email) email.value = role === "provider" ? "provider@demo.org" : "patient@demo.org";
+}
+function handleLogin(event){
+  event.preventDefault();
+  const email = document.getElementById("loginEmail").value.trim();
+  const password = document.getElementById("loginPassword").value.trim();
+  const error = document.getElementById("loginError");
+  if(!email || !password){
+    error.classList.add("show");
+    return false;
+  }
+  error.classList.remove("show");
+  document.getElementById("loginScreen").style.display = "none";
+  document.getElementById("appContainer").classList.remove("locked");
+  document.getElementById("signedInChip").textContent = loginRole === "provider" ? "Provider demo" : "Patient demo";
+  if(loginRole === "provider"){
+    document.querySelector(".view-toggle").style.display = "flex";
+    setMode("patient");
+  } else {
+    document.querySelector(".view-toggle").style.display = "none";
+    setMode("patientFacing");
+  }
+  window.scrollTo(0,0);
+  showToast(loginRole === "provider" ? "Provider view loaded" : "Patient view loaded");
+  return false;
+}
+function logoutDemo(){
+  document.getElementById("appContainer").classList.add("locked");
+  document.getElementById("loginScreen").style.display = "flex";
+  document.querySelector(".view-toggle").style.display = "flex";
+  window.scrollTo(0,0);
+}
+
+selectPatient(0);
+
+
+function lifestyleStatus(type, val){
+  if(type==="fv"){ if(val < 14) return "below"; if(val <= 35) return "meeting"; return "above"; }
+  if(type==="home"){ if(val < 5) return "below"; if(val <= 10) return "meeting"; return "above"; }
+  if(type==="sugar"){ if(val <= 2) return "meeting"; return "above"; }
+  if(type==="fast"){ if(val <= 2) return "meeting"; return "above"; }
+  if(type==="cardio"){ if(val < 150) return "below"; if(val <= 300) return "meeting"; return "above"; }
+  if(type==="strength"){ if(val < 75) return "below"; if(val <= 150) return "meeting"; return "above"; }
+  if(type==="brain"){ if(val < 30) return "below"; if(val <= 120) return "meeting"; return "above"; }
+  if(type==="stress"){ if(val < 30) return "below"; if(val <= 120) return "meeting"; return "above"; }
+  return "meeting";
+}
+
+
+function updateLifestyle() {
+  const getVal = id => {
+    const el = document.getElementById(id);
+    return el ? Number(el.textContent || 0) : 0;
+  };
+  const setStatus = (id, type, value) => {
+    const el = document.getElementById(id);
+    if(!el) return;
+    const status = lifestyleStatus(type, value);
+    el.className = "lifestyle-status " + status;
+    el.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+  };
+
+  const fv = getVal("fv");
+  const home = getVal("home");
+  const sugar = getVal("sugar");
+  const fast = getVal("fast");
+  const cardio = getVal("cardio");
+  const strength = getVal("strength");
+  const brain = getVal("brain");
+  const stress = getVal("stress");
+
+  setStatus("fvStatus", "fv", fv);
+  setStatus("homeStatus", "home", home);
+  setStatus("sugarStatus", "sugar", sugar);
+  setStatus("fastStatus", "fast", fast);
+  setStatus("cardioStatus", "cardio", cardio);
+  setStatus("strengthStatus", "strength", strength);
+  setStatus("brainStatus", "brain", brain);
+  setStatus("stressStatus", "stress", stress);
+
+  const summary = document.getElementById("lifestyleSummaryText");
+  if(summary){
+    summary.textContent = `This week: ${fv} fruit and vegetable servings, ${home} home cooked meals, ${sugar} sugary drinks, ${fast} fast or processed food servings, ${cardio} cardio minutes, ${strength} strength minutes, ${brain} brain game minutes, and ${stress} stress reduction minutes.`;
+  }
+}
+
+function bindLifestyleInputs(){
+  updateLifestyle();
+}
+
+function toggleEdu(id){
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.style.display = el.style.display === "block" ? "none" : "block";
+}
+
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", bindLifestyleInputs);
+} else {
+  bindLifestyleInputs();
+}
+
+function loadDummyLifestyleData() {
+  const data = {
+    fv: 14,
+    home: 6,
+    sugar: 6,
+    fast: 5,
+    cardio: 45,
+    strength: 20,
+    brain: 25,
+    stress: 30
+  };
+
+  Object.entries(data).forEach(([id, value]) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value;
+  });
+
+  updateLifestyle();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  loadDummyLifestyleData();
+  renderCareTeam(patients[0]);
+renderTopProblems(patients[0]);
+});
+
 </script>
+</div>
+
+<script>
+(function(){
+  function makeCollapsible(){
+    const selectors = [
+      '.panel.content-panel',
+      '.detail-card',
+      '.patient-card-panel'
+    ];
+    const panels = Array.from(document.querySelectorAll(selectors.join(',')));
+    panels.forEach((panel) => {
+      if(panel.classList.contains('collapsible-panel')) return;
+      if(panel.closest('[style*="display:none"]')) return;
+      let header = panel.querySelector(':scope > .header-row');
+      let titleEl = null;
+      if(!header){
+        titleEl = panel.querySelector(':scope > .patient-card-title, :scope > .detail-title');
+        if(titleEl){
+          header = document.createElement('div');
+          header.className = 'collapsible-title-row';
+          panel.insertBefore(header, titleEl);
+          header.appendChild(titleEl);
+        }
+      }
+      if(!header) return;
+
+      panel.classList.add('collapsible-panel');
+      const toggle = document.createElement('button');
+      toggle.type = 'button';
+      toggle.className = 'collapsible-toggle';
+      toggle.setAttribute('aria-label','Collapse section');
+      toggle.innerHTML = '⌄';
+      header.appendChild(toggle);
+
+      const body = document.createElement('div');
+      body.className = 'collapsible-body';
+      let node = header.nextSibling;
+      while(node){
+        const next = node.nextSibling;
+        body.appendChild(node);
+        node = next;
+      }
+      panel.appendChild(body);
+
+      function togglePanel(e){
+        if(e && e.target.closest('button, a, input, select, textarea, .tab, .mode-btn')) return;
+        panel.classList.toggle('collapsed');
+        toggle.setAttribute('aria-label', panel.classList.contains('collapsed') ? 'Expand section' : 'Collapse section');
+      }
+      header.addEventListener('click', togglePanel);
+      toggle.addEventListener('click', function(e){ e.stopPropagation(); togglePanel(); });
+    });
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', makeCollapsible);
+  else makeCollapsible();
+})();
+</script>
+
 </body>
 </html>
